@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script src="https://unpkg.com/@webcomponents/webcomponentsjs@next/webcomponents-loader.js"></script>
+    <script type="module" src="https://unpkg.com/@material/mwc-button@^0.1.0/mwc-button.js?module"></script>
+    <script type="module" src="https://unpkg.com/@material/mwc-fab@^0.1.0/mwc-fab.js?module"></script>
+    <script type="module" src="https://unpkg.com/@material/mwc-icon@^0.1.0/mwc-icon.js?module"></script>
+    <script type="module" src="https://unpkg.com/@material/mwc-checkbox@^0.1.0/mwc-checkbox.js?module"></script>
+    <script type="module" src="https://unpkg.com/@material/mwc-radio@^0.1.0/mwc-radio.js?module"></script>
+    <script type="module" src="https://unpkg.com/@material/mwc-switch@^0.1.0/mwc-switch.js?module"></script>
+    <script type="module" src="https://unpkg.com/@material/mwc-ripple@^0.1.0/mwc-ripple.js?module"></script>
+  </head>
+  <body class="notDefined">
+
+    <div id="main"></div>
+    <script src="demo.js"></script>
+
+    <style>
+      body {
+        font-family: Google sans, sans-serif;
+        transform: opacity 0.2s;
+      }
+      body.notDefined {
+        opacity: 0;
+      }
+
+      .box3 {
+        height: 100px;
+        width: 100px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid gray;
+        border-radius: 8px;
+      }
+
+      .group {
+        display: flex;
+      }
+      .group > * {
+        margin: 8px;
+      }
+
+       .light {
+          --mdc-theme-on-primary: black;
+          --mdc-theme-primary: white;
+          --mdc-theme-on-secondary: black;
+          --mdc-theme-secondary: white;
+        }
+
+        .special {
+          --mdc-theme-on-primary: white;
+          --mdc-theme-primary: #e9437a;
+          --mdc-theme-on-secondary: white;
+          --mdc-theme-secondary: #e9437a;
+        }
+
+      .light-icon {
+        color: gray;
+      }
+
+      .special-icon {
+        color: #e9437a;
+      }
+    </style>
+
+    <script>
+      addEventListener('WebComponentsReady', () => {
+        document.body.classList.remove('notDefined');
+        Elm.Main.fullscreen();
+      })
+    </script>
+
+  </body>
+</html>
