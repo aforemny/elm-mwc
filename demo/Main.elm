@@ -1,9 +1,10 @@
 module Main exposing (..)
 
+import Html exposing (Html, text)
 import Html.Attributes as Html
 import Html.Events as Html
-import Html exposing (Html, text)
 import Mwc.Button as Mwc exposing (button, buttonConfig)
+import Mwc.Card as Card exposing (card, cardConfig)
 import Mwc.Checkbox as Mwc exposing (checkbox, checkboxConfig)
 import Mwc.Fab as Mwc exposing (fab, fabConfig)
 import Mwc.Icon as Mwc exposing (icon, iconConfig)
@@ -137,5 +138,56 @@ main =
                 [ text "Ripple me"
                 , ripple { rippleConfig | secondary = True }
                 ]
+            ]
+        , Html.h3 [] [ text "Card" ]
+        , Html.div
+            [ Html.class "group"
+            ]
+            [ Card.card Card.cardConfig
+                { blocks =
+                    Card.primaryAction []
+                        [ Card.media
+                            (Card.mediaConfig
+                                |> (\mediaConfig ->
+                                        { mediaConfig
+                                            | aspect = Just Card.SixteenToNine
+                                        }
+                                   )
+                            )
+                            "https://material-components.github.io/material-components-web-catalog/static/media/photos/3x2/2.jpg"
+                        , Card.custom
+                            (Html.div
+                                [ Html.class "demo-card__primary"
+                                ]
+                                [ Html.div
+                                    [ Html.class "demo-card__title" ]
+                                    [ text "Our Changing Planet" ]
+                                , Html.div
+                                    [ Html.class "demo-card__subtitle" ]
+                                    [ text "by Kurt Wagner" ]
+                                ]
+                            )
+                        , Card.custom
+                            (Html.div
+                                [ Html.class "demo-card__secondary"
+                                ]
+                                [ text "Visit ten places on our planet that are undergoing the biggest changes today."
+                                ]
+                            )
+                        ]
+                , actions =
+                    Just <|
+                        Card.actions
+                            { buttons =
+                                [ Card.actionButton buttonConfig "Read"
+                                , Card.actionButton buttonConfig "Bookmark"
+                                ]
+                            , icons =
+                                [ Card.actionIcon iconConfig "favorite_border"
+                                , Card.actionIcon iconConfig "share"
+                                , Card.actionIcon iconConfig "more_vert"
+                                ]
+                            }
+                }
             ]
         ]
