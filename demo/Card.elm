@@ -5,6 +5,7 @@ import Html.Attributes as Html
 import Mwc.Button exposing (button, buttonConfig)
 import Mwc.Card as Card exposing (card, cardConfig)
 import Mwc.Icon exposing (icon, iconConfig)
+import Mwc.Typography as Typography
 
 
 style =
@@ -52,7 +53,7 @@ view =
         []
         [ Card.card Card.cardConfig
             { blocks =
-                Card.primaryAction []
+                Card.primaryAction Card.primaryActionConfig
                     [ Card.media
                         (Card.mediaConfig
                             |> (\mediaConfig ->
@@ -65,15 +66,24 @@ view =
                     , Card.custom
                         (Html.div
                             [ Html.class "content" ]
-                            [ Html.h2 []
-                                [ text "Our Changing Planet" ]
-                            , Html.h3 [ Html.class "subtext" ]
-                                [ text "by Kurt Wagner" ]
-                            , Html.h3 [ Html.class "subtext" ]
-                                [ text "Visit ten places on our planet that are undergoing the biggest changes today." ]
+                            [ Html.h2
+                                [ Typography.headline1 ]
+                                [ text "Our Changing Planet"
+                                ]
+                            , Html.h3
+                                [ Html.class "subtext"
+                                , Typography.subtitle1
+                                ]
+                                [ text "by Kurt Wagner"
+                                ]
+                            , Html.div
+                                [ Html.class "subtext"
+                                , Typography.body1
+                                ]
+                                [ text "Visit ten places on our planet that are undergoing the biggest changes today."
+                                ]
                             ]
                          -- TODO: typography
-                         -- TODO: ripple
                         )
                     ]
             , actions =

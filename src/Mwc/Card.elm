@@ -4,6 +4,7 @@ import Html exposing (Html, text)
 import Html.Attributes as Html
 import Mwc.Button as Button
 import Mwc.Icon as Icon
+import Mwc.Ripple exposing (rippleConfig)
 
 
 type alias Config msg =
@@ -79,12 +80,32 @@ type Actions msg
         }
 
 
-primaryAction : List (Html.Attribute msg) -> List (Block msg) -> List (Block msg)
-primaryAction attrs blocks =
+type alias PrimaryActionConfig msg =
+    { ripple : Bool
+    , additionalAttributes : List (Html.Attribute msg)
+    }
+
+
+primaryActionConfig : PrimaryActionConfig msg
+primaryActionConfig =
+    { ripple = True
+    , additionalAttributes = []
+    }
+
+
+primaryAction : PrimaryActionConfig msg -> List (Block msg) -> List (Block msg)
+primaryAction config blocks =
     [ Block <|
         Html.div
-            (Html.class "mdc-card__primary-action" :: attrs)
-            (List.map (\(Block html) -> html) blocks)
+            (Html.class "mdc-card__primary-action" :: config.additionalAttributes)
+            (List.map (\(Block html) -> html) blocks
+                ++ (if config.ripple then
+                        [ Mwc.Ripple.ripple rippleConfig
+                        ]
+                    else
+                        []
+                   )
+            )
     ]
 
 
