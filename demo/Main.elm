@@ -8,6 +8,7 @@ import Html.Events as Html
 import Mwc.Button as Mwc exposing (button, buttonConfig)
 import Mwc.Card as Card exposing (card, cardConfig)
 import Mwc.Checkbox as Mwc exposing (checkbox, checkboxConfig)
+import Mwc.Chips as Mwc exposing (chip, chipConfig, chipSet, chipSetConfig)
 import Mwc.Fab as Mwc exposing (fab, fabConfig)
 import Mwc.Icon as Mwc exposing (icon, iconConfig)
 import Mwc.Radio as Mwc exposing (radio, radioConfig)
