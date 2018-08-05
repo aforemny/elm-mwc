@@ -1,9 +1,13 @@
-build: node_modules
+build: node_modules material-components-web-components/node_modules
 	elm-make --yes demo/Main.elm --output demo.js
 	sassc -I node_modules demo/main.scss > demo.css
 
 node_modules:
 	npm i
+
+material-components-web-components/node_modules:
+	(cd material-components-web-components && npm i)
+	(cd material-components-web-components && npm run bootstrap)
 
 pages: build
 	mkdir -p gh-pages
@@ -17,4 +21,4 @@ clean:
 
 distclean: clean
 	rm -rf elm-stuff
-	rm -rf node_modules
+	rm -rf node_modules material-components-web-components/node_modules

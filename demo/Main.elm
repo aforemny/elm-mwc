@@ -1,5 +1,7 @@
 module Main exposing (..)
 
+import Button
+import Card
 import Html exposing (Html, text)
 import Html.Attributes as Html
 import Html.Events as Html
@@ -16,7 +18,16 @@ import Mwc.Switch as Mwc exposing (switch, switchConfig)
 main =
     Html.div
         []
-        [ Html.h2 [] [ text "Material Web Components" ]
+        [ Html.node "style"
+            [ Html.type_ "text/css" ]
+            [ text style
+            , text Button.style
+            , text Card.style
+            ]
+        , Button.view
+        , Card.view
+        , Html.hr [] []
+        , Html.h2 [] [ text "Material Web Components" ]
         , Html.h3 [] [ text "Button" ]
         , Html.div
             [ Html.class "group"
@@ -140,54 +151,71 @@ main =
                 ]
             ]
         , Html.h3 [] [ text "Card" ]
-        , Html.div
-            [ Html.class "group"
-            ]
-            [ Card.card Card.cardConfig
-                { blocks =
-                    Card.primaryAction []
-                        [ Card.media
-                            (Card.mediaConfig
-                                |> (\mediaConfig ->
-                                        { mediaConfig
-                                            | aspect = Just Card.SixteenToNine
-                                        }
-                                   )
-                            )
-                            "https://material-components.github.io/material-components-web-catalog/static/media/photos/3x2/2.jpg"
-                        , Card.custom
-                            (Html.div
-                                [ Html.class "demo-card__primary"
-                                ]
-                                [ Html.div
-                                    [ Html.class "demo-card__title" ]
-                                    [ text "Our Changing Planet" ]
-                                , Html.div
-                                    [ Html.class "demo-card__subtitle" ]
-                                    [ text "by Kurt Wagner" ]
-                                ]
-                            )
-                        , Card.custom
-                            (Html.div
-                                [ Html.class "demo-card__secondary"
-                                ]
-                                [ text "Visit ten places on our planet that are undergoing the biggest changes today."
-                                ]
-                            )
-                        ]
-                , actions =
-                    Just <|
-                        Card.actions
-                            { buttons =
-                                [ Card.actionButton buttonConfig "Read"
-                                , Card.actionButton buttonConfig "Bookmark"
-                                ]
-                            , icons =
-                                [ Card.actionIcon iconConfig "favorite_border"
-                                , Card.actionIcon iconConfig "share"
-                                , Card.actionIcon iconConfig "more_vert"
-                                ]
-                            }
-                }
-            ]
         ]
+
+
+style =
+    """
+body {
+    font-family: Roboto, sans-serif;
+    margin: 0;
+  }
+
+  .unresolved {
+    opacity: 0;
+  }
+
+  body {
+    transition: opacity ease-in 0.2s;
+  }
+
+  header {
+    background-color: #6200ee;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 4;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    box-sizing: border-box;
+    font-family: "Roboto Mono", monospace;
+    -webkit-font-smoothing: antialiased;
+    font-size: 1.25rem;
+    line-height: 2rem;
+    letter-spacing: 0.02em;
+    color: white;
+    min-height: 64px;
+    box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+  }
+
+  header > a {
+    text-decoration: none;
+    color: white;
+    display: flex;
+    align-items: center;
+  }
+
+  mwc-icon {
+    margin: 0 16px;
+  }
+
+  main {
+    margin-top: 64px;
+    padding: 16px;
+  }
+
+  .demo-group, .demo-group-spaced {
+    display: flex;
+    align-items: center;
+  }
+
+  .demo-group-spaced {
+    justify-content: space-around;
+  }
+
+  .demo-group > *, .demo-group-spaced > * {
+    margin: 0 8px;
+  }
+  """

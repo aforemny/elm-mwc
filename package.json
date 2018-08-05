@@ -4,7 +4,7 @@
   "description": "[Demo](https://aforemny.github.io/elm-mwc)",
   "main": "demo.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "polyserve --npm --module-resolution=node -p 8080"
   },
   "repository": {
     "type": "git",
@@ -13,6 +13,9 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@material/card": "^0.37.1"
+    "@material/card": "^0.37.1",
+    "@polymer/lit-element": "^0.5.2",
+    "@webcomponents/webcomponentsjs": "^2.0.4",
+    "polyserve": "^0.27.12"
   }
 }
