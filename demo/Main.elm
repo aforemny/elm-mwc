@@ -17,6 +17,7 @@ import Mwc.IconToggle as Mwc exposing (iconToggle, iconToggleConfig)
 import Mwc.Radio as Mwc exposing (radio, radioConfig)
 import Mwc.Ripple as Mwc exposing (ripple, rippleConfig)
 import Mwc.Switch as Mwc exposing (switch, switchConfig)
+import Mwc.Tabs as Mwc exposing (tab, tabBar, tabBarConfig, tabConfig)
 import Mwc.Textfield as Mwc exposing (textfield, textfieldConfig)
 
 
