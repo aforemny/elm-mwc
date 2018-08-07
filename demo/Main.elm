@@ -6,6 +6,7 @@ import Demo.Checkbox
 import Demo.Chips
 import Demo.Fab
 import Demo.Snackbar
+import Demo.Textfield
 import Html exposing (Html, text)
 import Html.Attributes
 import Html.Events as Html
@@ -35,6 +36,7 @@ defaultModel =
     { button = ()
     , card = ()
     , snackbar = Demo.Snackbar.Model
+    , textfield = Demo.Textfield.Model
     }
 
 
@@ -44,6 +46,7 @@ type Msg
     | FabMsg ()
     | CardMsg ()
     | SnackbarMsg Demo.Snackbar.Msg
+    | TextfieldMsg Demo.Textfield.Msg
 
 
 update msg model =
@@ -67,6 +70,14 @@ update msg model =
                         { model | snackbar = snackbar }
                     )
                 |> Tuple.mapSecond (Cmd.map SnackbarMsg)
+
+        TextfieldMsg textfieldMsg ->
+            Demo.Textfield.update textfieldMsg model.textfield
+                |> Tuple.mapFirst
+                    (\textfield ->
+                        { model | textfield = textfield }
+                    )
+                |> Tuple.mapSecond (Cmd.map TextfieldMsg)
 
 
 subscriptions model =
@@ -93,6 +104,7 @@ view model =
             , Html.map FabMsg Demo.Fab.view
             , Html.map CardMsg Demo.Card.view
             , Html.map SnackbarMsg (Demo.Snackbar.view model.snackbar)
+            , Html.map TextfieldMsg (Demo.Textfield.view model.textfield)
             ]
         , Html.hr [] []
         , Html.h2 [] [ text "Material Web Components" ]

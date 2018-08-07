@@ -42,16 +42,6 @@ defaultModel =
     {}
 
 
-type alias Snack =
-    { dismissesOnAction : Bool
-    , message : String
-    , actionText : String
-    , timeout : Time
-    , multiline : Bool
-    , actionOnBottom : Bool
-    }
-
-
 snack1 : Snack
 snack1 =
     { dismissesOnAction = True

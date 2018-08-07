@@ -2,6 +2,7 @@ module Mwc.Textfield exposing (..)
 
 import Html exposing (Html, text)
 import Html.Attributes as Html
+import Html.Events as Html
 
 
 type alias TextfieldConfig msg =
@@ -17,6 +18,7 @@ type alias TextfieldConfig msg =
     , fullWidth : Bool
     , placeholder : String
     , type_ : String
+    , onInput : Maybe (String -> msg)
     , additionalAttributes : List (Html.Attribute msg)
     }
 
@@ -38,12 +40,13 @@ textfield config =
             , Just (Html.attribute "icon" config.icon)
             , Maybe.map (Html.attribute "iconTrailing") (bool config.iconTrailing)
             , Just (Html.attribute "helperText" config.helperText)
-            , Maybe.map (Html.attribute "box") (bool config.required)
-            , Maybe.map (Html.attribute "outlined") (bool config.required)
-            , Maybe.map (Html.attribute "disabled") (bool config.required)
-            , Maybe.map (Html.attribute "fullWidth") (bool config.required)
+            , Maybe.map (Html.attribute "box") (bool config.box)
+            , Maybe.map (Html.attribute "outlined") (bool config.outlined)
+            , Maybe.map (Html.attribute "disabled") (bool config.disabled)
+            , Maybe.map (Html.attribute "fullWidth") (bool config.fullWidth)
             , Just (Html.attribute "placeholder" config.placeholder)
             , Just (Html.attribute "type" config.type_)
+            , Maybe.map Html.onInput config.onInput
             ]
             ++ config.additionalAttributes
         )
@@ -64,5 +67,6 @@ textfieldConfig =
     , fullWidth = False
     , placeholder = ""
     , type_ = ""
+    , onInput = Nothing
     , additionalAttributes = []
     }
