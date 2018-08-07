@@ -9,9 +9,9 @@ Elm bindings to
 ## Build instructions
 
 ```sh
-$ git clone github.com:aforemny/elm-mwc.git
-$ cd elm-mwc
-$ git submodule update --init
+$ git clone --recursive github.com:aforemny/elm-mwc.git
+$ npm i
+$ make
 ```
 
 
