@@ -2,6 +2,7 @@ module Mwc.Button exposing (..)
 
 import Html exposing (Html, text)
 import Html.Attributes as Html
+import Html.Events as Html
 
 
 type alias Config msg =
@@ -12,6 +13,8 @@ type alias Config msg =
     , disabled : Bool
     , icon : String
     , label : String
+    , ripple : Bool
+    , onClick : Maybe msg
     , additionalAttributes : List (Html.Attribute msg)
     }
 
@@ -25,6 +28,8 @@ buttonConfig =
     , disabled = False
     , icon = ""
     , label = ""
+    , ripple = False
+    , onClick = Nothing
     , additionalAttributes = []
     }
 
@@ -50,6 +55,9 @@ button config_ label =
             , Maybe.map (Html.attribute "disabled") (bool config.disabled)
             , Just (Html.attribute "icon" config.icon)
             , Just (Html.attribute "label" config.label)
+
+            -- TODO: config.ripple
+            , Maybe.map Html.onClick config.onClick
             ]
             ++ config.additionalAttributes
         )

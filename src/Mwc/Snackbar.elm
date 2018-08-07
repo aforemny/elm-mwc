@@ -49,3 +49,26 @@ snackbarConfig =
     , dismissOnAction = False
     , additionalAttributes = []
     }
+
+
+type alias Snack =
+    { dismissesOnAction : Bool
+    , message : String
+    , actionText : String
+    , timeout : Time
+    , multiline : Bool
+    , actionOnBottom : Bool
+    }
+
+
+-- TODO: opaque
+type alias Ports =
+    { action : String
+    , id : String
+    , snack : Maybe Snack
+    }
+
+
+show : String -> Snack -> Ports
+show id snack =
+    { action = "show", id = id, snack = Just snack }

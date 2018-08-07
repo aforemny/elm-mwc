@@ -11,6 +11,7 @@
     <script type="module" src="material-components-web-components/packages/switch/mwc-switch.js"></script>
     <script type="module" src="material-components-web-components/packages/ripple/mwc-ripple.js"></script>
     <script type="module" src="material-components-web-components/packages/card/mwc-card.js"></script>
+    <script type="module" src="material-components-web-components/packages/snackbar/mwc-snackbar.js"></script>
     <link rel="stylesheet" type="text/css" href="demo.css">
   </head>
   <body class="notDefined">
@@ -70,7 +71,13 @@
     <script>
       addEventListener('WebComponentsReady', () => {
         document.body.classList.remove('notDefined');
-        Elm.Main.fullscreen();
+        var app = Elm.Main.fullscreen();
+        app.ports.snackbar.subscribe(function(msg) {
+          // todo
+          console.log(msg.action);
+          console.log(msg.id);
+          console.log(msg.snack);
+        });
       })
     </script>
 

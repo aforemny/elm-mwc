@@ -5,8 +5,9 @@ import Demo.Card
 import Demo.Checkbox
 import Demo.Chips
 import Demo.Fab
+import Demo.Snackbar
 import Html exposing (Html, text)
-import Html.Attributes as Html
+import Html.Attributes
 import Html.Events as Html
 import Mwc.Button exposing (button, buttonConfig)
 import Mwc.Card as Card exposing (card, cardConfig)
@@ -30,24 +31,74 @@ import Mwc.Tabs exposing (tab, tabBar, tabBarConfig, tabConfig)
 import Mwc.Textfield exposing (textfield, textfieldConfig)
 
 
-main =
+defaultModel =
+    { button = ()
+    , card = ()
+    , snackbar = Demo.Snackbar.Model
+    }
+
+
+type Msg
+    = ButtonMsg ()
+    | CheckboxMsg ()
+    | FabMsg ()
+    | CardMsg ()
+    | SnackbarMsg Demo.Snackbar.Msg
+
+
+update msg model =
+    case msg of
+        ButtonMsg _ ->
+            ( model, Cmd.none )
+
+        CheckboxMsg _ ->
+            ( model, Cmd.none )
+
+        FabMsg _ ->
+            ( model, Cmd.none )
+
+        CardMsg _ ->
+            ( model, Cmd.none )
+
+        SnackbarMsg snackbarMsg ->
+            Demo.Snackbar.update snackbarMsg model.snackbar
+                |> Tuple.mapFirst
+                    (\snackbar ->
+                        { model | snackbar = snackbar }
+                    )
+                |> Tuple.mapSecond (Cmd.map SnackbarMsg)
+
+
+subscriptions model =
+    Sub.none
+
+
+init =
+    ( defaultModel, Cmd.none )
+
+
+view model =
     Html.div
         []
         [ Html.node "style"
-            [ Html.type_ "text/css" ]
+            [ Html.Attributes.type_ "text/css" ]
             [ text style
             , text Demo.Button.style
             , text Demo.Card.style
+            , text Demo.Snackbar.style
             ]
-        , Demo.Button.view
-        , Demo.Card.view
-        , Demo.Checkbox.view
-        , Demo.Fab.view
+        , Html.div []
+            [ Html.map ButtonMsg Demo.Button.view
+            , Html.map CheckboxMsg Demo.Checkbox.view
+            , Html.map FabMsg Demo.Fab.view
+            , Html.map CardMsg Demo.Card.view
+            , Html.map SnackbarMsg (Demo.Snackbar.view model.snackbar)
+            ]
         , Html.hr [] []
         , Html.h2 [] [ text "Material Web Components" ]
         , Html.h3 [] [ text "Button" ]
         , Html.div
-            [ Html.class "group"
+            [ Html.Attributes.class "group"
             ]
             [ button
                 { buttonConfig
@@ -59,76 +110,76 @@ main =
             ]
         , Html.h3 [] [ text "Icon" ]
         , Html.div
-            [ Html.class "group"
+            [ Html.Attributes.class "group"
             ]
             [ icon iconConfig "map"
             , icon
                 { iconConfig
-                    | additionalAttributes = [ Html.class "light-icon" ]
+                    | additionalAttributes = [ Html.Attributes.class "light-icon" ]
                 }
                 "explore"
             , icon
                 { iconConfig
-                    | additionalAttributes = [ Html.class "special-icon" ]
+                    | additionalAttributes = [ Html.Attributes.class "special-icon" ]
                 }
                 "code"
             ]
         , Html.h3 [] [ text "Radio" ]
         , Html.div
-            [ Html.class "group"
+            [ Html.Attributes.class "group"
             ]
             [ radio radioConfig
             , radio radioConfig
             , radio
                 { radioConfig
                     | checked = True
-                    , additionalAttributes = [ Html.class "special" ]
+                    , additionalAttributes = [ Html.Attributes.class "special" ]
                 }
             ]
         , Html.div
-            [ Html.class "group"
+            [ Html.Attributes.class "group"
             ]
             [ radio
                 { radioConfig
                     | name = "1"
                     , checked = True
-                    , additionalAttributes = [ Html.class "special" ]
+                    , additionalAttributes = [ Html.Attributes.class "special" ]
                 }
             , radio { radioConfig | name = "1" }
             , radio { radioConfig | name = "1" }
             ]
         , Html.h3 [] [ text "Switch" ]
         , Html.div
-            [ Html.class "group"
+            [ Html.Attributes.class "group"
             ]
             [ switch switchConfig
             , switch
                 { switchConfig
                     | checked = True
-                    , additionalAttributes = [ Html.class "special" ]
+                    , additionalAttributes = [ Html.Attributes.class "special" ]
                 }
             ]
         , Html.h3 [] [ text "Ripple" ]
         , Html.div
-            [ Html.class "group"
+            [ Html.Attributes.class "group"
             ]
             [ Html.div
-                [ Html.class "box3"
-                , Html.style [ ( "position", "relative" ) ]
+                [ Html.Attributes.class "box3"
+                , Html.Attributes.style [ ( "position", "relative" ) ]
                 ]
                 [ text "Ripple me"
                 , ripple rippleConfig
                 ]
             , Html.div
-                [ Html.class "box3"
-                , Html.style [ ( "position", "relative" ) ]
+                [ Html.Attributes.class "box3"
+                , Html.Attributes.style [ ( "position", "relative" ) ]
                 ]
                 [ text "Ripple me"
                 , ripple { rippleConfig | primary = True }
                 ]
             , Html.div
-                [ Html.class "box3"
-                , Html.style [ ( "position", "relative" ) ]
+                [ Html.Attributes.class "box3"
+                , Html.Attributes.style [ ( "position", "relative" ) ]
                 ]
                 [ text "Ripple me"
                 , ripple { rippleConfig | secondary = True }
@@ -136,6 +187,15 @@ main =
             ]
         , Html.h3 [] [ text "Card" ]
         ]
+
+
+main =
+    Html.program
+        { init = init
+        , subscriptions = subscriptions
+        , update = update
+        , view = view
+        }
 
 
 style =
