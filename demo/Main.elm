@@ -1,7 +1,7 @@
 module Main exposing (..)
 
-import Button
-import Card
+import Demo.Button as Button
+import Demo.Card as Card
 import Html exposing (Html, text)
 import Html.Attributes as Html
 import Html.Events as Html

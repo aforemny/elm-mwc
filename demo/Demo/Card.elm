@@ -1,4 +1,4 @@
-module Card exposing (..)
+module Demo.Card exposing (..)
 
 import Html exposing (Html, text)
 import Html.Attributes as Html

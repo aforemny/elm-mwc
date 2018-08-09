@@ -1,4 +1,4 @@
-module Button exposing (..)
+module Demo.Button exposing (..)
 
 import Html exposing (Html, text)
 import Html.Attributes as Html
