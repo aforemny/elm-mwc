@@ -3,14 +3,14 @@ module Main exposing (..)
 import Demo.Button
 import Demo.Card
 import Demo.Checkbox
+import Demo.Chips
+import Demo.Fab
 import Html exposing (Html, text)
 import Html.Attributes as Html
 import Html.Events as Html
 import Mwc.Button as Mwc exposing (button, buttonConfig)
 import Mwc.Card as Card exposing (card, cardConfig)
-import Mwc.Chips as Mwc exposing (chip, chipConfig, chipSet, chipSetConfig)
 import Mwc.Dialog as Mwc exposing (dialog, dialogConfig)
-import Mwc.Fab as Mwc exposing (fab, fabConfig)
 import Mwc.FormField as Mwc exposing (formField, formFieldConfig)
 import Mwc.Icon as Mwc exposing (icon, iconConfig)
 import Mwc.IconToggle as Mwc exposing (iconToggle, iconToggleConfig)
@@ -31,6 +31,7 @@ main =
         , Demo.Button.view
         , Demo.Card.view
         , Demo.Checkbox.view
+        , Demo.Fab.view
         , Html.hr [] []
         , Html.h2 [] [ text "Material Web Components" ]
         , Html.h3 [] [ text "Button" ]
@@ -44,22 +45,6 @@ main =
                 }
                 "Hi there"
             , button buttonConfig "I'm a button too"
-            ]
-        , Html.h3 [] [ text "Fab" ]
-        , Html.div
-            [ Html.class "group"
-            ]
-            [ fab fabConfig "map"
-            , fab
-                { fabConfig
-                    | additionalAttributes = [ Html.class "light" ]
-                }
-                "explore"
-            , fab
-                { fabConfig
-                    | additionalAttributes = [ Html.class "special" ]
-                }
-                "code"
             ]
         , Html.h3 [] [ text "Icon" ]
         , Html.div
