@@ -4,7 +4,7 @@ import Html exposing (Html, text)
 import Html.Attributes as Html
 
 
-type alias Config msg =
+type alias FabConfig msg =
     { mini : Bool
     , exited : Bool
     , disabled : Bool
@@ -14,7 +14,7 @@ type alias Config msg =
     }
 
 
-fabConfig : Config msg
+fabConfig : FabConfig msg
 fabConfig =
     { mini = False
     , exited = False
@@ -25,7 +25,7 @@ fabConfig =
     }
 
 
-fab : Config msg -> String -> Html msg
+fab : FabConfig msg -> String -> Html msg
 fab config_ icon =
     let
         config =
