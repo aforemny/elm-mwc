@@ -102,6 +102,7 @@ view model =
             , text Demo.Button.style
             , text Demo.Card.style
             , text Demo.Snackbar.style
+            , text Demo.Icon.style
             ]
         , Html.div []
             [ Html.map ButtonMsg Demo.Button.view
@@ -124,22 +125,6 @@ view model =
                 }
                 "Hi there"
             , button buttonConfig "I'm a button too"
-            ]
-        , Html.h3 [] [ text "Icon" ]
-        , Html.div
-            [ Html.Attributes.class "group"
-            ]
-            [ icon iconConfig "map"
-            , icon
-                { iconConfig
-                    | additionalAttributes = [ Html.Attributes.class "light-icon" ]
-                }
-                "explore"
-            , icon
-                { iconConfig
-                    | additionalAttributes = [ Html.Attributes.class "special-icon" ]
-                }
-                "code"
             ]
         , Html.h3 [] [ text "Radio" ]
         , Html.div
@@ -280,10 +265,4 @@ body {
   .demo-group > *, .demo-group-spaced > * {
     margin: 0 8px;
   }
-
-  .color-size {
-    color: tomato;
-    --mdc-icon-size: 4em;
-  }
-
   """

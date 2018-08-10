@@ -5,6 +5,15 @@ import Html.Attributes as Html
 import Mwc.Icon as Mwc exposing (icon, iconConfig)
 
 
+style =
+    """
+    .color-size {
+      color: tomato;
+      --mdc-icon-size: 4em;
+    }
+    """
+
+
 view =
     Html.node "main"
         []
