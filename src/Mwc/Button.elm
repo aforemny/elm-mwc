@@ -5,7 +5,7 @@ import Html.Attributes as Html
 import Html.Events as Html
 
 
-type alias Config msg =
+type alias ButtonConfig msg =
     { raised : Bool
     , unelevated : Bool
     , outlined : Bool
@@ -19,7 +19,7 @@ type alias Config msg =
     }
 
 
-buttonConfig : Config msg
+buttonConfig : ButtonConfig msg
 buttonConfig =
     { raised = False
     , unelevated = False
@@ -34,7 +34,7 @@ buttonConfig =
     }
 
 
-button : Config msg -> String -> Html msg
+button : ButtonConfig msg -> String -> Html msg
 button config_ label =
     let
         config =

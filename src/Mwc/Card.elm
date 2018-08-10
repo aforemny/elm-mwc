@@ -2,7 +2,7 @@ module Mwc.Card exposing (..)
 
 import Html exposing (Html, text)
 import Html.Attributes as Html
-import Mwc.Button as Button
+import Mwc.Button as Button exposing (ButtonConfig)
 import Mwc.Icon as Icon
 import Mwc.Ripple exposing (rippleConfig)
 
@@ -190,7 +190,7 @@ type Button msg
 
 
 actionButton :
-    Button.Config msg
+    ButtonConfig msg
     -> String
     -> Button msg
 actionButton buttonConfig buttonLabel =
