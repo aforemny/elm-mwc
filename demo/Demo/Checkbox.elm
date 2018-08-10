@@ -9,18 +9,16 @@ view =
     Html.node "main"
         []
         [ Html.h3 [] [ text "Checkbox" ]
-        , checkbox checkboxConfig ""
-        , checkbox { checkboxConfig | checked = True } ""
+        , checkbox checkboxConfig
+        , checkbox { checkboxConfig | checked = True }
         , checkbox
             { checkboxConfig
                 | indeterminate = True
             }
-            ""
         , checkbox
             { checkboxConfig
                 | indeterminate = True
                 , additionalAttributes = [ Html.class "special" ]
             }
-            ""
-        , checkbox { checkboxConfig | disabled = True } ""
+        , checkbox { checkboxConfig | disabled = True }
         ]

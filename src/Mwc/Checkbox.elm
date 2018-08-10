@@ -23,12 +23,9 @@ checkboxConfig =
     }
 
 
-checkbox : Config msg -> String -> Html msg
-checkbox config_ value =
+checkbox : Config msg -> Html msg
+checkbox config =
     let
-        config =
-            { config_ | value = value }
-
         bool v =
             if v then
                 Just ""
