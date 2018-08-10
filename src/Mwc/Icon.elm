@@ -5,22 +5,16 @@ import Html.Attributes as Html
 
 
 type alias IconConfig msg =
-    { icon : String
-    , additionalAttributes : List (Html.Attribute msg)
+    { additionalAttributes : List (Html.Attribute msg)
     }
 
 
 iconConfig : IconConfig msg
 iconConfig =
-    { icon = ""
-    , additionalAttributes = []
+    { additionalAttributes = []
     }
 
 
 icon : IconConfig msg -> String -> Html msg
-icon config_ icon =
-    let
-        config =
-            { config_ | icon = icon }
-    in
+icon config icon =
     Html.node "mwc-icon" config.additionalAttributes [ text icon ]
