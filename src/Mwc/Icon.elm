@@ -1,7 +1,6 @@
 module Mwc.Icon exposing (..)
 
 import Html exposing (Html, text)
-import Html.Attributes as Html
 
 
 type alias IconConfig msg =

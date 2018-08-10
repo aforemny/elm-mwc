@@ -5,6 +5,7 @@ import Demo.Card
 import Demo.Checkbox
 import Demo.Chips
 import Demo.Fab
+import Demo.Icon
 import Demo.Snackbar
 import Demo.Textfield
 import Html exposing (Html, text)
@@ -45,6 +46,7 @@ type Msg
     | CheckboxMsg ()
     | FabMsg ()
     | CardMsg ()
+    | IconMsg ()
     | SnackbarMsg Demo.Snackbar.Msg
     | TextfieldMsg Demo.Textfield.Msg
 
@@ -58,6 +60,9 @@ update msg model =
             ( model, Cmd.none )
 
         FabMsg _ ->
+            ( model, Cmd.none )
+
+        IconMsg _ ->
             ( model, Cmd.none )
 
         CardMsg _ ->
@@ -103,6 +108,7 @@ view model =
             , Html.map CheckboxMsg Demo.Checkbox.view
             , Html.map FabMsg Demo.Fab.view
             , Html.map CardMsg Demo.Card.view
+            , Html.map IconMsg Demo.Icon.view
             , Html.map TextfieldMsg (Demo.Textfield.view model.textfield)
             ]
         , Html.hr [] []
@@ -274,4 +280,10 @@ body {
   .demo-group > *, .demo-group-spaced > * {
     margin: 0 8px;
   }
+
+  .color-size {
+    color: tomato;
+    --mdc-icon-size: 4em;
+  }
+
   """
