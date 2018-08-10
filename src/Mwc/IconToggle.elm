@@ -23,15 +23,27 @@ iconToggle config =
                 Just ""
             else
                 Nothing
+
+        offIcon =
+            if config.offIcon == "" then
+                config.icon
+            else
+                config.offIcon
+
+        offLabel =
+            if config.offLabel == "" then
+                config.icon
+            else
+                config.offLabel
     in
     Html.node "mwc-icon-toggle"
         (List.filterMap identity
             [ Maybe.map (Html.attribute "disabled") (bool config.disabled)
             , Maybe.map (Html.attribute "on") (bool config.on)
             , Just (Html.attribute "icon" config.icon)
-            , Just (Html.attribute "offIcon" config.offIcon)
+            , Just (Html.attribute "offIcon" offIcon)
             , Just (Html.attribute "label" config.label)
-            , Just (Html.attribute "offLabel" config.offLabel)
+            , Just (Html.attribute "offLabel" offLabel)
             ]
             ++ config.additionalAttributes
         )
