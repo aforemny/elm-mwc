@@ -44,35 +44,35 @@ defaultModel =
 
 snack1 : Snack
 snack1 =
-    { dismissesOnAction = True
-    , message = ""
-    , actionText = ""
-    , timeout = 0
-    , multiline = False
-    , actionOnBottom = False
-    }
+    Snackbar.snack
+        { message = "Hi there snack 1"
+        , actionText = "Go"
+        }
 
 
 snack2 : Snack
 snack2 =
-    { dismissesOnAction = True
-    , message = "Hi there snack 2"
-    , actionText = "Happy"
-    , timeout = 5 * Time.second
-    , multiline = False
-    , actionOnBottom = False
-    }
+    Snackbar.snack
+        { message = "Hi there snack 2"
+        , actionText = "Happy"
+        }
+        |> Snackbar.setDismissesOnAction True
+        |> Snackbar.setTimeout (5 * Time.second)
 
 
 snack3 : Snack
 snack3 =
-    { dismissesOnAction = False
-    , message = "Hi there snack 3! This is a really long message that will probably wrap."
-    , actionText = "Wow"
-    , multiline = True
-    , actionOnBottom = True
-    , timeout = 5 * Time.second
-    }
+    Snackbar.snack
+        { message =
+            """
+              Hi there snack 3! This is a really long message that will probably
+              wrap.
+            """
+        , actionText = "Wow"
+        }
+        |> Snackbar.setTimeout (5 * Time.second)
+        |> Snackbar.setMultiline True
+        |> Snackbar.setActionOnBottom True
 
 
 style : String

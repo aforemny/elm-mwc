@@ -4,7 +4,12 @@ module Mwc.Snackbar
         , Snack
         , SnackbarConfig
         , ports
+        , setActionOnBottom
+        , setDismissesOnAction
+        , setMultiline
+        , setTimeout
         , show
+        , snack
         , snackbar
         , snackbarConfig
         )
@@ -17,7 +22,12 @@ module Mwc.Snackbar
 @docs Ports
 @docs ports
 @docs Snack
+@docs snack
 @docs show
+@docs setDismissesOnAction
+@docs setTimeout
+@docs setMultiline
+@docs setActionOnBottom
 
 -}
 
@@ -47,18 +57,7 @@ snackbar config =
             else
                 Nothing
     in
-    Html.node "mwc-snackbar"
-        (List.filterMap identity
-            [ Just (Html.attribute "message" config.message)
-            , Just (Html.attribute "timeout" (toString config.timeout))
-            , Maybe.map (Html.attribute "multiline") (bool config.multiline)
-            , Just (Html.attribute "actionOnBottom" config.actionText)
-            , Maybe.map (Html.attribute "actionOnBottom") (bool config.actionOnBottom)
-            , Maybe.map (Html.attribute "dismissOnAction") (bool config.dismissOnAction)
-            ]
-            ++ config.additionalAttributes
-        )
-        []
+    Html.node "mwc-snackbar" config.additionalAttributes []
 
 
 snackbarConfig : SnackbarConfig msg
@@ -81,6 +80,55 @@ type alias Snack =
     , multiline : Bool
     , actionOnBottom : Bool
     }
+
+
+defaultSnack : Snack
+defaultSnack =
+    { dismissesOnAction = False
+    , message = ""
+    , actionText = ""
+    , timeout = 0
+    , multiline = False
+    , actionOnBottom = False
+    }
+
+
+snack : { message : String, actionText : String } -> Snack
+snack { message, actionText } =
+    { defaultSnack
+        | message = message
+        , actionText = actionText
+    }
+
+
+setDismissesOnAction : Bool -> Snack -> Snack
+setDismissesOnAction dismissesOnAction snack =
+    { snack | dismissesOnAction = True }
+
+
+setTimeout : Time -> Snack -> Snack
+setTimeout timeout snack =
+    { snack | timeout = timeout }
+
+
+setMultiline : Bool -> Snack -> Snack
+setMultiline multiline snack =
+    { snack | multiline = multiline }
+
+
+setActionOnBottom : Bool -> Snack -> Snack
+setActionOnBottom actionOnBottom snack =
+    { snack | actionOnBottom = actionOnBottom }
+
+
+setMessage : String -> Snack -> Snack
+setMessage message snack =
+    { snack | message = message }
+
+
+setActionText : String -> Snack -> Snack
+setActionText actionText snack =
+    { snack | actionText = actionText }
 
 
 type Ports

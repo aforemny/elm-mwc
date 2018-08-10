@@ -103,7 +103,6 @@ view model =
             , Html.map CheckboxMsg Demo.Checkbox.view
             , Html.map FabMsg Demo.Fab.view
             , Html.map CardMsg Demo.Card.view
-            , Html.map SnackbarMsg (Demo.Snackbar.view model.snackbar)
             , Html.map TextfieldMsg (Demo.Textfield.view model.textfield)
             ]
         , Html.hr [] []
@@ -198,6 +197,7 @@ view model =
                 ]
             ]
         , Html.h3 [] [ text "Card" ]
+        , Html.map SnackbarMsg (Demo.Snackbar.view model.snackbar)
         ]
 
 

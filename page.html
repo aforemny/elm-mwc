@@ -73,11 +73,19 @@
       addEventListener('WebComponentsReady', () => {
         document.body.classList.remove('notDefined');
         var app = Elm.Main.fullscreen();
-        app.ports.snackbar.subscribe(function(msg) {
-          // todo
-          console.log(msg.action);
-          console.log(msg.id);
-          console.log(msg.snack);
+
+        app.ports.snackbarUnsafe.subscribe(function(msg) {
+          if (msg.action === 'show') {
+            if (typeof msg.snack === 'undefined') {
+              return;
+            }
+            snackbar = document.getElementById(msg.id);
+            if (typeof snackbar === 'undefined') {
+              return;
+            }
+            snackbar.dismissesOnAction = msg.snack.dismissesOnAction;
+            snackbar.show(msg.snack);
+          }
         });
       })
     </script>
