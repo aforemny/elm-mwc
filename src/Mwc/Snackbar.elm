@@ -1,7 +1,29 @@
-module Mwc.Snackbar exposing (..)
+module Mwc.Snackbar
+    exposing
+        ( Ports
+        , Snack
+        , SnackbarConfig
+        , ports
+        , show
+        , snackbar
+        , snackbarConfig
+        )
+
+{-|
+
+@docs SnackbarConfig
+@docs snackbar
+@docs snackbarConfig
+@docs Ports
+@docs ports
+@docs Snack
+@docs show
+
+-}
 
 import Html exposing (Html)
 import Html.Attributes as Html
+import Json.Encode as Encode exposing (Value)
 import Time exposing (Time)
 
 
@@ -61,14 +83,40 @@ type alias Snack =
     }
 
 
--- TODO: opaque
-type alias Ports =
-    { action : String
-    , id : String
-    , snack : Maybe Snack
-    }
+type Ports
+    = Ports
+        { action : String
+        , id : String
+        , snack : Maybe Snack
+        }
+
+
+ports : (Value -> Cmd msg) -> Ports -> Cmd msg
+ports portUnsafe ports =
+    portUnsafe (encodePorts ports)
+
+
+encodePorts : Ports -> Value
+encodePorts (Ports ports) =
+    Encode.object
+        [ ( "action", Encode.string ports.action )
+        , ( "id", Encode.string ports.id )
+        , ( "snack", Maybe.withDefault Encode.null (Maybe.map encodeSnack ports.snack) )
+        ]
+
+
+encodeSnack : Snack -> Value
+encodeSnack snack =
+    Encode.object
+        [ ( "dismissesOnAction", Encode.bool snack.dismissesOnAction )
+        , ( "message", Encode.string snack.message )
+        , ( "actionText", Encode.string snack.actionText )
+        , ( "timeout", Encode.float snack.timeout )
+        , ( "multiline", Encode.bool snack.multiline )
+        , ( "actionOnBottom", Encode.bool snack.actionOnBottom )
+        ]
 
 
 show : String -> Snack -> Ports
 show id snack =
-    { action = "show", id = id, snack = Just snack }
+    Ports { action = "show", id = id, snack = Just snack }
