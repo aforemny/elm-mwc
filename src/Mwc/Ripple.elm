@@ -4,7 +4,7 @@ import Html exposing (Html, text)
 import Html.Attributes as Html
 
 
-type alias Config msg =
+type alias RippleConfig msg =
     { primary : Bool
     , secondary : Bool
     , unbounded : Bool
@@ -12,7 +12,7 @@ type alias Config msg =
     }
 
 
-rippleConfig : Config msg
+rippleConfig : RippleConfig msg
 rippleConfig =
     { primary = False
     , secondary = False
@@ -21,7 +21,7 @@ rippleConfig =
     }
 
 
-ripple : Config msg -> Html msg
+ripple : RippleConfig msg -> Html msg
 ripple config =
     let
         bool v =
