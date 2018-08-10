@@ -4,7 +4,7 @@ import Html exposing (Html, text)
 import Html.Attributes as Html
 
 
-type alias Config msg =
+type alias RadioConfig msg =
     { checked : Bool
     , disabled : Bool
     , value : String
@@ -13,7 +13,7 @@ type alias Config msg =
     }
 
 
-radioConfig : Config msg
+radioConfig : RadioConfig msg
 radioConfig =
     { checked = False
     , disabled = False
@@ -23,7 +23,7 @@ radioConfig =
     }
 
 
-radio : Config msg -> Html msg
+radio : RadioConfig msg -> Html msg
 radio config =
     let
         bool v =
