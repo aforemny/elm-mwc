@@ -4,20 +4,20 @@ import Html exposing (Html, text)
 import Html.Attributes as Html
 
 
-type alias Config msg =
+type alias IconConfig msg =
     { icon : String
     , additionalAttributes : List (Html.Attribute msg)
     }
 
 
-iconConfig : Config msg
+iconConfig : IconConfig msg
 iconConfig =
     { icon = ""
     , additionalAttributes = []
     }
 
 
-icon : Config msg -> String -> Html msg
+icon : IconConfig msg -> String -> Html msg
 icon config_ icon =
     let
         config =

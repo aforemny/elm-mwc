@@ -3,7 +3,7 @@ module Mwc.Card exposing (..)
 import Html exposing (Html, text)
 import Html.Attributes as Html
 import Mwc.Button as Button exposing (ButtonConfig)
-import Mwc.Icon as Icon
+import Mwc.Icon as Icon exposing (IconConfig)
 import Mwc.Ripple exposing (rippleConfig)
 
 
@@ -210,7 +210,7 @@ type Icon msg
 
 
 actionIcon :
-    Icon.Config msg
+    IconConfig msg
     -> String
     -> Icon msg
 actionIcon iconConfig iconName =
