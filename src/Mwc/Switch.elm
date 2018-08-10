@@ -4,14 +4,14 @@ import Html exposing (Html, text)
 import Html.Attributes as Html
 
 
-type alias Config msg =
+type alias SwitchConfig msg =
     { checked : Bool
     , disabled : Bool
     , additionalAttributes : List (Html.Attribute msg)
     }
 
 
-switchConfig : Config msg
+switchConfig : SwitchConfig msg
 switchConfig =
     { checked = False
     , disabled = False
@@ -19,7 +19,7 @@ switchConfig =
     }
 
 
-switch : Config msg -> Html msg
+switch : SwitchConfig msg -> Html msg
 switch config =
     let
         bool v =
