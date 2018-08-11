@@ -6,6 +6,7 @@ import Demo.Checkbox
 import Demo.Chips
 import Demo.Fab
 import Demo.Icon
+import Demo.IconToggle
 import Demo.Snackbar
 import Demo.Textfield
 import Html exposing (Html, text)
@@ -19,7 +20,6 @@ import Mwc.Dialog exposing (dialog, dialogConfig)
 import Mwc.Fab exposing (fab, fabConfig)
 import Mwc.FormField exposing (formField, formFieldConfig)
 import Mwc.Icon exposing (icon, iconConfig)
-import Mwc.IconToggle exposing (iconToggle, iconToggleConfig)
 import Mwc.LinearProgress exposing (linearProgress, linearProgressConfig)
 import Mwc.List exposing (item, itemConfig, itemSeparator, itemSeparatorConfig)
 import Mwc.Menu exposing (menu, menuConfig)
@@ -30,7 +30,6 @@ import Mwc.Slider exposing (slider, sliderConfig)
 import Mwc.Snackbar exposing (snackbar, snackbarConfig)
 import Mwc.Switch exposing (switch, switchConfig)
 import Mwc.Tabs exposing (tab, tabBar, tabBarConfig, tabConfig)
-import Mwc.Textfield exposing (textfield, textfieldConfig)
 
 
 defaultModel =
@@ -38,6 +37,7 @@ defaultModel =
     , card = ()
     , snackbar = Demo.Snackbar.Model
     , textfield = Demo.Textfield.Model
+    , iconToggle = Demo.IconToggle.defaultModel
     }
 
 
@@ -47,6 +47,7 @@ type Msg
     | FabMsg ()
     | CardMsg ()
     | IconMsg ()
+    | IconToggleMsg Demo.IconToggle.Msg
     | SnackbarMsg Demo.Snackbar.Msg
     | TextfieldMsg Demo.Textfield.Msg
 
@@ -64,6 +65,12 @@ update msg model =
 
         IconMsg _ ->
             ( model, Cmd.none )
+
+        IconToggleMsg toggleMsg ->
+            Demo.IconToggle.update toggleMsg model.iconToggle
+                |> Tuple.mapFirst
+                    (\iconToggle -> { model | iconToggle = iconToggle })
+                |> Tuple.mapSecond (Cmd.map IconToggleMsg)
 
         CardMsg _ ->
             ( model, Cmd.none )
@@ -103,6 +110,7 @@ view model =
             , text Demo.Card.style
             , text Demo.Snackbar.style
             , text Demo.Icon.style
+            , text Demo.IconToggle.style
             ]
         , Html.div []
             [ Html.map ButtonMsg Demo.Button.view
@@ -110,6 +118,7 @@ view model =
             , Html.map FabMsg Demo.Fab.view
             , Html.map CardMsg Demo.Card.view
             , Html.map IconMsg Demo.Icon.view
+            , Html.map IconToggleMsg (Demo.IconToggle.view model.iconToggle)
             , Html.map TextfieldMsg (Demo.Textfield.view model.textfield)
             ]
         , Html.hr [] []
