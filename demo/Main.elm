@@ -7,6 +7,7 @@ import Demo.Chips
 import Demo.Fab
 import Demo.Icon
 import Demo.IconToggle
+import Demo.LinearProgress
 import Demo.Snackbar
 import Demo.Textfield
 import Html exposing (Html, text)
@@ -20,7 +21,6 @@ import Mwc.Dialog exposing (dialog, dialogConfig)
 import Mwc.Fab exposing (fab, fabConfig)
 import Mwc.FormField exposing (formField, formFieldConfig)
 import Mwc.Icon exposing (icon, iconConfig)
-import Mwc.LinearProgress exposing (linearProgress, linearProgressConfig)
 import Mwc.List exposing (item, itemConfig, itemSeparator, itemSeparatorConfig)
 import Mwc.Menu exposing (menu, menuConfig)
 import Mwc.Radio exposing (radio, radioConfig)
@@ -38,6 +38,7 @@ defaultModel =
     , snackbar = Demo.Snackbar.Model
     , textfield = Demo.Textfield.Model
     , iconToggle = Demo.IconToggle.defaultModel
+    , linearProgress = Demo.LinearProgress.defaultModel
     }
 
 
@@ -50,6 +51,7 @@ type Msg
     | IconToggleMsg Demo.IconToggle.Msg
     | SnackbarMsg Demo.Snackbar.Msg
     | TextfieldMsg Demo.Textfield.Msg
+    | LinearProgressMsg Demo.LinearProgress.Msg
 
 
 update msg model =
@@ -91,6 +93,14 @@ update msg model =
                     )
                 |> Tuple.mapSecond (Cmd.map TextfieldMsg)
 
+        LinearProgressMsg linearProgressMsg ->
+            Demo.LinearProgress.update linearProgressMsg model.linearProgress
+                |> Tuple.mapFirst
+                    (\linearProgress ->
+                        { model | linearProgress = linearProgress }
+                    )
+                |> Tuple.mapSecond (Cmd.map LinearProgressMsg)
+
 
 subscriptions model =
     Sub.none
@@ -111,6 +121,7 @@ view model =
             , text Demo.Snackbar.style
             , text Demo.Icon.style
             , text Demo.IconToggle.style
+            , text Demo.LinearProgress.style
             ]
         , Html.div []
             [ Html.map ButtonMsg Demo.Button.view
@@ -119,6 +130,7 @@ view model =
             , Html.map CardMsg Demo.Card.view
             , Html.map IconMsg Demo.Icon.view
             , Html.map IconToggleMsg (Demo.IconToggle.view model.iconToggle)
+            , Html.map LinearProgressMsg (Demo.LinearProgress.view model.linearProgress)
             , Html.map TextfieldMsg (Demo.Textfield.view model.textfield)
             ]
         , Html.hr [] []
