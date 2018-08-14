@@ -6,6 +6,22 @@ import Html.Events as Html
 import Mwc.IconToggle as Mwc exposing (iconToggle, iconToggleConfig)
 
 
+type alias Model =
+    { icon1 : Bool
+    , icon2 : Bool
+    , iconColor1 : Bool
+    , iconColor2 : Bool
+    }
+
+
+defaultModel =
+    { icon1 = False
+    , icon2 = False
+    , iconColor1 = False
+    , iconColor2 = False
+    }
+
+
 type Msg
     = Toggle1Clicked
     | Toggle2Clicked
@@ -34,22 +50,6 @@ update msg model =
 
         ToggleColor2Clicked ->
             ( { model | iconColor2 = not model.iconColor2 }, Cmd.none )
-
-
-type alias Model =
-    { icon1 : Bool
-    , icon2 : Bool
-    , iconColor1 : Bool
-    , iconColor2 : Bool
-    }
-
-
-defaultModel =
-    { icon1 = False
-    , icon2 = False
-    , iconColor1 = False
-    , iconColor2 = False
-    }
 
 
 style : String
