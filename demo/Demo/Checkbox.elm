@@ -10,14 +10,17 @@ view =
         []
         [ Html.h3 [] [ text "Checkbox" ]
         , checkbox checkboxConfig
-        , checkbox { checkboxConfig | checked = True }
         , checkbox
             { checkboxConfig
-                | indeterminate = True
+                | state = Mwc.Checked
             }
         , checkbox
             { checkboxConfig
-                | indeterminate = True
+                | state = Mwc.Indeterminate
+            }
+        , checkbox
+            { checkboxConfig
+                | state = Mwc.Indeterminate
                 , additionalAttributes = [ Html.class "special" ]
             }
         , checkbox { checkboxConfig | disabled = True }
