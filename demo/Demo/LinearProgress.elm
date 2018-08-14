@@ -7,6 +7,16 @@ import Mwc.Button as Button exposing (button, buttonConfig)
 import Mwc.LinearProgress exposing (linearProgress, linearProgressConfig)
 
 
+type alias Model =
+    { closed : Bool
+    }
+
+
+defaultModel =
+    { closed = False
+    }
+
+
 type Msg
     = ToggleButtonClicked
 
@@ -23,16 +33,6 @@ update msg model =
     case msg of
         ToggleButtonClicked ->
             ( { model | closed = not model.closed }, Cmd.none )
-
-
-type alias Model =
-    { closed : Bool
-    }
-
-
-defaultModel =
-    { closed = False
-    }
 
 
 style : String
