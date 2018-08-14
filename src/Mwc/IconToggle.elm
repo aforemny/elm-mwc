@@ -2,6 +2,7 @@ module Mwc.IconToggle exposing (..)
 
 import Html exposing (Html, text)
 import Html.Attributes as Html
+import Html.Events as Html
 
 
 type alias IconToggleConfig msg =
@@ -11,6 +12,7 @@ type alias IconToggleConfig msg =
     , offIcon : String
     , label : String
     , offLabel : String
+    , onToggle : Maybe msg
     , additionalAttributes : List (Html.Attribute msg)
     }
 
@@ -40,6 +42,10 @@ iconToggle config =
         (List.filterMap identity
             [ Maybe.map (Html.attribute "disabled") (bool config.disabled)
             , Maybe.map (Html.attribute "on") (bool config.on)
+            , if config.disabled then
+                Nothing
+              else
+                Maybe.map Html.onClick config.onToggle
             , Just (Html.attribute "icon" config.icon)
             , Just (Html.attribute "offIcon" offIcon)
             , Just (Html.attribute "label" config.label)
@@ -58,5 +64,6 @@ iconToggleConfig =
     , offIcon = ""
     , label = ""
     , offLabel = ""
+    , onToggle = Nothing
     , additionalAttributes = []
     }

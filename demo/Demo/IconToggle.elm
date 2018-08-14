@@ -9,6 +9,7 @@ import Mwc.IconToggle as Mwc exposing (iconToggle, iconToggleConfig)
 type alias Model =
     { icon1 : Bool
     , icon2 : Bool
+    , iconDisabled : Bool
     , iconColor1 : Bool
     , iconColor2 : Bool
     }
@@ -17,6 +18,7 @@ type alias Model =
 defaultModel =
     { icon1 = False
     , icon2 = False
+    , iconDisabled = False
     , iconColor1 = False
     , iconColor2 = False
     }
@@ -25,6 +27,7 @@ defaultModel =
 type Msg
     = Toggle1Clicked
     | Toggle2Clicked
+    | ToggleDisabledClicked
     | ToggleColor1Clicked
     | ToggleColor2Clicked
 
@@ -44,6 +47,9 @@ update msg model =
 
         Toggle2Clicked ->
             ( model, Cmd.none )
+
+        ToggleDisabledClicked ->
+            ( { model | iconDisabled = not model.iconDisabled }, Cmd.none )
 
         ToggleColor1Clicked ->
             ( { model | iconColor1 = not model.iconColor1 }, Cmd.none )
@@ -73,14 +79,14 @@ view model =
                     | on = model.icon1
                     , icon = "sentiment_very_satisfied"
                     , offIcon = "sentiment_very_dissatisfied"
-                    , additionalAttributes = [ Html.onClick Toggle1Clicked ]
+                    , onToggle = Just Toggle1Clicked
                 }
             , iconToggle
                 { iconToggleConfig
                     | on = model.icon2
                     , icon = "sentiment_satisfied"
                     , offIcon = "sentiment_neutral"
-                    , additionalAttributes = [ Html.onClick Toggle2Clicked ]
+                    , onToggle = Just Toggle2Clicked
                 }
             ]
         , Html.h3 [] [ text "Disabled" ]
@@ -88,10 +94,11 @@ view model =
             [ Html.class "demo-group" ]
             [ iconToggle
                 { iconToggleConfig
-                    | on = False
+                    | on = model.iconDisabled
                     , icon = "sentiment_satisfied"
                     , offIcon = "sentiment_very_dissatisfied"
                     , disabled = True
+                    , onToggle = Just ToggleDisabledClicked
                 }
             ]
         , Html.h3 [] [ text "Color" ]
@@ -102,14 +109,14 @@ view model =
                     | on = model.iconColor1
                     , icon = "all_out"
                     , offIcon = "accessibility"
-                    , additionalAttributes = [ Html.onClick ToggleColor1Clicked ]
+                    , onToggle = Just ToggleColor1Clicked
                 }
             , iconToggle
                 { iconToggleConfig
                     | on = model.iconColor2
                     , icon = "exit_to_app"
                     , offIcon = "camera"
-                    , additionalAttributes = [ Html.onClick ToggleColor2Clicked ]
+                    , onToggle = Just ToggleColor2Clicked
                 }
             ]
         ]
