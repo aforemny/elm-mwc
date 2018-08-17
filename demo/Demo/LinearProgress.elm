@@ -4,7 +4,7 @@ import Html exposing (Html, text)
 import Html.Attributes as Html
 import Html.Events as Html
 import Mwc.Button as Button exposing (button, buttonConfig)
-import Mwc.LinearProgress exposing (linearProgress, linearProgressConfig)
+import Mwc.LinearProgress as LinearProgress exposing (linearProgress, linearProgressConfig)
 
 
 type alias Model =
@@ -40,8 +40,7 @@ style =
     """
     mwc-linear-progress {
       width: 50%;
-      margin: auto !important;
-      --mdc-theme-secondary: #e6e6e6;
+      margin: auto;
     }
 
     .demo-progress-bar {
@@ -83,9 +82,7 @@ view model =
             []
             [ linearProgress
                 { linearProgressConfig
-                    | determinate = True
-                    , progress = 0.5
-                    , buffer = 1
+                    | variant = LinearProgress.Buffered 0.5 1
                 }
             ]
         , Html.h3 [] [ text "linear-progress: determinate buffer" ]
@@ -93,9 +90,7 @@ view model =
             []
             [ linearProgress
                 { linearProgressConfig
-                    | determinate = True
-                    , progress = 0.3
-                    , buffer = 0.7
+                    | variant = LinearProgress.Buffered 0.3 0.7
                     , additionalAttributes = [ Html.class "demo-progress-bar" ]
                 }
             ]
@@ -104,9 +99,7 @@ view model =
             []
             [ linearProgress
                 { linearProgressConfig
-                    | determinate = True
-                    , progress = 0.2
-                    , buffer = 0.6
+                    | variant = LinearProgress.Buffered 0.2 0.6
                     , reverse = True
                 }
             ]

@@ -5,13 +5,17 @@ import Html.Attributes as Html
 
 
 type alias LinearProgressConfig msg =
-    { determinate : Bool
-    , progress : Float
-    , buffer : Float
+    { variant : LinearProgressVariant
     , reverse : Bool
     , closed : Bool
     , additionalAttributes : List (Html.Attribute msg)
     }
+
+
+type LinearProgressVariant
+    = Indeterminate
+    | Determinate Float
+    | Buffered Float Float
 
 
 linearProgress : LinearProgressConfig msg -> Html msg
@@ -25,9 +29,36 @@ linearProgress config =
     in
     Html.node "mwc-linear-progress"
         (List.filterMap identity
-            [ Maybe.map (Html.attribute "determinate") (bool config.determinate)
-            , Just (Html.attribute "progress" (toString config.progress))
-            , Just (Html.attribute "buffer" (toString config.buffer))
+            [ Maybe.map (Html.attribute "determinate")
+                (case config.variant of
+                    Determinate determinate ->
+                        bool True
+
+                    Buffered determinate _ ->
+                        bool True
+
+                    _ ->
+                        bool False
+                )
+            , Maybe.map (Html.attribute "progress")
+                (case config.variant of
+                    Determinate determinate ->
+                        Just (toString determinate)
+
+                    Buffered determinate _ ->
+                        Just (toString determinate)
+
+                    _ ->
+                        Nothing
+                )
+            , Maybe.map (Html.attribute "buffer")
+                (case config.variant of
+                    Buffered _ buffered ->
+                        Just (toString buffered)
+
+                    _ ->
+                        Nothing
+                )
             , Maybe.map (Html.attribute "reverse") (bool config.reverse)
             , Maybe.map (Html.attribute "closed") (bool config.closed)
             ]
@@ -38,9 +69,7 @@ linearProgress config =
 
 linearProgressConfig : LinearProgressConfig msg
 linearProgressConfig =
-    { determinate = False
-    , progress = 0
-    , buffer = 0
+    { variant = Indeterminate
     , reverse = False
     , closed = False
     , additionalAttributes = []
