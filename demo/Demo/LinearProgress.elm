@@ -58,7 +58,7 @@ view model =
         []
         [ button
             { buttonConfig
-                | raised = True
+                | variant = Button.Raised
                 , additionalAttributes = [ Html.onClick ToggleButtonClicked ]
             }
             "Toggle"

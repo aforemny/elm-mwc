@@ -3,7 +3,7 @@ module Demo.Snackbar exposing (..)
 import Demo.Ports as Ports
 import Html exposing (Html, text)
 import Html.Attributes as Html
-import Mwc.Button exposing (button, buttonConfig)
+import Mwc.Button as Button exposing (button, buttonConfig)
 import Mwc.Snackbar as Snackbar exposing (Snack, snackbar, snackbarConfig)
 import Time exposing (Time)
 
@@ -89,7 +89,7 @@ view model =
             [ Html.class "demo-group" ]
             [ button
                 { buttonConfig
-                    | raised = True
+                    | variant = Button.Raised
                     , ripple = True
                     , onClick = Just Snack1Clicked
                     , additionalAttributes = [ Html.id "snack1" ]
@@ -97,7 +97,7 @@ view model =
                 "Snack 1"
             , button
                 { buttonConfig
-                    | raised = True
+                    | variant = Button.Raised
                     , ripple = True
                     , onClick = Just Snack2Clicked
                     , additionalAttributes = [ Html.id "snack2" ]
@@ -105,7 +105,7 @@ view model =
                 "Snack 2"
             , button
                 { buttonConfig
-                    | raised = True
+                    | variant = Button.Raised
                     , ripple = True
                     , onClick = Just Snack3Clicked
                     , additionalAttributes = [ Html.id "snack3" ]

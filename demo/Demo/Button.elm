@@ -40,13 +40,13 @@ view =
                 "Normal"
             , button
                 { buttonConfig
-                    | raised = True
+                    | variant = Button.Raised
                     , additionalAttributes = [ Html.class "light" ]
                 }
                 "Raised"
             , button
                 { buttonConfig
-                    | unelevated = True
+                    | variant = Button.Unelevated
                 }
                 "Unelevated"
             , button
@@ -57,7 +57,7 @@ view =
                 "Dense"
             , button
                 { buttonConfig
-                    | raised = True
+                    | variant = Button.Raised
                     , additionalAttributes = [ Html.class "pink white" ]
                 }
                 "Wide"

@@ -13,7 +13,7 @@ import Demo.Textfield
 import Html exposing (Html, text)
 import Html.Attributes
 import Html.Events as Html
-import Mwc.Button exposing (button, buttonConfig)
+import Mwc.Button as Button exposing (button, buttonConfig)
 import Mwc.Card as Card exposing (card, cardConfig)
 import Mwc.Checkbox exposing (checkbox, checkboxConfig)
 import Mwc.Chips exposing (chip, chipConfig, chipSet, chipSetConfig)
@@ -141,7 +141,7 @@ view model =
             ]
             [ button
                 { buttonConfig
-                    | raised = True
+                    | variant = Button.Raised
                     , icon = "map"
                 }
                 "Hi there"
