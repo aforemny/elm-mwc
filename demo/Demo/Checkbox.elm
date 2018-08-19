@@ -5,7 +5,26 @@ import Html.Attributes as Html
 import Mwc.Checkbox as Mwc exposing (checkbox, checkboxConfig)
 
 
-view =
+type alias Model =
+    {}
+
+
+defaultModel : Model
+defaultModel =
+    {}
+
+
+type Msg
+    = NoOp
+
+
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg model =
+    ( model, Cmd.none )
+
+
+view : Model -> Html Msg
+view model =
     Html.node "main"
         []
         [ Html.h3 [] [ text "Checkbox" ]

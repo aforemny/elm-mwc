@@ -8,6 +8,25 @@ import Mwc.Icon exposing (icon, iconConfig)
 import Mwc.Typography as Typography
 
 
+type alias Model =
+    {}
+
+
+defaultModel : Model
+defaultModel =
+    {}
+
+
+type Msg
+    = NoOp
+
+
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg model =
+    ( model, Cmd.none )
+
+
+style : String
 style =
     """
 body {
@@ -48,7 +67,8 @@ body {
     """
 
 
-view =
+view : Model -> Html Msg
+view model =
     Html.node "main"
         []
         [ Card.card Card.cardConfig

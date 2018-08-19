@@ -5,6 +5,25 @@ import Html.Attributes as Html
 import Mwc.Button as Button exposing (button, buttonConfig)
 
 
+type alias Model =
+    {}
+
+
+defaultModel : Model
+defaultModel =
+    {}
+
+
+type Msg
+    = NoOp
+
+
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg model =
+    ( model, Cmd.none )
+
+
+style : String
 style =
     """
     .light {
@@ -27,7 +46,8 @@ style =
   """
 
 
-view =
+view : Model -> Html Msg
+view model =
     Html.node "main"
         []
         [ Html.h4 []

@@ -32,92 +32,121 @@ import Mwc.Snackbar exposing (snackbar, snackbarConfig)
 import Mwc.Tabs exposing (tab, tabBar, tabBarConfig, tabConfig)
 
 
+type alias Model =
+    { button : Demo.Button.Model
+    , card : Demo.Card.Model
+    , snackbar : Demo.Snackbar.Model
+    , textfield : Demo.Textfield.Model
+    , iconToggle : Demo.IconToggle.Model
+    , linearProgress : Demo.LinearProgress.Model
+    , radio : Demo.Radio.Model
+    , switch : Demo.Switch.Model
+    , checkbox : Demo.Checkbox.Model
+    , fab : Demo.Fab.Model
+    , icon : Demo.Icon.Model
+    }
+
+
+defaultModel : Model
 defaultModel =
-    { button = ()
-    , card = ()
+    { button = Demo.Button.defaultModel
+    , card = Demo.Card.defaultModel
     , snackbar = Demo.Snackbar.Model
     , textfield = Demo.Textfield.Model
     , iconToggle = Demo.IconToggle.defaultModel
     , linearProgress = Demo.LinearProgress.defaultModel
+    , radio = Demo.Radio.defaultModel
     , switch = Demo.Switch.defaultModel
+    , checkbox = Demo.Checkbox.defaultModel
+    , fab = Demo.Fab.defaultModel
+    , icon = Demo.Icon.defaultModel
     }
 
 
 type Msg
-    = ButtonMsg ()
-    | CheckboxMsg ()
-    | FabMsg ()
-    | CardMsg ()
-    | IconMsg ()
+    = ButtonMsg Demo.Button.Msg
+    | CheckboxMsg Demo.Checkbox.Msg
+    | FabMsg Demo.Fab.Msg
+    | CardMsg Demo.Card.Msg
+    | IconMsg Demo.Icon.Msg
     | IconToggleMsg Demo.IconToggle.Msg
     | SnackbarMsg Demo.Snackbar.Msg
     | TextfieldMsg Demo.Textfield.Msg
     | LinearProgressMsg Demo.LinearProgress.Msg
     | SwitchMsg Demo.Switch.Msg
+    | RadioMsg Demo.Radio.Msg
 
 
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    Sub.none
+
+
+init : ( Model, Cmd Msg )
+init =
+    ( defaultModel, Cmd.none )
+
+
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        ButtonMsg _ ->
-            ( model, Cmd.none )
+        ButtonMsg buttonMsg ->
+            Demo.Button.update buttonMsg model.button
+                |> Tuple.mapFirst (\button -> { model | button = button })
+                |> Tuple.mapSecond (Cmd.map ButtonMsg)
 
-        CheckboxMsg _ ->
-            ( model, Cmd.none )
+        CheckboxMsg checkboxMsg ->
+            Demo.Checkbox.update checkboxMsg model.checkbox
+                |> Tuple.mapFirst (\checkbox -> { model | checkbox = checkbox })
+                |> Tuple.mapSecond (Cmd.map CheckboxMsg)
 
-        FabMsg _ ->
-            ( model, Cmd.none )
+        FabMsg fabMsg ->
+            Demo.Fab.update fabMsg model.fab
+                |> Tuple.mapFirst (\fab -> { model | fab = fab })
+                |> Tuple.mapSecond (Cmd.map FabMsg)
 
-        IconMsg _ ->
-            ( model, Cmd.none )
+        IconMsg iconMsg ->
+            Demo.Icon.update iconMsg model.icon
+                |> Tuple.mapFirst (\icon -> { model | icon = icon })
+                |> Tuple.mapSecond (Cmd.map IconMsg)
 
         IconToggleMsg toggleMsg ->
             Demo.IconToggle.update toggleMsg model.iconToggle
-                |> Tuple.mapFirst
-                    (\iconToggle -> { model | iconToggle = iconToggle })
+                |> Tuple.mapFirst (\iconToggle -> { model | iconToggle = iconToggle })
                 |> Tuple.mapSecond (Cmd.map IconToggleMsg)
 
-        CardMsg _ ->
-            ( model, Cmd.none )
+        CardMsg cardMsg ->
+            Demo.Card.update cardMsg model.card
+                |> Tuple.mapFirst (\card -> { model | card = card })
+                |> Tuple.mapSecond (Cmd.map CardMsg)
 
         SnackbarMsg snackbarMsg ->
             Demo.Snackbar.update snackbarMsg model.snackbar
                 |> Tuple.mapFirst
-                    (\snackbar ->
-                        { model | snackbar = snackbar }
-                    )
+                    (\snackbar -> { model | snackbar = snackbar })
                 |> Tuple.mapSecond (Cmd.map SnackbarMsg)
 
         TextfieldMsg textfieldMsg ->
             Demo.Textfield.update textfieldMsg model.textfield
                 |> Tuple.mapFirst
-                    (\textfield ->
-                        { model | textfield = textfield }
-                    )
+                    (\textfield -> { model | textfield = textfield })
                 |> Tuple.mapSecond (Cmd.map TextfieldMsg)
 
         LinearProgressMsg linearProgressMsg ->
             Demo.LinearProgress.update linearProgressMsg model.linearProgress
                 |> Tuple.mapFirst
-                    (\linearProgress ->
-                        { model | linearProgress = linearProgress }
-                    )
+                    (\linearProgress -> { model | linearProgress = linearProgress })
                 |> Tuple.mapSecond (Cmd.map LinearProgressMsg)
 
         SwitchMsg switchMsg ->
             Demo.Switch.update switchMsg model.switch
-                |> Tuple.mapFirst
-                    (\switch ->
-                        { model | switch = switch }
-                    )
+                |> Tuple.mapFirst (\switch -> { model | switch = switch })
                 |> Tuple.mapSecond (Cmd.map SwitchMsg)
 
-
-subscriptions model =
-    Sub.none
-
-
-init =
-    ( defaultModel, Cmd.none )
+        RadioMsg radioMsg ->
+            Demo.Radio.update radioMsg model.radio
+                |> Tuple.mapFirst (\radio -> { model | radio = radio })
+                |> Tuple.mapSecond (Cmd.map RadioMsg)
 
 
 view model =
@@ -134,14 +163,14 @@ view model =
             , text Demo.LinearProgress.style
             ]
         , Html.div []
-            [ Html.map ButtonMsg Demo.Button.view
-            , Html.map CheckboxMsg Demo.Checkbox.view
-            , Html.map FabMsg Demo.Fab.view
-            , Html.map CardMsg Demo.Card.view
-            , Html.map IconMsg Demo.Icon.view
+            [ Html.map ButtonMsg (Demo.Button.view model.button)
+            , Html.map CheckboxMsg (Demo.Checkbox.view model.checkbox)
+            , Html.map FabMsg (Demo.Fab.view model.fab)
+            , Html.map CardMsg (Demo.Card.view model.card)
+            , Html.map IconMsg (Demo.Icon.view model.icon)
             , Html.map IconToggleMsg (Demo.IconToggle.view model.iconToggle)
             , Html.map LinearProgressMsg (Demo.LinearProgress.view model.linearProgress)
-            , Demo.Radio.view
+            , Html.map RadioMsg (Demo.Radio.view model.radio)
             , Html.map TextfieldMsg (Demo.Textfield.view model.textfield)
             , Html.map SwitchMsg (Demo.Switch.view model.switch)
             ]
