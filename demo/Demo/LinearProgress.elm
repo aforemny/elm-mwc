@@ -12,6 +12,7 @@ type alias Model =
     }
 
 
+defaultModel : Model
 defaultModel =
     { closed = False
     }
@@ -21,14 +22,7 @@ type Msg
     = ToggleButtonClicked
 
 
-init msg model =
-    ( model, Cmd.none )
-
-
-subscriptions model =
-    Sub.none
-
-
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         ToggleButtonClicked ->

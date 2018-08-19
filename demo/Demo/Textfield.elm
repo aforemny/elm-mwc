@@ -6,38 +6,28 @@ import Mwc.Textfield as Textfield exposing (TextfieldConfig, textfield, textfiel
 import Time exposing (Time)
 
 
+type alias Model =
+    {}
+
+
+defaultModel : Model
+defaultModel =
+    {}
+
+
 type Msg
-    = NoOp
-    | Input String
+    = Input String
 
 
-init msg model =
-    ( model, Cmd.none )
-
-
-subscriptions model =
-    Sub.none
-
-
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        NoOp ->
-            ( model, Cmd.none )
-
         Input input ->
             let
                 _ =
                     Debug.log "input" input
             in
             ( model, Cmd.none )
-
-
-type alias Model =
-    {}
-
-
-defaultModel =
-    {}
 
 
 style : String

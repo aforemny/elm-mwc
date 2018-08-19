@@ -15,6 +15,7 @@ type alias Model =
     }
 
 
+defaultModel : Model
 defaultModel =
     { icon1 = False
     , icon2 = False
@@ -32,14 +33,7 @@ type Msg
     | ToggleColor2Clicked
 
 
-init msg model =
-    ( model, Cmd.none )
-
-
-subscriptions model =
-    Sub.none
-
-
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Toggle1Clicked ->
