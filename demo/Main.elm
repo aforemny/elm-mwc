@@ -89,7 +89,7 @@ init =
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    case msg of
+    case Debug.log "Msg" msg of
         ButtonMsg buttonMsg ->
             Demo.Button.update buttonMsg model.button
                 |> Tuple.mapFirst (\button -> { model | button = button })
