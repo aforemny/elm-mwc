@@ -44,17 +44,19 @@ button config_ label =
             { config_ | label = label }
     in
     Html.node "mwc-button"
-        ([ boolProp "raised" (config.variant == Raised)
-         , boolProp "unelevated" (config.variant == Unelevated)
-         , boolProp "outlined" (config.variant == Outlined)
-         , boolProp "dense" config.dense
-         , boolProp "disabled" config.disabled
-         , stringProp "icon" config.icon
-         , stringProp "label" config.label
+        (List.filterMap identity
+            [ Just (boolProp "raised" (config.variant == Raised))
+            , Just (boolProp "unelevated" (config.variant == Unelevated))
+            , Just (boolProp "outlined" (config.variant == Outlined))
+            , Just (boolProp "dense" config.dense)
+            , Just (boolProp "disabled" config.disabled)
+            , Just (stringProp "icon" config.icon)
+            , Just (stringProp "label" config.label)
+            , Maybe.map Html.onClick config.onClick
 
-         -- Note: As of now, this is not implemented in mwc-button yet:
-         -- , Just (boolProp "ripple" config.ripple)
-         ]
+            -- Note: As of now, this is not implemented in mwc-button yet:
+            -- , Just (boolProp "ripple" config.ripple)
+            ]
             ++ config.additionalAttributes
         )
         []
