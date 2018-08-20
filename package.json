@@ -11,12 +11,40 @@
     "url": "github.com:aforemny/elm-mwc.git"
   },
   "author": "",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "devDependencies": {
-    "@material/card": "^0.37.1",
-    "@material/typography": "^0.38.0",
-    "@polymer/lit-element": "^0.5.2",
     "@webcomponents/webcomponentsjs": "^2.0.4",
-    "polyserve": "^0.27.12"
+    "babel-core": "^6.26.3",
+    "babel-preset-es2015-rollup": "^3.0.0",
+    "polyserve": "^0.27.12",
+    "rollup": "^0.64.1",
+    "rollup-plugin-babel": "^3.0.7",
+    "rollup-plugin-node-resolve": "^3.3.0",
+    "rollup-plugin-uglify": "^4.0.0"
+  },
+  "dependencies": {
+    "@material/mwc-base": "file:material-components-web-components/packages/base",
+    "@material/mwc-button": "file:material-components-web-components/packages/button",
+    "@material/mwc-card": "file:material-components-web-components/packages/card",
+    "@material/mwc-checkbox": "file:material-components-web-components/packages/checkbox",
+    "@material/mwc-chips": "file:material-components-web-components/packages/chips",
+    "@material/mwc-dialog": "file:material-components-web-components/packages/dialog",
+    "@material/mwc-fab": "file:material-components-web-components/packages/fab",
+    "@material/mwc-formfield": "file:material-components-web-components/packages/formfield",
+    "@material/mwc-icon": "file:material-components-web-components/packages/icon",
+    "@material/mwc-icon-toggle": "file:material-components-web-components/packages/icon-toggle",
+    "@material/mwc-linear-progress": "file:material-components-web-components/packages/linear-progress",
+    "@material/mwc-list": "file:material-components-web-components/packages/list",
+    "@material/mwc-menu": "file:material-components-web-components/packages/menu",
+    "@material/mwc-radio": "file:material-components-web-components/packages/radio",
+    "@material/mwc-ripple": "file:material-components-web-components/packages/ripple",
+    "@material/mwc-sass-render": "file:material-components-web-components/packages/sass-render",
+    "@material/mwc-select": "file:material-components-web-components/packages/select",
+    "@material/mwc-slider": "file:material-components-web-components/packages/slider",
+    "@material/mwc-snackbar": "file:material-components-web-components/packages/snackbar",
+    "@material/mwc-switch": "file:material-components-web-components/packages/switch",
+    "@material/mwc-tabs": "file:material-components-web-components/packages/tabs",
+    "@material/mwc-textfield": "file:material-components-web-components/packages/textfield",
+    "@material/mwc-typography": "file:material-components-web-components/packages/typography"
   }
 }

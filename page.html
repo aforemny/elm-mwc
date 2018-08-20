@@ -2,22 +2,12 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <script type="module" src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
-    <script type="module" src="material-components-web-components/packages/button/mwc-button.js"></script>
-    <script type="module" src="material-components-web-components/packages/card/mwc-card.js"></script>
-    <script type="module" src="material-components-web-components/packages/checkbox/mwc-checkbox.js"></script>
-    <script type="module" src="material-components-web-components/packages/fab/mwc-fab.js"></script>
-    <script type="module" src="material-components-web-components/packages/icon/mwc-icon.js"></script>
-    <script type="module" src="material-components-web-components/packages/icon-toggle/mwc-icon-toggle.js"></script>
-    <script type="module" src="material-components-web-components/packages/linear-progress/mwc-linear-progress.js"></script>
-    <script type="module" src="material-components-web-components/packages/linear-progress/mwc-linear-progress-css.js"></script>
-    <script type="module" src="material-components-web-components/packages/radio/mwc-radio.js"></script>
-    <script type="module" src="material-components-web-components/packages/ripple/mwc-ripple.js"></script>
-    <script type="module" src="material-components-web-components/packages/switch/mwc-switch.js"></script>
-    <script type="module" src="material-components-web-components/packages/snackbar/mwc-snackbar.js"></script>
-    <script type="module" src="material-components-web-components/packages/textfield/mwc-textfield.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js"></script>
+    <script src="./node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
     <link rel="stylesheet" type="text/css" href="demo.css">
   </head>
+  <script src="bundle.js"></script>
   <body class="notDefined">
 
     <div id="main"></div>
@@ -74,8 +64,8 @@
 
     <script>
       addEventListener('WebComponentsReady', () => {
-        document.body.classList.remove('notDefined');
         var app = Elm.Main.fullscreen();
+        document.body.classList.remove('notDefined');
 
         app.ports.snackbarUnsafe.subscribe(function(msg) {
           if (msg.action === 'show') {

@@ -9,11 +9,16 @@ material-components-web-components/node_modules:
 	(cd material-components-web-components && npm i)
 	(cd material-components-web-components && npm run bootstrap)
 
-pages: build
+bundle.js: page.js
+	node scripts/build-demo.js
+
+pages: build bundle.js
 	mkdir -p gh-pages
 	cp page.html gh-pages/index.html
 	cp demo.js gh-pages/demo.js
 	cp demo.css gh-pages/demo.css
+	cp bundle.js gh-pages/bundle.js
+	rsync -r node_modules/@webcomponents gh-pages/node_modules
 
 clean:
 	rm -rf elm-stuff/build-artifacts
