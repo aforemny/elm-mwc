@@ -1,7 +1,7 @@
 module Mwc.Tabs exposing (..)
 
 import Html exposing (Html, text)
-import Html.Attributes as Html
+import Mwc.Attributes exposing (intProp, stringProp)
 
 
 type alias TabConfig msg =
@@ -15,9 +15,9 @@ type alias TabConfig msg =
 tab : TabConfig msg -> Html msg
 tab config =
     Html.node "mwc-tab"
-        ([ Html.attribute "href" config.href
-         , Html.attribute "icon" config.icon
-         , Html.attribute "label" config.label
+        ([ stringProp "href" config.href
+         , stringProp "icon" config.icon
+         , stringProp "label" config.label
          ]
             ++ config.additionalAttributes
         )
@@ -42,7 +42,7 @@ type alias TabBarConfig msg =
 tabBar : TabBarConfig msg -> Html msg
 tabBar config =
     Html.node "mwc-tab-bar"
-        ([ Html.attribute "activeIndex" (toString config.activeIndex)
+        ([ intProp "activeIndex" config.activeIndex
          ]
             ++ config.additionalAttributes
         )

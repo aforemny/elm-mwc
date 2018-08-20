@@ -1,7 +1,7 @@
 module Mwc.List exposing (..)
 
 import Html exposing (Html)
-import Html.Attributes as Html
+import Mwc.Attributes exposing (boolProp, stringProp)
 
 
 type alias ItemConfig msg =
@@ -14,19 +14,11 @@ type alias ItemConfig msg =
 
 item : ItemConfig msg -> Html msg
 item config =
-    let
-        bool v =
-            if v then
-                Just ""
-            else
-                Nothing
-    in
     Html.node "mwc-list-item"
-        (List.filterMap identity
-            [ Just (Html.attribute "label" config.label)
-            , Just (Html.attribute "icon" config.icon)
-            , Maybe.map (Html.attribute "disabled") (bool config.disabled)
-            ]
+        ([ stringProp "label" config.label
+         , stringProp "icon" config.icon
+         , boolProp "disabled" config.disabled
+         ]
             ++ config.additionalAttributes
         )
         []

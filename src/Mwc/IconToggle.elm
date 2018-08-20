@@ -1,8 +1,8 @@
 module Mwc.IconToggle exposing (..)
 
 import Html exposing (Html, text)
-import Html.Attributes as Html
 import Html.Events as Html
+import Mwc.Attributes exposing (boolProp, stringProp)
 
 
 type alias IconToggleConfig msg =
@@ -20,12 +20,6 @@ type alias IconToggleConfig msg =
 iconToggle : IconToggleConfig msg -> Html msg
 iconToggle config =
     let
-        bool v =
-            if v then
-                Just ""
-            else
-                Nothing
-
         offIcon =
             if config.offIcon == "" then
                 config.icon
@@ -40,16 +34,16 @@ iconToggle config =
     in
     Html.node "mwc-icon-toggle"
         (List.filterMap identity
-            [ Maybe.map (Html.attribute "disabled") (bool config.disabled)
-            , Maybe.map (Html.attribute "on") (bool config.on)
+            [ Just (boolProp "disabled" config.disabled)
+            , Just (boolProp "on" config.on)
+            , Just (stringProp "icon" config.icon)
+            , Just (stringProp "offIcon" offIcon)
+            , Just (stringProp "label" config.label)
+            , Just (stringProp "offLabel" offLabel)
             , if config.disabled then
                 Nothing
               else
                 Maybe.map Html.onClick config.onToggle
-            , Just (Html.attribute "icon" config.icon)
-            , Just (Html.attribute "offIcon" offIcon)
-            , Just (Html.attribute "label" config.label)
-            , Just (Html.attribute "offLabel" offLabel)
             ]
             ++ config.additionalAttributes
         )

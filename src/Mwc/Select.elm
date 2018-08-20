@@ -1,7 +1,7 @@
 module Mwc.Select exposing (..)
 
 import Html exposing (Html)
-import Html.Attributes as Html
+import Mwc.Attributes exposing (boolProp, stringProp)
 
 
 type alias SelectConfig msg =
@@ -14,16 +14,11 @@ type alias SelectConfig msg =
 
 select : SelectConfig msg -> List (Html msg) -> Html msg
 select config =
-  let
-      bool v =
-        if v then Just "" else Nothing
-  in
     Html.node "mwc-select"
-        (List.filterMap identity
-            [ Just (Html.attribute "label" config.label)
-            , Maybe.map (Html.attribute "disabled") (bool config.disabled)
-            , Maybe.map (Html.attribute "box") (bool config.box)
-            ]
+        ([ stringProp "label" config.label
+         , boolProp "disabled" config.disabled
+         , boolProp "box" config.box
+         ]
             ++ config.additionalAttributes
         )
 

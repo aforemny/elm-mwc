@@ -1,8 +1,8 @@
 module Mwc.Textfield exposing (..)
 
 import Html exposing (Html, text)
-import Html.Attributes as Html
 import Html.Events as Html
+import Mwc.Attributes exposing (boolProp, stringProp)
 
 
 type alias TextfieldConfig msg =
@@ -25,27 +25,20 @@ type alias TextfieldConfig msg =
 
 textfield : TextfieldConfig msg -> Html msg
 textfield config =
-    let
-        bool v =
-            if v then
-                Just ""
-            else
-                Nothing
-    in
     Html.node "mwc-textfield"
         (List.filterMap identity
-            [ Maybe.map (Html.attribute "required") (bool config.required)
-            , Just (Html.attribute "value" config.value)
-            , Just (Html.attribute "label" config.label)
-            , Just (Html.attribute "icon" config.icon)
-            , Maybe.map (Html.attribute "iconTrailing") (bool config.iconTrailing)
-            , Just (Html.attribute "helperText" config.helperText)
-            , Maybe.map (Html.attribute "box") (bool config.box)
-            , Maybe.map (Html.attribute "outlined") (bool config.outlined)
-            , Maybe.map (Html.attribute "disabled") (bool config.disabled)
-            , Maybe.map (Html.attribute "fullWidth") (bool config.fullWidth)
-            , Just (Html.attribute "placeholder" config.placeholder)
-            , Just (Html.attribute "type" config.type_)
+            [ Just (boolProp "required" config.required)
+            , Just (stringProp "value" config.value)
+            , Just (stringProp "label" config.label)
+            , Just (stringProp "icon" config.icon)
+            , Just (boolProp "iconTrailing" config.iconTrailing)
+            , Just (stringProp "helperText" config.helperText)
+            , Just (boolProp "box" config.box)
+            , Just (boolProp "outlined" config.outlined)
+            , Just (boolProp "disabled" config.disabled)
+            , Just (boolProp "fullWidth" config.fullWidth)
+            , Just (stringProp "placeholder" config.placeholder)
+            , Just (stringProp "type" config.type_)
             , Maybe.map Html.onInput config.onInput
             ]
             ++ config.additionalAttributes

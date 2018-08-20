@@ -50,13 +50,6 @@ type alias SnackbarConfig msg =
 
 snackbar : SnackbarConfig msg -> Html msg
 snackbar config =
-    let
-        bool v =
-            if v then
-                Just ""
-            else
-                Nothing
-    in
     Html.node "mwc-snackbar" config.additionalAttributes []
 
 

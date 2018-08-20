@@ -1,7 +1,7 @@
 module Mwc.Fab exposing (..)
 
 import Html exposing (Html, text)
-import Html.Attributes as Html
+import Mwc.Attributes exposing (boolProp, stringProp)
 
 
 type alias FabConfig msg =
@@ -30,21 +30,14 @@ fab config_ icon =
     let
         config =
             { config_ | icon = icon }
-
-        bool v =
-            if v then
-                Just ""
-            else
-                Nothing
     in
     Html.node "mwc-fab"
-        (List.filterMap identity
-            [ Maybe.map (Html.attribute "mini") (bool config.mini)
-            , Maybe.map (Html.attribute "exited") (bool config.exited)
-            , Maybe.map (Html.attribute "disabled") (bool config.disabled)
-            , Just (Html.attribute "icon" config.icon)
-            , Just (Html.attribute "label" config.label)
-            ]
+        ([ boolProp "mini" config.mini
+         , boolProp "exited" config.exited
+         , boolProp "disabled" config.disabled
+         , stringProp "icon" config.icon
+         , stringProp "label" config.label
+         ]
             ++ config.additionalAttributes
         )
         []

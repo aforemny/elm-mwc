@@ -90,7 +90,6 @@ view model =
             [ button
                 { buttonConfig
                     | variant = Button.Raised
-                    , ripple = True
                     , onClick = Just Snack1Clicked
                     , additionalAttributes = [ Html.id "snack1" ]
                 }
@@ -98,7 +97,6 @@ view model =
             , button
                 { buttonConfig
                     | variant = Button.Raised
-                    , ripple = True
                     , onClick = Just Snack2Clicked
                     , additionalAttributes = [ Html.id "snack2" ]
                 }
@@ -106,7 +104,6 @@ view model =
             , button
                 { buttonConfig
                     | variant = Button.Raised
-                    , ripple = True
                     , onClick = Just Snack3Clicked
                     , additionalAttributes = [ Html.id "snack3" ]
                 }

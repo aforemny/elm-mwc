@@ -1,7 +1,7 @@
 module Mwc.Slider exposing (..)
 
 import Html exposing (Html)
-import Html.Attributes as Html
+import Mwc.Attributes exposing (boolProp, floatProp, stringProp)
 
 
 type alias SliderConfig msg =
@@ -18,23 +18,15 @@ type alias SliderConfig msg =
 
 slider : SliderConfig msg -> Html msg
 slider config =
-    let
-        bool v =
-            if v then
-                Just ""
-            else
-                Nothing
-    in
     Html.node "mwc-slider"
-        (List.filterMap identity
-            [ Maybe.map (Html.attribute "disabled") (bool config.disabled)
-            , Just (Html.attribute "step" (toString config.step))
-            , Just (Html.attribute "min" (toString config.min))
-            , Just (Html.attribute "max" (toString config.max))
-            , Just (Html.attribute "value" (toString config.value))
-            , Maybe.map (Html.attribute "discrete") (bool config.discrete)
-            , Maybe.map (Html.attribute "markers") (bool config.markers)
-            ]
+        ([ boolProp "disabled" config.disabled
+         , floatProp "step" config.step
+         , floatProp "min" config.min
+         , floatProp "max" config.max
+         , floatProp "value" config.value
+         , boolProp "discrete" config.discrete
+         , boolProp "markers" config.markers
+         ]
             ++ config.additionalAttributes
         )
         []

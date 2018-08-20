@@ -1,7 +1,7 @@
 module Mwc.Checkbox exposing (CheckboxConfig, State(..), checkbox, checkboxConfig)
 
 import Html exposing (Html, text)
-import Html.Attributes as Html
+import Mwc.Attributes exposing (boolProp, stringProp)
 
 
 type alias CheckboxConfig msg =
@@ -29,27 +29,19 @@ checkboxConfig =
 
 checkbox : CheckboxConfig msg -> Html msg
 checkbox config =
-    let
-        bool v =
-            if v then
-                Just ""
-            else
-                Nothing
-    in
     Html.node "mwc-checkbox"
-        (List.filterMap identity
-            [ case config.state of
-                Unchecked ->
-                    Maybe.map (Html.attribute "checked") (bool False)
+        ([ case config.state of
+            Unchecked ->
+                boolProp "checked" False
 
-                Checked ->
-                    Maybe.map (Html.attribute "checked") (bool True)
+            Checked ->
+                boolProp "checked" True
 
-                Indeterminate ->
-                    Maybe.map (Html.attribute "indeterminate") (bool True)
-            , Maybe.map (Html.attribute "disabled") (bool config.disabled)
-            , Just (Html.attribute "value" config.value)
-            ]
+            Indeterminate ->
+                boolProp "indeterminate" True
+         , boolProp "disabled" config.disabled
+         , stringProp "value" config.value
+         ]
             ++ config.additionalAttributes
         )
         []

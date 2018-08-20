@@ -1,7 +1,7 @@
 module Mwc.FormField exposing (..)
 
 import Html exposing (Html, text)
-import Html.Attributes as Html
+import Mwc.Attributes exposing (boolProp, stringProp)
 
 
 type alias FormFieldConfig msg =
@@ -13,18 +13,10 @@ type alias FormFieldConfig msg =
 
 formField : FormFieldConfig msg -> List (Html msg) -> Html msg
 formField config =
-    let
-        bool v =
-            if v then
-                Just ""
-            else
-                Nothing
-    in
     Html.node "mwc-formfield"
-        (List.filterMap identity
-            [ Just (Html.attribute "label" config.label)
-            , Maybe.map (Html.attribute "alignEnd") (bool config.alignEnd)
-            ]
+        ([ stringProp "label" config.label
+         , boolProp "alignEnd" config.alignEnd
+         ]
             ++ config.additionalAttributes
         )
 

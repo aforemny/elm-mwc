@@ -1,7 +1,7 @@
 module Mwc.LinearProgress exposing (..)
 
 import Html exposing (Html)
-import Html.Attributes as Html
+import Mwc.Attributes exposing (boolProp, floatProp, stringProp)
 
 
 type alias LinearProgressConfig msg =
@@ -20,47 +20,30 @@ type LinearProgressVariant
 
 linearProgress : LinearProgressConfig msg -> Html msg
 linearProgress config =
-    let
-        bool v =
-            if v then
-                Just ""
-            else
-                Nothing
-    in
     Html.node "mwc-linear-progress"
         (List.filterMap identity
-            [ Maybe.map (Html.attribute "determinate")
+            [ Just (boolProp "determinate" (config.variant /= Indeterminate))
+            , Maybe.map (floatProp "progress")
                 (case config.variant of
                     Determinate determinate ->
-                        bool True
+                        Just determinate
 
                     Buffered determinate _ ->
-                        bool True
-
-                    _ ->
-                        bool False
-                )
-            , Maybe.map (Html.attribute "progress")
-                (case config.variant of
-                    Determinate determinate ->
-                        Just (toString determinate)
-
-                    Buffered determinate _ ->
-                        Just (toString determinate)
+                        Just determinate
 
                     _ ->
                         Nothing
                 )
-            , Maybe.map (Html.attribute "buffer")
+            , Maybe.map (floatProp "buffer")
                 (case config.variant of
                     Buffered _ buffered ->
-                        Just (toString buffered)
+                        Just buffered
 
                     _ ->
                         Nothing
                 )
-            , Maybe.map (Html.attribute "reverse") (bool config.reverse)
-            , Maybe.map (Html.attribute "closed") (bool config.closed)
+            , Just (boolProp "reverse" config.reverse)
+            , Just (boolProp "closed" config.closed)
             ]
             ++ config.additionalAttributes
         )

@@ -1,7 +1,7 @@
 module Mwc.Dialog exposing (..)
 
 import Html exposing (Html, text)
-import Html.Attributes as Html
+import Mwc.Attributes exposing (boolProp, stringProp)
 
 
 type alias DialogConfig msg =
@@ -16,21 +16,13 @@ type alias DialogConfig msg =
 
 dialog : DialogConfig msg -> List (Html msg) -> Html msg
 dialog config =
-    let
-        bool v =
-            if v then
-                Just ""
-            else
-                Nothing
-    in
     Html.node "mwc-dialog"
-        (List.filterMap identity
-            [ Just (Html.attribute "headerLabel" config.headerLabel)
-            , Just (Html.attribute "acceptLabel" config.acceptLabel)
-            , Just (Html.attribute "declineLabel" config.declineLabel)
-            , Maybe.map (Html.attribute "scrollable") (bool config.scrollable)
-            , Maybe.map (Html.attribute "opened") (bool config.opened)
-            ]
+        ([ stringProp "headerLabel" config.headerLabel
+         , stringProp "acceptLabel" config.acceptLabel
+         , stringProp "declineLabel" config.declineLabel
+         , boolProp "scrollable" config.scrollable
+         , boolProp "opened" config.opened
+         ]
             ++ config.additionalAttributes
         )
 

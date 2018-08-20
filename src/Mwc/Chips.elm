@@ -1,7 +1,7 @@
 module Mwc.Chips exposing (..)
 
 import Html exposing (Html, text)
-import Html.Attributes as Html
+import Mwc.Attributes exposing (boolProp, stringProp)
 
 
 type alias ChipConfig msg =
@@ -14,20 +14,12 @@ type alias ChipConfig msg =
 
 chip : ChipConfig msg -> String -> Html msg
 chip config label =
-    let
-        bool v =
-            if v then
-                Just ""
-            else
-                Nothing
-    in
     Html.node "mwc-chip"
-        (List.filterMap identity
-            [ Maybe.map (Html.attribute "leadingIcon") config.leadingIcon
-            , Maybe.map (Html.attribute "trailingIcon") config.trailingIcon
-            , Maybe.map (Html.attribute "active") (bool config.active)
-            , Just (Html.attribute "label" label)
-            ]
+        ([ stringProp "leadingIcon" (Maybe.withDefault "" config.leadingIcon)
+         , stringProp "trailingIcon" (Maybe.withDefault "" config.trailingIcon)
+         , boolProp "active" config.active
+         , stringProp "label" label
+         ]
             ++ config.additionalAttributes
         )
         []
@@ -55,7 +47,7 @@ chipSet config =
             v
     in
     Html.node "mwc-chip-set"
-        (Html.attribute "type" (type_ config.type_) :: config.additionalAttributes)
+        (stringProp "type" (type_ config.type_) :: config.additionalAttributes)
 
 
 type ChipSetType
