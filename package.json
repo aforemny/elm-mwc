@@ -13,6 +13,7 @@
   "author": "",
   "license": "Apache-2.0",
   "devDependencies": {
+    "@babel/core": "^7.0.0-beta.35",
     "@webcomponents/webcomponentsjs": "^2.0.4",
     "babel-core": "^6.26.3",
     "babel-preset-es2015-rollup": "^3.0.0",
