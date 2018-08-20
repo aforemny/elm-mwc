@@ -6465,6 +6465,8 @@
             label = _ref.label,
             offLabel = _ref.offLabel;
 
+        console.log(this);
+        console.log(on, disabled, icon, offIcon, label, offLabel);
         offIcon = offIcon || icon;
         return html$1(_templateObject$d, this._renderStyle(), disabled ? 'mdc-icon-toggle--disabled' : '', disabled, label, icon, offLabel, offIcon, this._boundChangeHandler);
       }
