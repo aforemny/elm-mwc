@@ -2,15 +2,12 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <script src="https://unpkg.com/@webcomponents/webcomponentsjs@next/webcomponents-loader.js"></script>
-    <script type="module" src="https://unpkg.com/@material/mwc-button@^0.1.0/mwc-button.js?module"></script>
-    <script type="module" src="https://unpkg.com/@material/mwc-fab@^0.1.0/mwc-fab.js?module"></script>
-    <script type="module" src="https://unpkg.com/@material/mwc-icon@^0.1.0/mwc-icon.js?module"></script>
-    <script type="module" src="https://unpkg.com/@material/mwc-checkbox@^0.1.0/mwc-checkbox.js?module"></script>
-    <script type="module" src="https://unpkg.com/@material/mwc-radio@^0.1.0/mwc-radio.js?module"></script>
-    <script type="module" src="https://unpkg.com/@material/mwc-switch@^0.1.0/mwc-switch.js?module"></script>
-    <script type="module" src="https://unpkg.com/@material/mwc-ripple@^0.1.0/mwc-ripple.js?module"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js"></script>
+    <script src="./node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+    <link rel="stylesheet" type="text/css" href="demo.css">
   </head>
+  <script src="bundle.js"></script>
   <body class="notDefined">
 
     <div id="main"></div>
@@ -67,8 +64,22 @@
 
     <script>
       addEventListener('WebComponentsReady', () => {
+        var app = Elm.Main.fullscreen();
         document.body.classList.remove('notDefined');
-        Elm.Main.fullscreen();
+
+        app.ports.snackbarUnsafe.subscribe(function(msg) {
+          if (msg.action === 'show') {
+            if (typeof msg.snack === 'undefined') {
+              return;
+            }
+            snackbar = document.getElementById(msg.id);
+            if (typeof snackbar === 'undefined') {
+              return;
+            }
+            snackbar.dismissesOnAction = msg.snack.dismissesOnAction;
+            snackbar.show(msg.snack);
+          }
+        });
       })
     </script>
 

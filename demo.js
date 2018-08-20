@@ -3746,6 +3746,203 @@ var _elm_lang$core$Result$fromMaybe = F2(
 		}
 	});
 
+var _elm_lang$core$Task$onError = _elm_lang$core$Native_Scheduler.onError;
+var _elm_lang$core$Task$andThen = _elm_lang$core$Native_Scheduler.andThen;
+var _elm_lang$core$Task$spawnCmd = F2(
+	function (router, _p0) {
+		var _p1 = _p0;
+		return _elm_lang$core$Native_Scheduler.spawn(
+			A2(
+				_elm_lang$core$Task$andThen,
+				_elm_lang$core$Platform$sendToApp(router),
+				_p1._0));
+	});
+var _elm_lang$core$Task$fail = _elm_lang$core$Native_Scheduler.fail;
+var _elm_lang$core$Task$mapError = F2(
+	function (convert, task) {
+		return A2(
+			_elm_lang$core$Task$onError,
+			function (_p2) {
+				return _elm_lang$core$Task$fail(
+					convert(_p2));
+			},
+			task);
+	});
+var _elm_lang$core$Task$succeed = _elm_lang$core$Native_Scheduler.succeed;
+var _elm_lang$core$Task$map = F2(
+	function (func, taskA) {
+		return A2(
+			_elm_lang$core$Task$andThen,
+			function (a) {
+				return _elm_lang$core$Task$succeed(
+					func(a));
+			},
+			taskA);
+	});
+var _elm_lang$core$Task$map2 = F3(
+	function (func, taskA, taskB) {
+		return A2(
+			_elm_lang$core$Task$andThen,
+			function (a) {
+				return A2(
+					_elm_lang$core$Task$andThen,
+					function (b) {
+						return _elm_lang$core$Task$succeed(
+							A2(func, a, b));
+					},
+					taskB);
+			},
+			taskA);
+	});
+var _elm_lang$core$Task$map3 = F4(
+	function (func, taskA, taskB, taskC) {
+		return A2(
+			_elm_lang$core$Task$andThen,
+			function (a) {
+				return A2(
+					_elm_lang$core$Task$andThen,
+					function (b) {
+						return A2(
+							_elm_lang$core$Task$andThen,
+							function (c) {
+								return _elm_lang$core$Task$succeed(
+									A3(func, a, b, c));
+							},
+							taskC);
+					},
+					taskB);
+			},
+			taskA);
+	});
+var _elm_lang$core$Task$map4 = F5(
+	function (func, taskA, taskB, taskC, taskD) {
+		return A2(
+			_elm_lang$core$Task$andThen,
+			function (a) {
+				return A2(
+					_elm_lang$core$Task$andThen,
+					function (b) {
+						return A2(
+							_elm_lang$core$Task$andThen,
+							function (c) {
+								return A2(
+									_elm_lang$core$Task$andThen,
+									function (d) {
+										return _elm_lang$core$Task$succeed(
+											A4(func, a, b, c, d));
+									},
+									taskD);
+							},
+							taskC);
+					},
+					taskB);
+			},
+			taskA);
+	});
+var _elm_lang$core$Task$map5 = F6(
+	function (func, taskA, taskB, taskC, taskD, taskE) {
+		return A2(
+			_elm_lang$core$Task$andThen,
+			function (a) {
+				return A2(
+					_elm_lang$core$Task$andThen,
+					function (b) {
+						return A2(
+							_elm_lang$core$Task$andThen,
+							function (c) {
+								return A2(
+									_elm_lang$core$Task$andThen,
+									function (d) {
+										return A2(
+											_elm_lang$core$Task$andThen,
+											function (e) {
+												return _elm_lang$core$Task$succeed(
+													A5(func, a, b, c, d, e));
+											},
+											taskE);
+									},
+									taskD);
+							},
+							taskC);
+					},
+					taskB);
+			},
+			taskA);
+	});
+var _elm_lang$core$Task$sequence = function (tasks) {
+	var _p3 = tasks;
+	if (_p3.ctor === '[]') {
+		return _elm_lang$core$Task$succeed(
+			{ctor: '[]'});
+	} else {
+		return A3(
+			_elm_lang$core$Task$map2,
+			F2(
+				function (x, y) {
+					return {ctor: '::', _0: x, _1: y};
+				}),
+			_p3._0,
+			_elm_lang$core$Task$sequence(_p3._1));
+	}
+};
+var _elm_lang$core$Task$onEffects = F3(
+	function (router, commands, state) {
+		return A2(
+			_elm_lang$core$Task$map,
+			function (_p4) {
+				return {ctor: '_Tuple0'};
+			},
+			_elm_lang$core$Task$sequence(
+				A2(
+					_elm_lang$core$List$map,
+					_elm_lang$core$Task$spawnCmd(router),
+					commands)));
+	});
+var _elm_lang$core$Task$init = _elm_lang$core$Task$succeed(
+	{ctor: '_Tuple0'});
+var _elm_lang$core$Task$onSelfMsg = F3(
+	function (_p7, _p6, _p5) {
+		return _elm_lang$core$Task$succeed(
+			{ctor: '_Tuple0'});
+	});
+var _elm_lang$core$Task$command = _elm_lang$core$Native_Platform.leaf('Task');
+var _elm_lang$core$Task$Perform = function (a) {
+	return {ctor: 'Perform', _0: a};
+};
+var _elm_lang$core$Task$perform = F2(
+	function (toMessage, task) {
+		return _elm_lang$core$Task$command(
+			_elm_lang$core$Task$Perform(
+				A2(_elm_lang$core$Task$map, toMessage, task)));
+	});
+var _elm_lang$core$Task$attempt = F2(
+	function (resultToMessage, task) {
+		return _elm_lang$core$Task$command(
+			_elm_lang$core$Task$Perform(
+				A2(
+					_elm_lang$core$Task$onError,
+					function (_p8) {
+						return _elm_lang$core$Task$succeed(
+							resultToMessage(
+								_elm_lang$core$Result$Err(_p8)));
+					},
+					A2(
+						_elm_lang$core$Task$andThen,
+						function (_p9) {
+							return _elm_lang$core$Task$succeed(
+								resultToMessage(
+									_elm_lang$core$Result$Ok(_p9)));
+						},
+						task))));
+	});
+var _elm_lang$core$Task$cmdMap = F2(
+	function (tagger, _p10) {
+		var _p11 = _p10;
+		return _elm_lang$core$Task$Perform(
+			A2(_elm_lang$core$Task$map, tagger, _p11._0));
+	});
+_elm_lang$core$Native_Platform.effectManagers['Task'] = {pkg: 'elm-lang/core', init: _elm_lang$core$Task$init, onEffects: _elm_lang$core$Task$onEffects, onSelfMsg: _elm_lang$core$Task$onSelfMsg, tag: 'cmd', cmdMap: _elm_lang$core$Task$cmdMap};
+
 //import Native.Utils //
 
 var _elm_lang$core$Native_Debug = function() {
@@ -5076,6 +5273,221 @@ var _elm_lang$core$Dict$diff = F2(
 			t1,
 			t2);
 	});
+
+//import Native.Scheduler //
+
+var _elm_lang$core$Native_Time = function() {
+
+var now = _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)
+{
+	callback(_elm_lang$core$Native_Scheduler.succeed(Date.now()));
+});
+
+function setInterval_(interval, task)
+{
+	return _elm_lang$core$Native_Scheduler.nativeBinding(function(callback)
+	{
+		var id = setInterval(function() {
+			_elm_lang$core$Native_Scheduler.rawSpawn(task);
+		}, interval);
+
+		return function() { clearInterval(id); };
+	});
+}
+
+return {
+	now: now,
+	setInterval_: F2(setInterval_)
+};
+
+}();
+var _elm_lang$core$Time$setInterval = _elm_lang$core$Native_Time.setInterval_;
+var _elm_lang$core$Time$spawnHelp = F3(
+	function (router, intervals, processes) {
+		var _p0 = intervals;
+		if (_p0.ctor === '[]') {
+			return _elm_lang$core$Task$succeed(processes);
+		} else {
+			var _p1 = _p0._0;
+			var spawnRest = function (id) {
+				return A3(
+					_elm_lang$core$Time$spawnHelp,
+					router,
+					_p0._1,
+					A3(_elm_lang$core$Dict$insert, _p1, id, processes));
+			};
+			var spawnTimer = _elm_lang$core$Native_Scheduler.spawn(
+				A2(
+					_elm_lang$core$Time$setInterval,
+					_p1,
+					A2(_elm_lang$core$Platform$sendToSelf, router, _p1)));
+			return A2(_elm_lang$core$Task$andThen, spawnRest, spawnTimer);
+		}
+	});
+var _elm_lang$core$Time$addMySub = F2(
+	function (_p2, state) {
+		var _p3 = _p2;
+		var _p6 = _p3._1;
+		var _p5 = _p3._0;
+		var _p4 = A2(_elm_lang$core$Dict$get, _p5, state);
+		if (_p4.ctor === 'Nothing') {
+			return A3(
+				_elm_lang$core$Dict$insert,
+				_p5,
+				{
+					ctor: '::',
+					_0: _p6,
+					_1: {ctor: '[]'}
+				},
+				state);
+		} else {
+			return A3(
+				_elm_lang$core$Dict$insert,
+				_p5,
+				{ctor: '::', _0: _p6, _1: _p4._0},
+				state);
+		}
+	});
+var _elm_lang$core$Time$inMilliseconds = function (t) {
+	return t;
+};
+var _elm_lang$core$Time$millisecond = 1;
+var _elm_lang$core$Time$second = 1000 * _elm_lang$core$Time$millisecond;
+var _elm_lang$core$Time$minute = 60 * _elm_lang$core$Time$second;
+var _elm_lang$core$Time$hour = 60 * _elm_lang$core$Time$minute;
+var _elm_lang$core$Time$inHours = function (t) {
+	return t / _elm_lang$core$Time$hour;
+};
+var _elm_lang$core$Time$inMinutes = function (t) {
+	return t / _elm_lang$core$Time$minute;
+};
+var _elm_lang$core$Time$inSeconds = function (t) {
+	return t / _elm_lang$core$Time$second;
+};
+var _elm_lang$core$Time$now = _elm_lang$core$Native_Time.now;
+var _elm_lang$core$Time$onSelfMsg = F3(
+	function (router, interval, state) {
+		var _p7 = A2(_elm_lang$core$Dict$get, interval, state.taggers);
+		if (_p7.ctor === 'Nothing') {
+			return _elm_lang$core$Task$succeed(state);
+		} else {
+			var tellTaggers = function (time) {
+				return _elm_lang$core$Task$sequence(
+					A2(
+						_elm_lang$core$List$map,
+						function (tagger) {
+							return A2(
+								_elm_lang$core$Platform$sendToApp,
+								router,
+								tagger(time));
+						},
+						_p7._0));
+			};
+			return A2(
+				_elm_lang$core$Task$andThen,
+				function (_p8) {
+					return _elm_lang$core$Task$succeed(state);
+				},
+				A2(_elm_lang$core$Task$andThen, tellTaggers, _elm_lang$core$Time$now));
+		}
+	});
+var _elm_lang$core$Time$subscription = _elm_lang$core$Native_Platform.leaf('Time');
+var _elm_lang$core$Time$State = F2(
+	function (a, b) {
+		return {taggers: a, processes: b};
+	});
+var _elm_lang$core$Time$init = _elm_lang$core$Task$succeed(
+	A2(_elm_lang$core$Time$State, _elm_lang$core$Dict$empty, _elm_lang$core$Dict$empty));
+var _elm_lang$core$Time$onEffects = F3(
+	function (router, subs, _p9) {
+		var _p10 = _p9;
+		var rightStep = F3(
+			function (_p12, id, _p11) {
+				var _p13 = _p11;
+				return {
+					ctor: '_Tuple3',
+					_0: _p13._0,
+					_1: _p13._1,
+					_2: A2(
+						_elm_lang$core$Task$andThen,
+						function (_p14) {
+							return _p13._2;
+						},
+						_elm_lang$core$Native_Scheduler.kill(id))
+				};
+			});
+		var bothStep = F4(
+			function (interval, taggers, id, _p15) {
+				var _p16 = _p15;
+				return {
+					ctor: '_Tuple3',
+					_0: _p16._0,
+					_1: A3(_elm_lang$core$Dict$insert, interval, id, _p16._1),
+					_2: _p16._2
+				};
+			});
+		var leftStep = F3(
+			function (interval, taggers, _p17) {
+				var _p18 = _p17;
+				return {
+					ctor: '_Tuple3',
+					_0: {ctor: '::', _0: interval, _1: _p18._0},
+					_1: _p18._1,
+					_2: _p18._2
+				};
+			});
+		var newTaggers = A3(_elm_lang$core$List$foldl, _elm_lang$core$Time$addMySub, _elm_lang$core$Dict$empty, subs);
+		var _p19 = A6(
+			_elm_lang$core$Dict$merge,
+			leftStep,
+			bothStep,
+			rightStep,
+			newTaggers,
+			_p10.processes,
+			{
+				ctor: '_Tuple3',
+				_0: {ctor: '[]'},
+				_1: _elm_lang$core$Dict$empty,
+				_2: _elm_lang$core$Task$succeed(
+					{ctor: '_Tuple0'})
+			});
+		var spawnList = _p19._0;
+		var existingDict = _p19._1;
+		var killTask = _p19._2;
+		return A2(
+			_elm_lang$core$Task$andThen,
+			function (newProcesses) {
+				return _elm_lang$core$Task$succeed(
+					A2(_elm_lang$core$Time$State, newTaggers, newProcesses));
+			},
+			A2(
+				_elm_lang$core$Task$andThen,
+				function (_p20) {
+					return A3(_elm_lang$core$Time$spawnHelp, router, spawnList, existingDict);
+				},
+				killTask));
+	});
+var _elm_lang$core$Time$Every = F2(
+	function (a, b) {
+		return {ctor: 'Every', _0: a, _1: b};
+	});
+var _elm_lang$core$Time$every = F2(
+	function (interval, tagger) {
+		return _elm_lang$core$Time$subscription(
+			A2(_elm_lang$core$Time$Every, interval, tagger));
+	});
+var _elm_lang$core$Time$subMap = F2(
+	function (f, _p21) {
+		var _p22 = _p21;
+		return A2(
+			_elm_lang$core$Time$Every,
+			_p22._0,
+			function (_p23) {
+				return f(
+					_p22._1(_p23));
+			});
+	});
+_elm_lang$core$Native_Platform.effectManagers['Time'] = {pkg: 'elm-lang/core', init: _elm_lang$core$Time$init, onEffects: _elm_lang$core$Time$onEffects, onSelfMsg: _elm_lang$core$Time$onSelfMsg, tag: 'sub', subMap: _elm_lang$core$Time$subMap};
 
 var _elm_lang$core$Debug$crash = _elm_lang$core$Native_Debug.crash;
 var _elm_lang$core$Debug$log = _elm_lang$core$Native_Debug.log;
@@ -8260,6 +8672,13 @@ var _elm_lang$html$Html_Events$Options = F2(
 		return {stopPropagation: a, preventDefault: b};
 	});
 
+var _user$project$Mwc_Button$ButtonConfig = F8(
+	function (a, b, c, d, e, f, g, h) {
+		return {variant: a, dense: b, disabled: c, icon: d, ripple: e, onClick: f, additionalAttributes: g, label: h};
+	});
+var _user$project$Mwc_Button$Outlined = {ctor: 'Outlined'};
+var _user$project$Mwc_Button$Unelevated = {ctor: 'Unelevated'};
+var _user$project$Mwc_Button$Raised = {ctor: 'Raised'};
 var _user$project$Mwc_Button$button = F2(
 	function (config_, label) {
 		var bool = function (v) {
@@ -8281,19 +8700,22 @@ var _user$project$Mwc_Button$button = F2(
 						_0: A2(
 							_elm_lang$core$Maybe$map,
 							_elm_lang$html$Html_Attributes$attribute('raised'),
-							bool(config.raised)),
+							bool(
+								_elm_lang$core$Native_Utils.eq(config.variant, _user$project$Mwc_Button$Raised))),
 						_1: {
 							ctor: '::',
 							_0: A2(
 								_elm_lang$core$Maybe$map,
 								_elm_lang$html$Html_Attributes$attribute('unelevated'),
-								bool(config.unelevated)),
+								bool(
+									_elm_lang$core$Native_Utils.eq(config.variant, _user$project$Mwc_Button$Unelevated))),
 							_1: {
 								ctor: '::',
 								_0: A2(
 									_elm_lang$core$Maybe$map,
 									_elm_lang$html$Html_Attributes$attribute('outlined'),
-									bool(config.outlined)),
+									bool(
+										_elm_lang$core$Native_Utils.eq(config.variant, _user$project$Mwc_Button$Outlined))),
 								_1: {
 									ctor: '::',
 									_0: A2(
@@ -8314,7 +8736,11 @@ var _user$project$Mwc_Button$button = F2(
 												ctor: '::',
 												_0: _elm_lang$core$Maybe$Just(
 													A2(_elm_lang$html$Html_Attributes$attribute, 'label', config.label)),
-												_1: {ctor: '[]'}
+												_1: {
+													ctor: '::',
+													_0: A2(_elm_lang$core$Maybe$map, _elm_lang$html$Html_Events$onClick, config.onClick),
+													_1: {ctor: '[]'}
+												}
 											}
 										}
 									}
@@ -8325,32 +8751,773 @@ var _user$project$Mwc_Button$button = F2(
 				config.additionalAttributes),
 			{ctor: '[]'});
 	});
+var _user$project$Mwc_Button$Text = {ctor: 'Text'};
 var _user$project$Mwc_Button$buttonConfig = {
-	raised: false,
-	unelevated: false,
-	outlined: false,
+	variant: _user$project$Mwc_Button$Text,
 	dense: false,
 	disabled: false,
 	icon: '',
-	label: '',
+	ripple: false,
+	onClick: _elm_lang$core$Maybe$Nothing,
+	additionalAttributes: {ctor: '[]'},
+	label: ''
+};
+
+var _user$project$Demo_Button$view = function (model) {
+	return A3(
+		_elm_lang$html$Html$node,
+		'main',
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$h4,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('labeled'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('demo-group-spaced'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: A2(_user$project$Mwc_Button$button, _user$project$Mwc_Button$buttonConfig, 'Normal'),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_user$project$Mwc_Button$button,
+								_elm_lang$core$Native_Utils.update(
+									_user$project$Mwc_Button$buttonConfig,
+									{
+										variant: _user$project$Mwc_Button$Raised,
+										additionalAttributes: {
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$class('light'),
+											_1: {ctor: '[]'}
+										}
+									}),
+								'Raised'),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_user$project$Mwc_Button$button,
+									_elm_lang$core$Native_Utils.update(
+										_user$project$Mwc_Button$buttonConfig,
+										{variant: _user$project$Mwc_Button$Unelevated}),
+									'Unelevated'),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_user$project$Mwc_Button$button,
+										_elm_lang$core$Native_Utils.update(
+											_user$project$Mwc_Button$buttonConfig,
+											{
+												dense: true,
+												additionalAttributes: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$class('pink'),
+													_1: {ctor: '[]'}
+												}
+											}),
+										'Dense'),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_user$project$Mwc_Button$button,
+											_elm_lang$core$Native_Utils.update(
+												_user$project$Mwc_Button$buttonConfig,
+												{
+													variant: _user$project$Mwc_Button$Raised,
+													additionalAttributes: {
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$class('pink white'),
+														_1: {ctor: '[]'}
+													}
+												}),
+											'Wide'),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_user$project$Mwc_Button$button,
+												_elm_lang$core$Native_Utils.update(
+													_user$project$Mwc_Button$buttonConfig,
+													{disabled: true}),
+												'Disabled'),
+											_1: {ctor: '[]'}
+										}
+									}
+								}
+							}
+						}
+					}),
+				_1: {ctor: '[]'}
+			}
+		});
+};
+var _user$project$Demo_Button$style = '\n    .light {\n      --mdc-theme-on-primary: black;\n      --mdc-theme-primary: white;\n      --mdc-theme-on-secondary: black;\n      --mdc-theme-secondary: white;\n    }\n\n    .pink {\n      --mdc-theme-on-primary: white;\n      --mdc-theme-primary: #e9437a;\n      --mdc-theme-on-secondary: white;\n      --mdc-theme-secondary: #e9437a;\n    }\n\n    .wide {\n      width: 250px;\n    }\n  ';
+var _user$project$Demo_Button$update = F2(
+	function (msg, model) {
+		return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+	});
+var _user$project$Demo_Button$defaultModel = {};
+var _user$project$Demo_Button$Model = {};
+var _user$project$Demo_Button$NoOp = {ctor: 'NoOp'};
+
+var _user$project$Mwc_Icon$icon = F2(
+	function (config, icon) {
+		return A3(
+			_elm_lang$html$Html$node,
+			'mwc-icon',
+			config.additionalAttributes,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(icon),
+				_1: {ctor: '[]'}
+			});
+	});
+var _user$project$Mwc_Icon$iconConfig = {
 	additionalAttributes: {ctor: '[]'}
 };
-var _user$project$Mwc_Button$Config = F8(
-	function (a, b, c, d, e, f, g, h) {
-		return {raised: a, unelevated: b, outlined: c, dense: d, disabled: e, icon: f, label: g, additionalAttributes: h};
+var _user$project$Mwc_Icon$IconConfig = function (a) {
+	return {additionalAttributes: a};
+};
+
+var _user$project$Mwc_Ripple$ripple = function (config) {
+	var bool = function (v) {
+		return v ? _elm_lang$core$Maybe$Just('') : _elm_lang$core$Maybe$Nothing;
+	};
+	return A3(
+		_elm_lang$html$Html$node,
+		'mwc-ripple',
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			A2(
+				_elm_lang$core$List$filterMap,
+				_elm_lang$core$Basics$identity,
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$core$Maybe$map,
+						_elm_lang$html$Html_Attributes$attribute('primary'),
+						bool(config.primary)),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$core$Maybe$map,
+							_elm_lang$html$Html_Attributes$attribute('accent'),
+							bool(config.secondary)),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$core$Maybe$map,
+								_elm_lang$html$Html_Attributes$attribute('unbounded'),
+								bool(config.unbounded)),
+							_1: {ctor: '[]'}
+						}
+					}
+				}),
+			config.additionalAttributes),
+		{ctor: '[]'});
+};
+var _user$project$Mwc_Ripple$rippleConfig = {
+	primary: false,
+	secondary: false,
+	unbounded: false,
+	additionalAttributes: {ctor: '[]'}
+};
+var _user$project$Mwc_Ripple$RippleConfig = F4(
+	function (a, b, c, d) {
+		return {primary: a, secondary: b, unbounded: c, additionalAttributes: d};
 	});
 
-var _user$project$Mwc_Checkbox$checkbox = F2(
-	function (config_, value) {
+var _user$project$Mwc_Card$mediaConfig = {
+	aspect: _elm_lang$core$Maybe$Nothing,
+	additionalAttributes: {ctor: '[]'}
+};
+var _user$project$Mwc_Card$primaryActionConfig = {
+	ripple: true,
+	additionalAttributes: {ctor: '[]'}
+};
+var _user$project$Mwc_Card$card = F2(
+	function (config, content) {
+		var actions = function () {
+			var _p0 = content.actions;
+			if (_p0.ctor === 'Just') {
+				return {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						A2(
+							_elm_lang$core$List$filterMap,
+							_elm_lang$core$Basics$identity,
+							{
+								ctor: '::',
+								_0: _elm_lang$core$Maybe$Just(
+									_elm_lang$html$Html_Attributes$class('mdc-card__actions')),
+								_1: {
+									ctor: '::',
+									_0: _p0._0._0.fullBleed ? _elm_lang$core$Maybe$Just(
+										_elm_lang$html$Html_Attributes$class('mdc-card__action--full-bleed')) : _elm_lang$core$Maybe$Nothing,
+									_1: {ctor: '[]'}
+								}
+							}),
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$div,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('mdc-card__action-buttons'),
+									_1: {ctor: '[]'}
+								},
+								A2(
+									_elm_lang$core$List$map,
+									function (_p1) {
+										var _p2 = _p1;
+										return _p2._0;
+									},
+									_p0._0._0.buttons)),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$div,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$class('mdc-card__action-icons'),
+										_1: {ctor: '[]'}
+									},
+									A2(
+										_elm_lang$core$List$map,
+										function (_p3) {
+											var _p4 = _p3;
+											return _p4._0;
+										},
+										_p0._0._0.icons)),
+								_1: {ctor: '[]'}
+							}
+						}),
+					_1: {ctor: '[]'}
+				};
+			} else {
+				return {ctor: '[]'};
+			}
+		}();
+		var blocks = A2(
+			_elm_lang$core$List$map,
+			function (_p5) {
+				var _p6 = _p5;
+				return _p6._0;
+			},
+			content.blocks);
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('mdc-card'),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('mdc-card--outlined'),
+					_1: config.additionalAttributes
+				}
+			},
+			_elm_lang$core$List$concat(
+				{
+					ctor: '::',
+					_0: blocks,
+					_1: {
+						ctor: '::',
+						_0: actions,
+						_1: {ctor: '[]'}
+					}
+				}));
+	});
+var _user$project$Mwc_Card$cardConfig = {
+	outlined: false,
+	additionalAttributes: {ctor: '[]'}
+};
+var _user$project$Mwc_Card$Config = F2(
+	function (a, b) {
+		return {outlined: a, additionalAttributes: b};
+	});
+var _user$project$Mwc_Card$Content = F2(
+	function (a, b) {
+		return {blocks: a, actions: b};
+	});
+var _user$project$Mwc_Card$PrimaryActionConfig = F2(
+	function (a, b) {
+		return {ripple: a, additionalAttributes: b};
+	});
+var _user$project$Mwc_Card$MediaConfig = F2(
+	function (a, b) {
+		return {aspect: a, additionalAttributes: b};
+	});
+var _user$project$Mwc_Card$Block = function (a) {
+	return {ctor: 'Block', _0: a};
+};
+var _user$project$Mwc_Card$primaryAction = F2(
+	function (config, blocks) {
+		return {
+			ctor: '::',
+			_0: _user$project$Mwc_Card$Block(
+				A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('mdc-card__primary-action'),
+						_1: config.additionalAttributes
+					},
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						A2(
+							_elm_lang$core$List$map,
+							function (_p7) {
+								var _p8 = _p7;
+								return _p8._0;
+							},
+							blocks),
+						config.ripple ? {
+							ctor: '::',
+							_0: _user$project$Mwc_Ripple$ripple(_user$project$Mwc_Ripple$rippleConfig),
+							_1: {ctor: '[]'}
+						} : {ctor: '[]'}))),
+			_1: {ctor: '[]'}
+		};
+	});
+var _user$project$Mwc_Card$media = F2(
+	function (config, backgroundImage) {
+		return _user$project$Mwc_Card$Block(
+			A2(
+				_elm_lang$html$Html$div,
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					A2(
+						_elm_lang$core$List$filterMap,
+						_elm_lang$core$Basics$identity,
+						{
+							ctor: '::',
+							_0: _elm_lang$core$Maybe$Just(
+								_elm_lang$html$Html_Attributes$class('mdc-card__media')),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$core$Maybe$Just(
+									_elm_lang$html$Html_Attributes$style(
+										{
+											ctor: '::',
+											_0: {
+												ctor: '_Tuple2',
+												_0: 'background-image',
+												_1: A2(
+													_elm_lang$core$Basics_ops['++'],
+													'url(\"',
+													A2(_elm_lang$core$Basics_ops['++'], backgroundImage, '\")'))
+											},
+											_1: {ctor: '[]'}
+										})),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$core$Maybe$map,
+										function (aspect) {
+											var _p9 = aspect;
+											if (_p9.ctor === 'Square') {
+												return _elm_lang$html$Html_Attributes$class('mdc-card__media--square');
+											} else {
+												return _elm_lang$html$Html_Attributes$class('mdc-card__media--16-9');
+											}
+										},
+										config.aspect),
+									_1: {ctor: '[]'}
+								}
+							}
+						}),
+					config.additionalAttributes),
+				{ctor: '[]'}));
+	});
+var _user$project$Mwc_Card$custom = _user$project$Mwc_Card$Block;
+var _user$project$Mwc_Card$Actions = function (a) {
+	return {ctor: 'Actions', _0: a};
+};
+var _user$project$Mwc_Card$actions = function (_p10) {
+	var _p11 = _p10;
+	return _user$project$Mwc_Card$Actions(
+		{buttons: _p11.buttons, icons: _p11.icons, fullBleed: false});
+};
+var _user$project$Mwc_Card$fullBleedAction = function (button) {
+	return _user$project$Mwc_Card$Actions(
+		{
+			buttons: {
+				ctor: '::',
+				_0: button,
+				_1: {ctor: '[]'}
+			},
+			icons: {ctor: '[]'},
+			fullBleed: true
+		});
+};
+var _user$project$Mwc_Card$SixteenToNine = {ctor: 'SixteenToNine'};
+var _user$project$Mwc_Card$Square = {ctor: 'Square'};
+var _user$project$Mwc_Card$ActionsContent = function (a) {
+	return {ctor: 'ActionsContent', _0: a};
+};
+var _user$project$Mwc_Card$Button = function (a) {
+	return {ctor: 'Button', _0: a};
+};
+var _user$project$Mwc_Card$actionButton = F2(
+	function (buttonConfig, buttonLabel) {
+		return _user$project$Mwc_Card$Button(
+			A2(
+				_user$project$Mwc_Button$button,
+				_elm_lang$core$Native_Utils.update(
+					buttonConfig,
+					{
+						additionalAttributes: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('mdc-card__action'),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('mdc-card__action--button'),
+								_1: buttonConfig.additionalAttributes
+							}
+						}
+					}),
+				buttonLabel));
+	});
+var _user$project$Mwc_Card$Icon = function (a) {
+	return {ctor: 'Icon', _0: a};
+};
+var _user$project$Mwc_Card$actionIcon = F2(
+	function (iconConfig, iconName) {
+		return _user$project$Mwc_Card$Icon(
+			A2(
+				_user$project$Mwc_Icon$icon,
+				_elm_lang$core$Native_Utils.update(
+					iconConfig,
+					{
+						additionalAttributes: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('mdc-card__action'),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('mdc-card__action--icon'),
+								_1: iconConfig.additionalAttributes
+							}
+						}
+					}),
+				iconName));
+	});
+
+var _user$project$Mwc_Typography$overline = _elm_lang$html$Html_Attributes$class('mdc-typography--overline');
+var _user$project$Mwc_Typography$button = _elm_lang$html$Html_Attributes$class('mdc-typography--button');
+var _user$project$Mwc_Typography$caption = _elm_lang$html$Html_Attributes$class('mdc-typography--caption');
+var _user$project$Mwc_Typography$body2 = _elm_lang$html$Html_Attributes$class('mdc-typography--body2');
+var _user$project$Mwc_Typography$body1 = _elm_lang$html$Html_Attributes$class('mdc-typography--body1');
+var _user$project$Mwc_Typography$subtitle2 = _elm_lang$html$Html_Attributes$class('mdc-typography--subtitle2');
+var _user$project$Mwc_Typography$subtitle1 = _elm_lang$html$Html_Attributes$class('mdc-typography--subtitle1');
+var _user$project$Mwc_Typography$headline6 = _elm_lang$html$Html_Attributes$class('mdc-typography--headline6');
+var _user$project$Mwc_Typography$headline5 = _elm_lang$html$Html_Attributes$class('mdc-typography--headline5');
+var _user$project$Mwc_Typography$headline4 = _elm_lang$html$Html_Attributes$class('mdc-typography--headline4');
+var _user$project$Mwc_Typography$headline3 = _elm_lang$html$Html_Attributes$class('mdc-typography--headline3');
+var _user$project$Mwc_Typography$headline2 = _elm_lang$html$Html_Attributes$class('mdc-typography--headline2');
+var _user$project$Mwc_Typography$headline1 = _elm_lang$html$Html_Attributes$class('mdc-typography--headline1');
+var _user$project$Mwc_Typography$typography = _elm_lang$html$Html_Attributes$class('mdc-typography');
+
+var _user$project$Demo_Card$view = function (model) {
+	return A3(
+		_elm_lang$html$Html$node,
+		'main',
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(
+				_user$project$Mwc_Card$card,
+				_user$project$Mwc_Card$cardConfig,
+				{
+					blocks: A2(
+						_user$project$Mwc_Card$primaryAction,
+						_user$project$Mwc_Card$primaryActionConfig,
+						{
+							ctor: '::',
+							_0: A2(
+								_user$project$Mwc_Card$media,
+								function (mediaConfig) {
+									return _elm_lang$core$Native_Utils.update(
+										mediaConfig,
+										{
+											aspect: _elm_lang$core$Maybe$Just(_user$project$Mwc_Card$SixteenToNine)
+										});
+								}(_user$project$Mwc_Card$mediaConfig),
+								'https://material-components-web.appspot.com/images/16-9.jpg'),
+							_1: {
+								ctor: '::',
+								_0: _user$project$Mwc_Card$custom(
+									A2(
+										_elm_lang$html$Html$div,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$class('content'),
+											_1: {ctor: '[]'}
+										},
+										{
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$h2,
+												{
+													ctor: '::',
+													_0: _user$project$Mwc_Typography$headline1,
+													_1: {ctor: '[]'}
+												},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text('Our Changing Planet'),
+													_1: {ctor: '[]'}
+												}),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$h3,
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$class('subtext'),
+														_1: {
+															ctor: '::',
+															_0: _user$project$Mwc_Typography$subtitle1,
+															_1: {ctor: '[]'}
+														}
+													},
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html$text('by Kurt Wagner'),
+														_1: {ctor: '[]'}
+													}),
+												_1: {
+													ctor: '::',
+													_0: A2(
+														_elm_lang$html$Html$div,
+														{
+															ctor: '::',
+															_0: _elm_lang$html$Html_Attributes$class('subtext'),
+															_1: {
+																ctor: '::',
+																_0: _user$project$Mwc_Typography$body1,
+																_1: {ctor: '[]'}
+															}
+														},
+														{
+															ctor: '::',
+															_0: _elm_lang$html$Html$text('Visit ten places on our planet that are undergoing the biggest changes today.'),
+															_1: {ctor: '[]'}
+														}),
+													_1: {ctor: '[]'}
+												}
+											}
+										})),
+								_1: {ctor: '[]'}
+							}
+						}),
+					actions: _elm_lang$core$Maybe$Just(
+						_user$project$Mwc_Card$actions(
+							{
+								buttons: {
+									ctor: '::',
+									_0: A2(_user$project$Mwc_Card$actionButton, _user$project$Mwc_Button$buttonConfig, 'Read'),
+									_1: {
+										ctor: '::',
+										_0: A2(_user$project$Mwc_Card$actionButton, _user$project$Mwc_Button$buttonConfig, 'Save'),
+										_1: {ctor: '[]'}
+									}
+								},
+								icons: {
+									ctor: '::',
+									_0: A2(_user$project$Mwc_Card$actionIcon, _user$project$Mwc_Icon$iconConfig, 'share'),
+									_1: {
+										ctor: '::',
+										_0: A2(_user$project$Mwc_Card$actionIcon, _user$project$Mwc_Icon$iconConfig, 'more_vert'),
+										_1: {ctor: '[]'}
+									}
+								}
+							}))
+				}),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$Demo_Card$style = '\nbody {\n  font-family: Arial, Helvetica, sans-serif;\n  background-color: rgba(0, 0, 0, 0.05);\n}\n\n.presentCard {\n  padding: 40px;\n  display: flex;\n  justify-content: center;\n}\n\n.content {\n  padding: 8px;\n}\n\n.rounded {\n  border-radius: 8px;\n  overflow: hidden;\n}\n\n.mdc-card {\n  max-width: 350px;\n}\n\n.my-media {\n  background-image: url(\'https://material-components-web.appspot.com/images/16-9.jpg\');\n}\n\n.content {\n  padding: 1rem;\n}\n\n.subtext {\n  color: rgba(0, 0, 0, 0.54);\n}\n    ';
+var _user$project$Demo_Card$update = F2(
+	function (msg, model) {
+		return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+	});
+var _user$project$Demo_Card$defaultModel = {};
+var _user$project$Demo_Card$Model = {};
+var _user$project$Demo_Card$NoOp = {ctor: 'NoOp'};
+
+var _user$project$Mwc_Checkbox$checkbox = function (config) {
+	var bool = function (v) {
+		return v ? _elm_lang$core$Maybe$Just('') : _elm_lang$core$Maybe$Nothing;
+	};
+	return A3(
+		_elm_lang$html$Html$node,
+		'mwc-checkbox',
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			A2(
+				_elm_lang$core$List$filterMap,
+				_elm_lang$core$Basics$identity,
+				{
+					ctor: '::',
+					_0: function () {
+						var _p0 = config.state;
+						switch (_p0.ctor) {
+							case 'Unchecked':
+								return A2(
+									_elm_lang$core$Maybe$map,
+									_elm_lang$html$Html_Attributes$attribute('checked'),
+									bool(false));
+							case 'Checked':
+								return A2(
+									_elm_lang$core$Maybe$map,
+									_elm_lang$html$Html_Attributes$attribute('checked'),
+									bool(true));
+							default:
+								return A2(
+									_elm_lang$core$Maybe$map,
+									_elm_lang$html$Html_Attributes$attribute('indeterminate'),
+									bool(true));
+						}
+					}(),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$core$Maybe$map,
+							_elm_lang$html$Html_Attributes$attribute('disabled'),
+							bool(config.disabled)),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$core$Maybe$Just(
+								A2(_elm_lang$html$Html_Attributes$attribute, 'value', config.value)),
+							_1: {ctor: '[]'}
+						}
+					}
+				}),
+			config.additionalAttributes),
+		{ctor: '[]'});
+};
+var _user$project$Mwc_Checkbox$CheckboxConfig = F4(
+	function (a, b, c, d) {
+		return {state: a, disabled: b, value: c, additionalAttributes: d};
+	});
+var _user$project$Mwc_Checkbox$Indeterminate = {ctor: 'Indeterminate'};
+var _user$project$Mwc_Checkbox$Checked = {ctor: 'Checked'};
+var _user$project$Mwc_Checkbox$Unchecked = {ctor: 'Unchecked'};
+var _user$project$Mwc_Checkbox$checkboxConfig = {
+	state: _user$project$Mwc_Checkbox$Unchecked,
+	disabled: false,
+	value: '',
+	additionalAttributes: {ctor: '[]'}
+};
+
+var _user$project$Demo_Checkbox$view = function (model) {
+	return A3(
+		_elm_lang$html$Html$node,
+		'main',
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$h3,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('Checkbox'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: _user$project$Mwc_Checkbox$checkbox(_user$project$Mwc_Checkbox$checkboxConfig),
+				_1: {
+					ctor: '::',
+					_0: _user$project$Mwc_Checkbox$checkbox(
+						_elm_lang$core$Native_Utils.update(
+							_user$project$Mwc_Checkbox$checkboxConfig,
+							{state: _user$project$Mwc_Checkbox$Checked})),
+					_1: {
+						ctor: '::',
+						_0: _user$project$Mwc_Checkbox$checkbox(
+							_elm_lang$core$Native_Utils.update(
+								_user$project$Mwc_Checkbox$checkboxConfig,
+								{state: _user$project$Mwc_Checkbox$Indeterminate})),
+						_1: {
+							ctor: '::',
+							_0: _user$project$Mwc_Checkbox$checkbox(
+								_elm_lang$core$Native_Utils.update(
+									_user$project$Mwc_Checkbox$checkboxConfig,
+									{
+										state: _user$project$Mwc_Checkbox$Indeterminate,
+										additionalAttributes: {
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$class('special'),
+											_1: {ctor: '[]'}
+										}
+									})),
+							_1: {
+								ctor: '::',
+								_0: _user$project$Mwc_Checkbox$checkbox(
+									_elm_lang$core$Native_Utils.update(
+										_user$project$Mwc_Checkbox$checkboxConfig,
+										{disabled: true})),
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				}
+			}
+		});
+};
+var _user$project$Demo_Checkbox$update = F2(
+	function (msg, model) {
+		return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+	});
+var _user$project$Demo_Checkbox$defaultModel = {};
+var _user$project$Demo_Checkbox$Model = {};
+var _user$project$Demo_Checkbox$NoOp = {ctor: 'NoOp'};
+
+var _user$project$Mwc_Chips$chipSet = function (config) {
+	var type_ = function (_p0) {
+		var _p1 = _p0;
+		return _p1._0;
+	};
+	return A2(
+		_elm_lang$html$Html$node,
+		'mwc-chip-set',
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html_Attributes$attribute,
+				'type',
+				type_(config.type_)),
+			_1: config.additionalAttributes
+		});
+};
+var _user$project$Mwc_Chips$chipConfig = {
+	leadingIcon: _elm_lang$core$Maybe$Nothing,
+	trailingIcon: _elm_lang$core$Maybe$Nothing,
+	active: false,
+	additionalAttributes: {ctor: '[]'}
+};
+var _user$project$Mwc_Chips$chip = F2(
+	function (config, label) {
 		var bool = function (v) {
 			return v ? _elm_lang$core$Maybe$Just('') : _elm_lang$core$Maybe$Nothing;
 		};
-		var config = _elm_lang$core$Native_Utils.update(
-			config_,
-			{value: value});
 		return A3(
 			_elm_lang$html$Html$node,
-			'mwc-checkbox',
+			'mwc-chip',
 			A2(
 				_elm_lang$core$Basics_ops['++'],
 				A2(
@@ -8360,24 +9527,24 @@ var _user$project$Mwc_Checkbox$checkbox = F2(
 						ctor: '::',
 						_0: A2(
 							_elm_lang$core$Maybe$map,
-							_elm_lang$html$Html_Attributes$attribute('checked'),
-							bool(config.checked)),
+							_elm_lang$html$Html_Attributes$attribute('leadingIcon'),
+							config.leadingIcon),
 						_1: {
 							ctor: '::',
 							_0: A2(
 								_elm_lang$core$Maybe$map,
-								_elm_lang$html$Html_Attributes$attribute('indeterminate'),
-								bool(config.indeterminate)),
+								_elm_lang$html$Html_Attributes$attribute('trailingIcon'),
+								config.trailingIcon),
 							_1: {
 								ctor: '::',
 								_0: A2(
 									_elm_lang$core$Maybe$map,
-									_elm_lang$html$Html_Attributes$attribute('disabled'),
-									bool(config.disabled)),
+									_elm_lang$html$Html_Attributes$attribute('active'),
+									bool(config.active)),
 								_1: {
 									ctor: '::',
 									_0: _elm_lang$core$Maybe$Just(
-										A2(_elm_lang$html$Html_Attributes$attribute, 'value', config.value)),
+										A2(_elm_lang$html$Html_Attributes$attribute, 'label', label)),
 									_1: {ctor: '[]'}
 								}
 							}
@@ -8386,16 +9553,44 @@ var _user$project$Mwc_Checkbox$checkbox = F2(
 				config.additionalAttributes),
 			{ctor: '[]'});
 	});
-var _user$project$Mwc_Checkbox$checkboxConfig = {
-	checked: false,
-	indeterminate: false,
-	disabled: false,
-	value: '',
+var _user$project$Mwc_Chips$ChipConfig = F4(
+	function (a, b, c, d) {
+		return {leadingIcon: a, trailingIcon: b, active: c, additionalAttributes: d};
+	});
+var _user$project$Mwc_Chips$ChipSetConfig = F2(
+	function (a, b) {
+		return {type_: a, additionalAttributes: b};
+	});
+var _user$project$Mwc_Chips$ChipSetType = function (a) {
+	return {ctor: 'ChipSetType', _0: a};
+};
+var _user$project$Mwc_Chips$chipSetConfig = {
+	type_: _user$project$Mwc_Chips$ChipSetType(''),
 	additionalAttributes: {ctor: '[]'}
 };
-var _user$project$Mwc_Checkbox$Config = F5(
-	function (a, b, c, d, e) {
-		return {checked: a, indeterminate: b, disabled: c, value: d, additionalAttributes: e};
+var _user$project$Mwc_Chips$default = _user$project$Mwc_Chips$ChipSetType('');
+var _user$project$Mwc_Chips$choice = _user$project$Mwc_Chips$ChipSetType('choice');
+var _user$project$Mwc_Chips$filter = _user$project$Mwc_Chips$ChipSetType('filter');
+
+var _user$project$Demo_Chips$view = A3(
+	_elm_lang$html$Html$node,
+	'main',
+	{ctor: '[]'},
+	{
+		ctor: '::',
+		_0: A2(
+			_elm_lang$html$Html$h3,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text('Chips'),
+				_1: {ctor: '[]'}
+			}),
+		_1: {
+			ctor: '::',
+			_0: A2(_user$project$Mwc_Chips$chip, _user$project$Mwc_Chips$chipConfig, 'example'),
+			_1: {ctor: '[]'}
+		}
 	});
 
 var _user$project$Mwc_Fab$fab = F2(
@@ -8457,34 +9652,903 @@ var _user$project$Mwc_Fab$fabConfig = {
 	label: '',
 	additionalAttributes: {ctor: '[]'}
 };
-var _user$project$Mwc_Fab$Config = F6(
+var _user$project$Mwc_Fab$FabConfig = F6(
 	function (a, b, c, d, e, f) {
 		return {mini: a, exited: b, disabled: c, icon: d, label: e, additionalAttributes: f};
 	});
 
-var _user$project$Mwc_Icon$icon = F2(
-	function (config_, icon) {
-		var config = _elm_lang$core$Native_Utils.update(
-			config_,
-			{icon: icon});
-		return A3(
-			_elm_lang$html$Html$node,
-			'mwc-icon',
-			config.additionalAttributes,
-			{
+var _user$project$Demo_Fab$view = function (model) {
+	return A3(
+		_elm_lang$html$Html$node,
+		'main',
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$h3,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('FAB'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
 				ctor: '::',
-				_0: _elm_lang$html$Html$text(icon),
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('demo-fab-group demo-group-spaced'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: A2(_user$project$Mwc_Fab$fab, _user$project$Mwc_Fab$fabConfig, 'explore'),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_user$project$Mwc_Fab$fab,
+								_elm_lang$core$Native_Utils.update(
+									_user$project$Mwc_Fab$fabConfig,
+									{
+										additionalAttributes: {
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$class('light'),
+											_1: {ctor: '[]'}
+										}
+									}),
+								'code'),
+							_1: {
+								ctor: '::',
+								_0: A2(_user$project$Mwc_Fab$fab, _user$project$Mwc_Fab$fabConfig, 'feedback'),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_user$project$Mwc_Fab$fab,
+										_elm_lang$core$Native_Utils.update(
+											_user$project$Mwc_Fab$fabConfig,
+											{
+												mini: true,
+												additionalAttributes: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$class('special'),
+													_1: {ctor: '[]'}
+												}
+											}),
+										'gavel'),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_user$project$Mwc_Fab$fab,
+											_elm_lang$core$Native_Utils.update(
+												_user$project$Mwc_Fab$fabConfig,
+												{disabled: true}),
+											'fingerprint'),
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						}
+					}),
 				_1: {ctor: '[]'}
-			});
+			}
+		});
+};
+var _user$project$Demo_Fab$update = F2(
+	function (msg, model) {
+		return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 	});
-var _user$project$Mwc_Icon$iconConfig = {
+var _user$project$Demo_Fab$defaultModel = {};
+var _user$project$Demo_Fab$Model = {};
+var _user$project$Demo_Fab$NoOp = {ctor: 'NoOp'};
+
+var _user$project$Demo_Icon$view = function (model) {
+	return A3(
+		_elm_lang$html$Html$node,
+		'main',
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$h3,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('Icon'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('demo-group'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: A2(_user$project$Mwc_Icon$icon, _user$project$Mwc_Icon$iconConfig, 'sentiment_very_dissatisfied'),
+						_1: {
+							ctor: '::',
+							_0: A2(_user$project$Mwc_Icon$icon, _user$project$Mwc_Icon$iconConfig, 'sentiment_dissatisfied'),
+							_1: {
+								ctor: '::',
+								_0: A2(_user$project$Mwc_Icon$icon, _user$project$Mwc_Icon$iconConfig, 'sentiment_neutral'),
+								_1: {
+									ctor: '::',
+									_0: A2(_user$project$Mwc_Icon$icon, _user$project$Mwc_Icon$iconConfig, 'sentiment_satisfied'),
+									_1: {
+										ctor: '::',
+										_0: A2(_user$project$Mwc_Icon$icon, _user$project$Mwc_Icon$iconConfig, 'sentiment_very_satisfied'),
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$h3,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('Color and size'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$div,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('demo-group color-size'),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: A2(_user$project$Mwc_Icon$icon, _user$project$Mwc_Icon$iconConfig, 'all_out'),
+								_1: {
+									ctor: '::',
+									_0: A2(_user$project$Mwc_Icon$icon, _user$project$Mwc_Icon$iconConfig, 'accessibility'),
+									_1: {
+										ctor: '::',
+										_0: A2(_user$project$Mwc_Icon$icon, _user$project$Mwc_Icon$iconConfig, 'exit_to_app'),
+										_1: {
+											ctor: '::',
+											_0: A2(_user$project$Mwc_Icon$icon, _user$project$Mwc_Icon$iconConfig, 'camera'),
+											_1: {ctor: '[]'}
+										}
+									}
+								}
+							}),
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		});
+};
+var _user$project$Demo_Icon$style = '\n    .color-size {\n      color: tomato;\n      --mdc-icon-size: 4em;\n    }\n    ';
+var _user$project$Demo_Icon$update = F2(
+	function (msg, model) {
+		var _p0 = msg;
+		return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+	});
+var _user$project$Demo_Icon$defaultModel = {};
+var _user$project$Demo_Icon$Model = {};
+var _user$project$Demo_Icon$NoOp = {ctor: 'NoOp'};
+
+var _user$project$Mwc_IconToggle$iconToggleConfig = {
+	disabled: false,
+	on: false,
 	icon: '',
+	offIcon: '',
+	label: '',
+	offLabel: '',
+	onToggle: _elm_lang$core$Maybe$Nothing,
 	additionalAttributes: {ctor: '[]'}
 };
-var _user$project$Mwc_Icon$Config = F2(
-	function (a, b) {
-		return {icon: a, additionalAttributes: b};
+var _user$project$Mwc_IconToggle$iconToggle = function (config) {
+	var offLabel = _elm_lang$core$Native_Utils.eq(config.offLabel, '') ? config.icon : config.offLabel;
+	var offIcon = _elm_lang$core$Native_Utils.eq(config.offIcon, '') ? config.icon : config.offIcon;
+	var bool = function (v) {
+		return v ? _elm_lang$core$Maybe$Just('') : _elm_lang$core$Maybe$Nothing;
+	};
+	return A3(
+		_elm_lang$html$Html$node,
+		'mwc-icon-toggle',
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			A2(
+				_elm_lang$core$List$filterMap,
+				_elm_lang$core$Basics$identity,
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$core$Maybe$map,
+						_elm_lang$html$Html_Attributes$attribute('disabled'),
+						bool(config.disabled)),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$core$Maybe$map,
+							_elm_lang$html$Html_Attributes$attribute('on'),
+							bool(config.on)),
+						_1: {
+							ctor: '::',
+							_0: config.disabled ? _elm_lang$core$Maybe$Nothing : A2(_elm_lang$core$Maybe$map, _elm_lang$html$Html_Events$onClick, config.onToggle),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$core$Maybe$Just(
+									A2(_elm_lang$html$Html_Attributes$attribute, 'icon', config.icon)),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$core$Maybe$Just(
+										A2(_elm_lang$html$Html_Attributes$attribute, 'offIcon', offIcon)),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$core$Maybe$Just(
+											A2(_elm_lang$html$Html_Attributes$attribute, 'label', config.label)),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$core$Maybe$Just(
+												A2(_elm_lang$html$Html_Attributes$attribute, 'offLabel', offLabel)),
+											_1: {ctor: '[]'}
+										}
+									}
+								}
+							}
+						}
+					}
+				}),
+			config.additionalAttributes),
+		{ctor: '[]'});
+};
+var _user$project$Mwc_IconToggle$IconToggleConfig = F8(
+	function (a, b, c, d, e, f, g, h) {
+		return {disabled: a, on: b, icon: c, offIcon: d, label: e, offLabel: f, onToggle: g, additionalAttributes: h};
 	});
+
+var _user$project$Demo_IconToggle$style = '\n    .color {\n      --mdc-theme-text-primary-on-light: tomato;\n    }\n    ';
+var _user$project$Demo_IconToggle$update = F2(
+	function (msg, model) {
+		var _p0 = msg;
+		switch (_p0.ctor) {
+			case 'Toggle1Clicked':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{icon1: !model.icon1}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'Toggle2Clicked':
+				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+			case 'ToggleDisabledClicked':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{iconDisabled: !model.iconDisabled}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'ToggleColor1Clicked':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{iconColor1: !model.iconColor1}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			default:
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{iconColor2: !model.iconColor2}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+		}
+	});
+var _user$project$Demo_IconToggle$defaultModel = {icon1: false, icon2: false, iconDisabled: false, iconColor1: false, iconColor2: false};
+var _user$project$Demo_IconToggle$Model = F5(
+	function (a, b, c, d, e) {
+		return {icon1: a, icon2: b, iconDisabled: c, iconColor1: d, iconColor2: e};
+	});
+var _user$project$Demo_IconToggle$ToggleColor2Clicked = {ctor: 'ToggleColor2Clicked'};
+var _user$project$Demo_IconToggle$ToggleColor1Clicked = {ctor: 'ToggleColor1Clicked'};
+var _user$project$Demo_IconToggle$ToggleDisabledClicked = {ctor: 'ToggleDisabledClicked'};
+var _user$project$Demo_IconToggle$Toggle2Clicked = {ctor: 'Toggle2Clicked'};
+var _user$project$Demo_IconToggle$Toggle1Clicked = {ctor: 'Toggle1Clicked'};
+var _user$project$Demo_IconToggle$view = function (model) {
+	return A3(
+		_elm_lang$html$Html$node,
+		'main',
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$h3,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('Icon Toggle'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('demo-group'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: _user$project$Mwc_IconToggle$iconToggle(
+							_elm_lang$core$Native_Utils.update(
+								_user$project$Mwc_IconToggle$iconToggleConfig,
+								{
+									on: model.icon1,
+									icon: 'sentiment_very_satisfied',
+									offIcon: 'sentiment_very_dissatisfied',
+									onToggle: _elm_lang$core$Maybe$Just(_user$project$Demo_IconToggle$Toggle1Clicked)
+								})),
+						_1: {
+							ctor: '::',
+							_0: _user$project$Mwc_IconToggle$iconToggle(
+								_elm_lang$core$Native_Utils.update(
+									_user$project$Mwc_IconToggle$iconToggleConfig,
+									{
+										on: model.icon2,
+										icon: 'sentiment_satisfied',
+										offIcon: 'sentiment_neutral',
+										onToggle: _elm_lang$core$Maybe$Just(_user$project$Demo_IconToggle$Toggle2Clicked)
+									})),
+							_1: {ctor: '[]'}
+						}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$h3,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('Disabled'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$div,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('demo-group'),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: _user$project$Mwc_IconToggle$iconToggle(
+									_elm_lang$core$Native_Utils.update(
+										_user$project$Mwc_IconToggle$iconToggleConfig,
+										{
+											on: model.iconDisabled,
+											icon: 'sentiment_satisfied',
+											offIcon: 'sentiment_very_dissatisfied',
+											disabled: true,
+											onToggle: _elm_lang$core$Maybe$Just(_user$project$Demo_IconToggle$ToggleDisabledClicked)
+										})),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$h3,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('Color'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$div,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$class('demo-group color'),
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: _user$project$Mwc_IconToggle$iconToggle(
+											_elm_lang$core$Native_Utils.update(
+												_user$project$Mwc_IconToggle$iconToggleConfig,
+												{
+													on: model.iconColor1,
+													icon: 'all_out',
+													offIcon: 'accessibility',
+													onToggle: _elm_lang$core$Maybe$Just(_user$project$Demo_IconToggle$ToggleColor1Clicked)
+												})),
+										_1: {
+											ctor: '::',
+											_0: _user$project$Mwc_IconToggle$iconToggle(
+												_elm_lang$core$Native_Utils.update(
+													_user$project$Mwc_IconToggle$iconToggleConfig,
+													{
+														on: model.iconColor2,
+														icon: 'exit_to_app',
+														offIcon: 'camera',
+														onToggle: _elm_lang$core$Maybe$Just(_user$project$Demo_IconToggle$ToggleColor2Clicked)
+													})),
+											_1: {ctor: '[]'}
+										}
+									}),
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				}
+			}
+		});
+};
+
+var _user$project$Mwc_LinearProgress$linearProgress = function (config) {
+	var bool = function (v) {
+		return v ? _elm_lang$core$Maybe$Just('') : _elm_lang$core$Maybe$Nothing;
+	};
+	return A3(
+		_elm_lang$html$Html$node,
+		'mwc-linear-progress',
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			A2(
+				_elm_lang$core$List$filterMap,
+				_elm_lang$core$Basics$identity,
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$core$Maybe$map,
+						_elm_lang$html$Html_Attributes$attribute('determinate'),
+						function () {
+							var _p0 = config.variant;
+							switch (_p0.ctor) {
+								case 'Determinate':
+									return bool(true);
+								case 'Buffered':
+									return bool(true);
+								default:
+									return bool(false);
+							}
+						}()),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$core$Maybe$map,
+							_elm_lang$html$Html_Attributes$attribute('progress'),
+							function () {
+								var _p1 = config.variant;
+								switch (_p1.ctor) {
+									case 'Determinate':
+										return _elm_lang$core$Maybe$Just(
+											_elm_lang$core$Basics$toString(_p1._0));
+									case 'Buffered':
+										return _elm_lang$core$Maybe$Just(
+											_elm_lang$core$Basics$toString(_p1._0));
+									default:
+										return _elm_lang$core$Maybe$Nothing;
+								}
+							}()),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$core$Maybe$map,
+								_elm_lang$html$Html_Attributes$attribute('buffer'),
+								function () {
+									var _p2 = config.variant;
+									if (_p2.ctor === 'Buffered') {
+										return _elm_lang$core$Maybe$Just(
+											_elm_lang$core$Basics$toString(_p2._1));
+									} else {
+										return _elm_lang$core$Maybe$Nothing;
+									}
+								}()),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$core$Maybe$map,
+									_elm_lang$html$Html_Attributes$attribute('reverse'),
+									bool(config.reverse)),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$core$Maybe$map,
+										_elm_lang$html$Html_Attributes$attribute('closed'),
+										bool(config.closed)),
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					}
+				}),
+			config.additionalAttributes),
+		{ctor: '[]'});
+};
+var _user$project$Mwc_LinearProgress$LinearProgressConfig = F4(
+	function (a, b, c, d) {
+		return {variant: a, reverse: b, closed: c, additionalAttributes: d};
+	});
+var _user$project$Mwc_LinearProgress$Buffered = F2(
+	function (a, b) {
+		return {ctor: 'Buffered', _0: a, _1: b};
+	});
+var _user$project$Mwc_LinearProgress$Determinate = function (a) {
+	return {ctor: 'Determinate', _0: a};
+};
+var _user$project$Mwc_LinearProgress$Indeterminate = {ctor: 'Indeterminate'};
+var _user$project$Mwc_LinearProgress$linearProgressConfig = {
+	variant: _user$project$Mwc_LinearProgress$Indeterminate,
+	reverse: false,
+	closed: false,
+	additionalAttributes: {ctor: '[]'}
+};
+
+var _user$project$Demo_LinearProgress$style = '\n    mwc-linear-progress {\n      width: 50%;\n      margin: auto;\n    }\n\n    .demo-progress-bar {\n      --mdc-theme-primary: red;\n      --mdc-theme-secondary: orange;\n      --mdc-linear-progress-buffering-dots-image: url(\"data:image/svg+xml,%3Csvg version=\'1.1\' xmlns=\'http://www.w3.org/2000/svg\' xmlns:xlink=\'http://www.w3.org/1999/xlink\' x=\'0px\' y=\'0px\' enable-background=\'new 0 0 5 2\' xml:space=\'preserve\' viewBox=\'0 0 5 2\' preserveAspectRatio=\'none slice\'%3E%3Ccircle cx=\'1\' cy=\'1\' r=\'1\' fill=\'%23ffcdd2\'/%3E%3C/svg%3E\")\n    }\n    ';
+var _user$project$Demo_LinearProgress$update = F2(
+	function (msg, model) {
+		var _p0 = msg;
+		return {
+			ctor: '_Tuple2',
+			_0: _elm_lang$core$Native_Utils.update(
+				model,
+				{closed: !model.closed}),
+			_1: _elm_lang$core$Platform_Cmd$none
+		};
+	});
+var _user$project$Demo_LinearProgress$defaultModel = {closed: false};
+var _user$project$Demo_LinearProgress$Model = function (a) {
+	return {closed: a};
+};
+var _user$project$Demo_LinearProgress$ToggleButtonClicked = {ctor: 'ToggleButtonClicked'};
+var _user$project$Demo_LinearProgress$view = function (model) {
+	return A3(
+		_elm_lang$html$Html$node,
+		'main',
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(
+				_user$project$Mwc_Button$button,
+				_elm_lang$core$Native_Utils.update(
+					_user$project$Mwc_Button$buttonConfig,
+					{
+						variant: _user$project$Mwc_Button$Raised,
+						additionalAttributes: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Events$onClick(_user$project$Demo_LinearProgress$ToggleButtonClicked),
+							_1: {ctor: '[]'}
+						}
+					}),
+				'Toggle'),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: _user$project$Mwc_LinearProgress$linearProgress(
+							_elm_lang$core$Native_Utils.update(
+								_user$project$Mwc_LinearProgress$linearProgressConfig,
+								{closed: model.closed})),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$h3,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('linear-progress: reverse'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$div,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: _user$project$Mwc_LinearProgress$linearProgress(
+									_elm_lang$core$Native_Utils.update(
+										_user$project$Mwc_LinearProgress$linearProgressConfig,
+										{
+											reverse: true,
+											additionalAttributes: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$class('demo-progress-bar'),
+												_1: {ctor: '[]'}
+											}
+										})),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$h3,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('linear-progress: determinate'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$div,
+									{ctor: '[]'},
+									{
+										ctor: '::',
+										_0: _user$project$Mwc_LinearProgress$linearProgress(
+											_elm_lang$core$Native_Utils.update(
+												_user$project$Mwc_LinearProgress$linearProgressConfig,
+												{
+													variant: A2(_user$project$Mwc_LinearProgress$Buffered, 0.5, 1)
+												})),
+										_1: {ctor: '[]'}
+									}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$h3,
+										{ctor: '[]'},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text('linear-progress: determinate buffer'),
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$div,
+											{ctor: '[]'},
+											{
+												ctor: '::',
+												_0: _user$project$Mwc_LinearProgress$linearProgress(
+													_elm_lang$core$Native_Utils.update(
+														_user$project$Mwc_LinearProgress$linearProgressConfig,
+														{
+															variant: A2(_user$project$Mwc_LinearProgress$Buffered, 0.3, 0.7),
+															additionalAttributes: {
+																ctor: '::',
+																_0: _elm_lang$html$Html_Attributes$class('demo-progress-bar'),
+																_1: {ctor: '[]'}
+															}
+														})),
+												_1: {ctor: '[]'}
+											}),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$h3,
+												{ctor: '[]'},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text('linear-progress: determinate buffer reverse'),
+													_1: {ctor: '[]'}
+												}),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$div,
+													{ctor: '[]'},
+													{
+														ctor: '::',
+														_0: _user$project$Mwc_LinearProgress$linearProgress(
+															_elm_lang$core$Native_Utils.update(
+																_user$project$Mwc_LinearProgress$linearProgressConfig,
+																{
+																	variant: A2(_user$project$Mwc_LinearProgress$Buffered, 0.2, 0.6),
+																	reverse: true
+																})),
+														_1: {ctor: '[]'}
+													}),
+												_1: {ctor: '[]'}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		});
+};
+
+var _user$project$Mwc_Snackbar$encodeSnack = function (snack) {
+	return _elm_lang$core$Json_Encode$object(
+		{
+			ctor: '::',
+			_0: {
+				ctor: '_Tuple2',
+				_0: 'dismissesOnAction',
+				_1: _elm_lang$core$Json_Encode$bool(snack.dismissesOnAction)
+			},
+			_1: {
+				ctor: '::',
+				_0: {
+					ctor: '_Tuple2',
+					_0: 'message',
+					_1: _elm_lang$core$Json_Encode$string(snack.message)
+				},
+				_1: {
+					ctor: '::',
+					_0: {
+						ctor: '_Tuple2',
+						_0: 'actionText',
+						_1: _elm_lang$core$Json_Encode$string(snack.actionText)
+					},
+					_1: {
+						ctor: '::',
+						_0: {
+							ctor: '_Tuple2',
+							_0: 'timeout',
+							_1: _elm_lang$core$Json_Encode$float(snack.timeout)
+						},
+						_1: {
+							ctor: '::',
+							_0: {
+								ctor: '_Tuple2',
+								_0: 'multiline',
+								_1: _elm_lang$core$Json_Encode$bool(snack.multiline)
+							},
+							_1: {
+								ctor: '::',
+								_0: {
+									ctor: '_Tuple2',
+									_0: 'actionOnBottom',
+									_1: _elm_lang$core$Json_Encode$bool(snack.actionOnBottom)
+								},
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				}
+			}
+		});
+};
+var _user$project$Mwc_Snackbar$encodePorts = function (_p0) {
+	var _p1 = _p0;
+	var _p2 = _p1._0;
+	return _elm_lang$core$Json_Encode$object(
+		{
+			ctor: '::',
+			_0: {
+				ctor: '_Tuple2',
+				_0: 'action',
+				_1: _elm_lang$core$Json_Encode$string(_p2.action)
+			},
+			_1: {
+				ctor: '::',
+				_0: {
+					ctor: '_Tuple2',
+					_0: 'id',
+					_1: _elm_lang$core$Json_Encode$string(_p2.id)
+				},
+				_1: {
+					ctor: '::',
+					_0: {
+						ctor: '_Tuple2',
+						_0: 'snack',
+						_1: A2(
+							_elm_lang$core$Maybe$withDefault,
+							_elm_lang$core$Json_Encode$null,
+							A2(_elm_lang$core$Maybe$map, _user$project$Mwc_Snackbar$encodeSnack, _p2.snack))
+					},
+					_1: {ctor: '[]'}
+				}
+			}
+		});
+};
+var _user$project$Mwc_Snackbar$ports = F2(
+	function (portUnsafe, ports) {
+		return portUnsafe(
+			_user$project$Mwc_Snackbar$encodePorts(ports));
+	});
+var _user$project$Mwc_Snackbar$setActionText = F2(
+	function (actionText, snack) {
+		return _elm_lang$core$Native_Utils.update(
+			snack,
+			{actionText: actionText});
+	});
+var _user$project$Mwc_Snackbar$setMessage = F2(
+	function (message, snack) {
+		return _elm_lang$core$Native_Utils.update(
+			snack,
+			{message: message});
+	});
+var _user$project$Mwc_Snackbar$setActionOnBottom = F2(
+	function (actionOnBottom, snack) {
+		return _elm_lang$core$Native_Utils.update(
+			snack,
+			{actionOnBottom: actionOnBottom});
+	});
+var _user$project$Mwc_Snackbar$setMultiline = F2(
+	function (multiline, snack) {
+		return _elm_lang$core$Native_Utils.update(
+			snack,
+			{multiline: multiline});
+	});
+var _user$project$Mwc_Snackbar$setTimeout = F2(
+	function (timeout, snack) {
+		return _elm_lang$core$Native_Utils.update(
+			snack,
+			{timeout: timeout});
+	});
+var _user$project$Mwc_Snackbar$setDismissesOnAction = F2(
+	function (dismissesOnAction, snack) {
+		return _elm_lang$core$Native_Utils.update(
+			snack,
+			{dismissesOnAction: true});
+	});
+var _user$project$Mwc_Snackbar$defaultSnack = {dismissesOnAction: false, message: '', actionText: '', timeout: 0, multiline: false, actionOnBottom: false};
+var _user$project$Mwc_Snackbar$snack = function (_p3) {
+	var _p4 = _p3;
+	return _elm_lang$core$Native_Utils.update(
+		_user$project$Mwc_Snackbar$defaultSnack,
+		{message: _p4.message, actionText: _p4.actionText});
+};
+var _user$project$Mwc_Snackbar$snackbarConfig = {
+	message: '',
+	timeout: 0,
+	multiline: false,
+	actionText: '',
+	actionOnBottom: false,
+	dismissOnAction: false,
+	additionalAttributes: {ctor: '[]'}
+};
+var _user$project$Mwc_Snackbar$snackbar = function (config) {
+	var bool = function (v) {
+		return v ? _elm_lang$core$Maybe$Just('') : _elm_lang$core$Maybe$Nothing;
+	};
+	return A3(
+		_elm_lang$html$Html$node,
+		'mwc-snackbar',
+		config.additionalAttributes,
+		{ctor: '[]'});
+};
+var _user$project$Mwc_Snackbar$SnackbarConfig = F7(
+	function (a, b, c, d, e, f, g) {
+		return {message: a, timeout: b, multiline: c, actionText: d, actionOnBottom: e, dismissOnAction: f, additionalAttributes: g};
+	});
+var _user$project$Mwc_Snackbar$Snack = F6(
+	function (a, b, c, d, e, f) {
+		return {dismissesOnAction: a, message: b, actionText: c, timeout: d, multiline: e, actionOnBottom: f};
+	});
+var _user$project$Mwc_Snackbar$Ports = function (a) {
+	return {ctor: 'Ports', _0: a};
+};
+var _user$project$Mwc_Snackbar$show = F2(
+	function (id, snack) {
+		return _user$project$Mwc_Snackbar$Ports(
+			{
+				action: 'show',
+				id: id,
+				snack: _elm_lang$core$Maybe$Just(snack)
+			});
+	});
+
+var _user$project$Demo_Ports$snackbarUnsafe = _elm_lang$core$Native_Platform.outgoingPort(
+	'snackbarUnsafe',
+	function (v) {
+		return v;
+	});
+var _user$project$Demo_Ports$snackbar = _user$project$Mwc_Snackbar$ports(_user$project$Demo_Ports$snackbarUnsafe);
 
 var _user$project$Mwc_Radio$radio = function (config) {
 	var bool = function (v) {
@@ -8533,58 +10597,258 @@ var _user$project$Mwc_Radio$radioConfig = {
 	name: '',
 	additionalAttributes: {ctor: '[]'}
 };
-var _user$project$Mwc_Radio$Config = F5(
+var _user$project$Mwc_Radio$RadioConfig = F5(
 	function (a, b, c, d, e) {
 		return {checked: a, disabled: b, value: c, name: d, additionalAttributes: e};
 	});
 
-var _user$project$Mwc_Ripple$ripple = function (config) {
-	var bool = function (v) {
-		return v ? _elm_lang$core$Maybe$Just('') : _elm_lang$core$Maybe$Nothing;
-	};
+var _user$project$Demo_Radio$view = function (model) {
 	return A3(
 		_elm_lang$html$Html$node,
-		'mwc-ripple',
+		'main',
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$h3,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('Radio'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('group'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: _user$project$Mwc_Radio$radio(_user$project$Mwc_Radio$radioConfig),
+						_1: {
+							ctor: '::',
+							_0: _user$project$Mwc_Radio$radio(_user$project$Mwc_Radio$radioConfig),
+							_1: {
+								ctor: '::',
+								_0: _user$project$Mwc_Radio$radio(
+									_elm_lang$core$Native_Utils.update(
+										_user$project$Mwc_Radio$radioConfig,
+										{
+											checked: true,
+											additionalAttributes: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$class('special'),
+												_1: {ctor: '[]'}
+											}
+										})),
+								_1: {ctor: '[]'}
+							}
+						}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('group'),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: _user$project$Mwc_Radio$radio(
+								_elm_lang$core$Native_Utils.update(
+									_user$project$Mwc_Radio$radioConfig,
+									{
+										name: '1',
+										checked: true,
+										additionalAttributes: {
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$class('special'),
+											_1: {ctor: '[]'}
+										}
+									})),
+							_1: {
+								ctor: '::',
+								_0: _user$project$Mwc_Radio$radio(
+									_elm_lang$core$Native_Utils.update(
+										_user$project$Mwc_Radio$radioConfig,
+										{name: '1'})),
+								_1: {
+									ctor: '::',
+									_0: _user$project$Mwc_Radio$radio(
+										_elm_lang$core$Native_Utils.update(
+											_user$project$Mwc_Radio$radioConfig,
+											{name: '1'})),
+									_1: {ctor: '[]'}
+								}
+							}
+						}),
+					_1: {ctor: '[]'}
+				}
+			}
+		});
+};
+var _user$project$Demo_Radio$update = F2(
+	function (msg, model) {
+		return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+	});
+var _user$project$Demo_Radio$defaultModel = {};
+var _user$project$Demo_Radio$Model = {};
+var _user$project$Demo_Radio$NoOp = {ctor: 'NoOp'};
+
+var _user$project$Demo_Snackbar$style = '\n  ';
+var _user$project$Demo_Snackbar$snack3 = A2(
+	_user$project$Mwc_Snackbar$setActionOnBottom,
+	true,
+	A2(
+		_user$project$Mwc_Snackbar$setMultiline,
+		true,
 		A2(
-			_elm_lang$core$Basics_ops['++'],
-			A2(
-				_elm_lang$core$List$filterMap,
-				_elm_lang$core$Basics$identity,
+			_user$project$Mwc_Snackbar$setTimeout,
+			5 * _elm_lang$core$Time$second,
+			_user$project$Mwc_Snackbar$snack(
+				{message: '\n              Hi there snack 3! This is a really long message that will probably\n              wrap.\n            ', actionText: 'Wow'}))));
+var _user$project$Demo_Snackbar$snack2 = A2(
+	_user$project$Mwc_Snackbar$setTimeout,
+	5 * _elm_lang$core$Time$second,
+	A2(
+		_user$project$Mwc_Snackbar$setDismissesOnAction,
+		true,
+		_user$project$Mwc_Snackbar$snack(
+			{message: 'Hi there snack 2', actionText: 'Happy'})));
+var _user$project$Demo_Snackbar$snack1 = _user$project$Mwc_Snackbar$snack(
+	{message: 'Hi there snack 1', actionText: 'Go'});
+var _user$project$Demo_Snackbar$defaultModel = {};
+var _user$project$Demo_Snackbar$update = F2(
+	function (msg, model) {
+		var _p0 = msg;
+		switch (_p0.ctor) {
+			case 'Snack1Clicked':
+				return {
+					ctor: '_Tuple2',
+					_0: model,
+					_1: _user$project$Demo_Ports$snackbar(
+						A2(_user$project$Mwc_Snackbar$show, 'snack', _user$project$Demo_Snackbar$snack1))
+				};
+			case 'Snack2Clicked':
+				return {
+					ctor: '_Tuple2',
+					_0: model,
+					_1: _user$project$Demo_Ports$snackbar(
+						A2(_user$project$Mwc_Snackbar$show, 'snack', _user$project$Demo_Snackbar$snack2))
+				};
+			default:
+				return {
+					ctor: '_Tuple2',
+					_0: model,
+					_1: _user$project$Demo_Ports$snackbar(
+						A2(_user$project$Mwc_Snackbar$show, 'snack', _user$project$Demo_Snackbar$snack3))
+				};
+		}
+	});
+var _user$project$Demo_Snackbar$subscriptions = function (model) {
+	return _elm_lang$core$Platform_Sub$none;
+};
+var _user$project$Demo_Snackbar$init = F2(
+	function (msg, model) {
+		return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+	});
+var _user$project$Demo_Snackbar$Model = {};
+var _user$project$Demo_Snackbar$Snack3Clicked = {ctor: 'Snack3Clicked'};
+var _user$project$Demo_Snackbar$Snack2Clicked = {ctor: 'Snack2Clicked'};
+var _user$project$Demo_Snackbar$Snack1Clicked = {ctor: 'Snack1Clicked'};
+var _user$project$Demo_Snackbar$view = function (model) {
+	return A3(
+		_elm_lang$html$Html$node,
+		'main',
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('demo-group'),
+					_1: {ctor: '[]'}
+				},
 				{
 					ctor: '::',
 					_0: A2(
-						_elm_lang$core$Maybe$map,
-						_elm_lang$html$Html_Attributes$attribute('primary'),
-						bool(config.primary)),
+						_user$project$Mwc_Button$button,
+						_elm_lang$core$Native_Utils.update(
+							_user$project$Mwc_Button$buttonConfig,
+							{
+								variant: _user$project$Mwc_Button$Raised,
+								ripple: true,
+								onClick: _elm_lang$core$Maybe$Just(_user$project$Demo_Snackbar$Snack1Clicked),
+								additionalAttributes: {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$id('snack1'),
+									_1: {ctor: '[]'}
+								}
+							}),
+						'Snack 1'),
 					_1: {
 						ctor: '::',
 						_0: A2(
-							_elm_lang$core$Maybe$map,
-							_elm_lang$html$Html_Attributes$attribute('accent'),
-							bool(config.secondary)),
+							_user$project$Mwc_Button$button,
+							_elm_lang$core$Native_Utils.update(
+								_user$project$Mwc_Button$buttonConfig,
+								{
+									variant: _user$project$Mwc_Button$Raised,
+									ripple: true,
+									onClick: _elm_lang$core$Maybe$Just(_user$project$Demo_Snackbar$Snack2Clicked),
+									additionalAttributes: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$id('snack2'),
+										_1: {ctor: '[]'}
+									}
+								}),
+							'Snack 2'),
 						_1: {
 							ctor: '::',
 							_0: A2(
-								_elm_lang$core$Maybe$map,
-								_elm_lang$html$Html_Attributes$attribute('unbounded'),
-								bool(config.unbounded)),
+								_user$project$Mwc_Button$button,
+								_elm_lang$core$Native_Utils.update(
+									_user$project$Mwc_Button$buttonConfig,
+									{
+										variant: _user$project$Mwc_Button$Raised,
+										ripple: true,
+										onClick: _elm_lang$core$Maybe$Just(_user$project$Demo_Snackbar$Snack3Clicked),
+										additionalAttributes: {
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$id('snack3'),
+											_1: {ctor: '[]'}
+										}
+									}),
+								'Snack 3'),
 							_1: {ctor: '[]'}
 						}
 					}
 				}),
-			config.additionalAttributes),
-		{ctor: '[]'});
+			_1: {
+				ctor: '::',
+				_0: _user$project$Mwc_Snackbar$snackbar(
+					_elm_lang$core$Native_Utils.update(
+						_user$project$Mwc_Snackbar$snackbarConfig,
+						{
+							message: 'Hi there snack 1!',
+							actionText: 'Go',
+							additionalAttributes: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$id('snack'),
+								_1: {ctor: '[]'}
+							}
+						})),
+				_1: {ctor: '[]'}
+			}
+		});
 };
-var _user$project$Mwc_Ripple$rippleConfig = {
-	primary: false,
-	secondary: false,
-	unbounded: false,
-	additionalAttributes: {ctor: '[]'}
-};
-var _user$project$Mwc_Ripple$Config = F4(
-	function (a, b, c, d) {
-		return {primary: a, secondary: b, unbounded: c, additionalAttributes: d};
-	});
 
 var _user$project$Mwc_Switch$switch = function (config) {
 	var bool = function (v) {
@@ -8610,7 +10874,11 @@ var _user$project$Mwc_Switch$switch = function (config) {
 							_elm_lang$core$Maybe$map,
 							_elm_lang$html$Html_Attributes$attribute('disabled'),
 							bool(config.disabled)),
-						_1: {ctor: '[]'}
+						_1: {
+							ctor: '::',
+							_0: config.disabled ? _elm_lang$core$Maybe$Nothing : A2(_elm_lang$core$Maybe$map, _elm_lang$html$Html_Events$onClick, config.onToggle),
+							_1: {ctor: '[]'}
+						}
 					}
 				}),
 			config.additionalAttributes),
@@ -8619,448 +10887,190 @@ var _user$project$Mwc_Switch$switch = function (config) {
 var _user$project$Mwc_Switch$switchConfig = {
 	checked: false,
 	disabled: false,
+	onToggle: _elm_lang$core$Maybe$Nothing,
 	additionalAttributes: {ctor: '[]'}
 };
-var _user$project$Mwc_Switch$Config = F3(
-	function (a, b, c) {
-		return {checked: a, disabled: b, additionalAttributes: c};
+var _user$project$Mwc_Switch$SwitchConfig = F4(
+	function (a, b, c, d) {
+		return {checked: a, disabled: b, onToggle: c, additionalAttributes: d};
 	});
 
-var _user$project$Main$main = _elm_lang$virtual_dom$Native_VirtualDom.staticProgram(
-	A2(
-		_elm_lang$html$Html$div,
+var _user$project$Demo_Switch$style = '\n    ';
+var _user$project$Demo_Switch$update = F2(
+	function (msg, model) {
+		var _p0 = msg;
+		if (_p0.ctor === 'ToggleSwitch1') {
+			return {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Native_Utils.update(
+					model,
+					{toggle1: !model.toggle1}),
+				_1: _elm_lang$core$Platform_Cmd$none
+			};
+		} else {
+			return {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Native_Utils.update(
+					model,
+					{toggle2: !model.toggle2}),
+				_1: _elm_lang$core$Platform_Cmd$none
+			};
+		}
+	});
+var _user$project$Demo_Switch$defaultModel = {toggle1: false, toggle2: true};
+var _user$project$Demo_Switch$Model = F2(
+	function (a, b) {
+		return {toggle1: a, toggle2: b};
+	});
+var _user$project$Demo_Switch$ToggleSwitch2 = {ctor: 'ToggleSwitch2'};
+var _user$project$Demo_Switch$ToggleSwitch1 = {ctor: 'ToggleSwitch1'};
+var _user$project$Demo_Switch$view = function (model) {
+	return A3(
+		_elm_lang$html$Html$node,
+		'main',
 		{ctor: '[]'},
 		{
 			ctor: '::',
 			_0: A2(
-				_elm_lang$html$Html$h2,
+				_elm_lang$html$Html$h3,
 				{ctor: '[]'},
 				{
 					ctor: '::',
-					_0: _elm_lang$html$Html$text('Material Web Components'),
+					_0: _elm_lang$html$Html$text('Switch'),
 					_1: {ctor: '[]'}
 				}),
 			_1: {
 				ctor: '::',
 				_0: A2(
-					_elm_lang$html$Html$h3,
-					{ctor: '[]'},
+					_elm_lang$html$Html$div,
 					{
 						ctor: '::',
-						_0: _elm_lang$html$Html$text('Button'),
+						_0: _elm_lang$html$Html_Attributes$class('group'),
 						_1: {ctor: '[]'}
-					}),
-				_1: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$div,
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$class('group'),
-							_1: {ctor: '[]'}
-						},
-						{
-							ctor: '::',
-							_0: A2(
-								_user$project$Mwc_Button$button,
-								_elm_lang$core$Native_Utils.update(
-									_user$project$Mwc_Button$buttonConfig,
-									{raised: true, icon: 'map'}),
-								'Hi there'),
-							_1: {
-								ctor: '::',
-								_0: A2(_user$project$Mwc_Button$button, _user$project$Mwc_Button$buttonConfig, 'I\'m a button too'),
-								_1: {ctor: '[]'}
-							}
-						}),
-					_1: {
+					},
+					{
 						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$h3,
-							{ctor: '[]'},
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html$text('Fab'),
-								_1: {ctor: '[]'}
-							}),
+						_0: _user$project$Mwc_Switch$switch(
+							_elm_lang$core$Native_Utils.update(
+								_user$project$Mwc_Switch$switchConfig,
+								{
+									checked: model.toggle1,
+									onToggle: _elm_lang$core$Maybe$Just(_user$project$Demo_Switch$ToggleSwitch1)
+								})),
 						_1: {
 							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$div,
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$class('group'),
-									_1: {ctor: '[]'}
-								},
-								{
-									ctor: '::',
-									_0: A2(_user$project$Mwc_Fab$fab, _user$project$Mwc_Fab$fabConfig, 'map'),
-									_1: {
-										ctor: '::',
-										_0: A2(
-											_user$project$Mwc_Fab$fab,
-											_elm_lang$core$Native_Utils.update(
-												_user$project$Mwc_Fab$fabConfig,
-												{
-													additionalAttributes: {
-														ctor: '::',
-														_0: _elm_lang$html$Html_Attributes$class('light'),
-														_1: {ctor: '[]'}
-													}
-												}),
-											'explore'),
-										_1: {
+							_0: _user$project$Mwc_Switch$switch(
+								_elm_lang$core$Native_Utils.update(
+									_user$project$Mwc_Switch$switchConfig,
+									{
+										checked: model.toggle2,
+										onToggle: _elm_lang$core$Maybe$Just(_user$project$Demo_Switch$ToggleSwitch2),
+										additionalAttributes: {
 											ctor: '::',
-											_0: A2(
-												_user$project$Mwc_Fab$fab,
-												_elm_lang$core$Native_Utils.update(
-													_user$project$Mwc_Fab$fabConfig,
-													{
-														additionalAttributes: {
-															ctor: '::',
-															_0: _elm_lang$html$Html_Attributes$class('special'),
-															_1: {ctor: '[]'}
-														}
-													}),
-												'code'),
+											_0: _elm_lang$html$Html_Attributes$class('special'),
 											_1: {ctor: '[]'}
 										}
-									}
-								}),
+									})),
+							_1: {ctor: '[]'}
+						}
+					}),
+				_1: {ctor: '[]'}
+			}
+		});
+};
+
+var _user$project$Mwc_Textfield$textfieldConfig = {
+	required: false,
+	value: '',
+	label: '',
+	icon: '',
+	iconTrailing: false,
+	helperText: '',
+	box: false,
+	outlined: false,
+	disabled: false,
+	fullWidth: false,
+	placeholder: '',
+	type_: '',
+	onInput: _elm_lang$core$Maybe$Nothing,
+	additionalAttributes: {ctor: '[]'}
+};
+var _user$project$Mwc_Textfield$textfield = function (config) {
+	var bool = function (v) {
+		return v ? _elm_lang$core$Maybe$Just('') : _elm_lang$core$Maybe$Nothing;
+	};
+	return A3(
+		_elm_lang$html$Html$node,
+		'mwc-textfield',
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			A2(
+				_elm_lang$core$List$filterMap,
+				_elm_lang$core$Basics$identity,
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$core$Maybe$map,
+						_elm_lang$html$Html_Attributes$attribute('required'),
+						bool(config.required)),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$core$Maybe$Just(
+							A2(_elm_lang$html$Html_Attributes$attribute, 'value', config.value)),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$core$Maybe$Just(
+								A2(_elm_lang$html$Html_Attributes$attribute, 'label', config.label)),
 							_1: {
 								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$h3,
-									{ctor: '[]'},
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html$text('Icon'),
-										_1: {ctor: '[]'}
-									}),
+								_0: _elm_lang$core$Maybe$Just(
+									A2(_elm_lang$html$Html_Attributes$attribute, 'icon', config.icon)),
 								_1: {
 									ctor: '::',
 									_0: A2(
-										_elm_lang$html$Html$div,
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$class('group'),
-											_1: {ctor: '[]'}
-										},
-										{
-											ctor: '::',
-											_0: A2(_user$project$Mwc_Icon$icon, _user$project$Mwc_Icon$iconConfig, 'map'),
-											_1: {
-												ctor: '::',
-												_0: A2(
-													_user$project$Mwc_Icon$icon,
-													_elm_lang$core$Native_Utils.update(
-														_user$project$Mwc_Icon$iconConfig,
-														{
-															additionalAttributes: {
-																ctor: '::',
-																_0: _elm_lang$html$Html_Attributes$class('light-icon'),
-																_1: {ctor: '[]'}
-															}
-														}),
-													'explore'),
-												_1: {
-													ctor: '::',
-													_0: A2(
-														_user$project$Mwc_Icon$icon,
-														_elm_lang$core$Native_Utils.update(
-															_user$project$Mwc_Icon$iconConfig,
-															{
-																additionalAttributes: {
-																	ctor: '::',
-																	_0: _elm_lang$html$Html_Attributes$class('special-icon'),
-																	_1: {ctor: '[]'}
-																}
-															}),
-														'code'),
-													_1: {ctor: '[]'}
-												}
-											}
-										}),
+										_elm_lang$core$Maybe$map,
+										_elm_lang$html$Html_Attributes$attribute('iconTrailing'),
+										bool(config.iconTrailing)),
 									_1: {
 										ctor: '::',
-										_0: A2(
-											_elm_lang$html$Html$h3,
-											{ctor: '[]'},
-											{
-												ctor: '::',
-												_0: _elm_lang$html$Html$text('Checkbox'),
-												_1: {ctor: '[]'}
-											}),
+										_0: _elm_lang$core$Maybe$Just(
+											A2(_elm_lang$html$Html_Attributes$attribute, 'helperText', config.helperText)),
 										_1: {
 											ctor: '::',
 											_0: A2(
-												_elm_lang$html$Html$div,
-												{
-													ctor: '::',
-													_0: _elm_lang$html$Html_Attributes$class('group'),
-													_1: {ctor: '[]'}
-												},
-												{
-													ctor: '::',
-													_0: A2(_user$project$Mwc_Checkbox$checkbox, _user$project$Mwc_Checkbox$checkboxConfig, ''),
-													_1: {
-														ctor: '::',
-														_0: A2(
-															_user$project$Mwc_Checkbox$checkbox,
-															_elm_lang$core$Native_Utils.update(
-																_user$project$Mwc_Checkbox$checkboxConfig,
-																{checked: true}),
-															''),
-														_1: {
-															ctor: '::',
-															_0: A2(
-																_user$project$Mwc_Checkbox$checkbox,
-																_elm_lang$core$Native_Utils.update(
-																	_user$project$Mwc_Checkbox$checkboxConfig,
-																	{
-																		indeterminate: true,
-																		additionalAttributes: {
-																			ctor: '::',
-																			_0: _elm_lang$html$Html_Attributes$class('special'),
-																			_1: {ctor: '[]'}
-																		}
-																	}),
-																''),
-															_1: {ctor: '[]'}
-														}
-													}
-												}),
+												_elm_lang$core$Maybe$map,
+												_elm_lang$html$Html_Attributes$attribute('box'),
+												bool(config.box)),
 											_1: {
 												ctor: '::',
 												_0: A2(
-													_elm_lang$html$Html$h3,
-													{ctor: '[]'},
-													{
-														ctor: '::',
-														_0: _elm_lang$html$Html$text('Radio'),
-														_1: {ctor: '[]'}
-													}),
+													_elm_lang$core$Maybe$map,
+													_elm_lang$html$Html_Attributes$attribute('outlined'),
+													bool(config.outlined)),
 												_1: {
 													ctor: '::',
 													_0: A2(
-														_elm_lang$html$Html$div,
-														{
-															ctor: '::',
-															_0: _elm_lang$html$Html_Attributes$class('group'),
-															_1: {ctor: '[]'}
-														},
-														{
-															ctor: '::',
-															_0: _user$project$Mwc_Radio$radio(_user$project$Mwc_Radio$radioConfig),
-															_1: {
-																ctor: '::',
-																_0: _user$project$Mwc_Radio$radio(_user$project$Mwc_Radio$radioConfig),
-																_1: {
-																	ctor: '::',
-																	_0: _user$project$Mwc_Radio$radio(
-																		_elm_lang$core$Native_Utils.update(
-																			_user$project$Mwc_Radio$radioConfig,
-																			{
-																				checked: true,
-																				additionalAttributes: {
-																					ctor: '::',
-																					_0: _elm_lang$html$Html_Attributes$class('special'),
-																					_1: {ctor: '[]'}
-																				}
-																			})),
-																	_1: {ctor: '[]'}
-																}
-															}
-														}),
+														_elm_lang$core$Maybe$map,
+														_elm_lang$html$Html_Attributes$attribute('disabled'),
+														bool(config.disabled)),
 													_1: {
 														ctor: '::',
 														_0: A2(
-															_elm_lang$html$Html$div,
-															{
-																ctor: '::',
-																_0: _elm_lang$html$Html_Attributes$class('group'),
-																_1: {ctor: '[]'}
-															},
-															{
-																ctor: '::',
-																_0: _user$project$Mwc_Radio$radio(
-																	_elm_lang$core$Native_Utils.update(
-																		_user$project$Mwc_Radio$radioConfig,
-																		{
-																			name: '1',
-																			checked: true,
-																			additionalAttributes: {
-																				ctor: '::',
-																				_0: _elm_lang$html$Html_Attributes$class('special'),
-																				_1: {ctor: '[]'}
-																			}
-																		})),
-																_1: {
-																	ctor: '::',
-																	_0: _user$project$Mwc_Radio$radio(
-																		_elm_lang$core$Native_Utils.update(
-																			_user$project$Mwc_Radio$radioConfig,
-																			{name: '1'})),
-																	_1: {
-																		ctor: '::',
-																		_0: _user$project$Mwc_Radio$radio(
-																			_elm_lang$core$Native_Utils.update(
-																				_user$project$Mwc_Radio$radioConfig,
-																				{name: '1'})),
-																		_1: {ctor: '[]'}
-																	}
-																}
-															}),
+															_elm_lang$core$Maybe$map,
+															_elm_lang$html$Html_Attributes$attribute('fullWidth'),
+															bool(config.fullWidth)),
 														_1: {
 															ctor: '::',
-															_0: A2(
-																_elm_lang$html$Html$h3,
-																{ctor: '[]'},
-																{
-																	ctor: '::',
-																	_0: _elm_lang$html$Html$text('Switch'),
-																	_1: {ctor: '[]'}
-																}),
+															_0: _elm_lang$core$Maybe$Just(
+																A2(_elm_lang$html$Html_Attributes$attribute, 'placeholder', config.placeholder)),
 															_1: {
 																ctor: '::',
-																_0: A2(
-																	_elm_lang$html$Html$div,
-																	{
-																		ctor: '::',
-																		_0: _elm_lang$html$Html_Attributes$class('group'),
-																		_1: {ctor: '[]'}
-																	},
-																	{
-																		ctor: '::',
-																		_0: _user$project$Mwc_Switch$switch(_user$project$Mwc_Switch$switchConfig),
-																		_1: {
-																			ctor: '::',
-																			_0: _user$project$Mwc_Switch$switch(
-																				_elm_lang$core$Native_Utils.update(
-																					_user$project$Mwc_Switch$switchConfig,
-																					{
-																						checked: true,
-																						additionalAttributes: {
-																							ctor: '::',
-																							_0: _elm_lang$html$Html_Attributes$class('special'),
-																							_1: {ctor: '[]'}
-																						}
-																					})),
-																			_1: {ctor: '[]'}
-																		}
-																	}),
+																_0: _elm_lang$core$Maybe$Just(
+																	A2(_elm_lang$html$Html_Attributes$attribute, 'type', config.type_)),
 																_1: {
 																	ctor: '::',
-																	_0: A2(
-																		_elm_lang$html$Html$h3,
-																		{ctor: '[]'},
-																		{
-																			ctor: '::',
-																			_0: _elm_lang$html$Html$text('Ripple'),
-																			_1: {ctor: '[]'}
-																		}),
-																	_1: {
-																		ctor: '::',
-																		_0: A2(
-																			_elm_lang$html$Html$div,
-																			{
-																				ctor: '::',
-																				_0: _elm_lang$html$Html_Attributes$class('group'),
-																				_1: {ctor: '[]'}
-																			},
-																			{
-																				ctor: '::',
-																				_0: A2(
-																					_elm_lang$html$Html$div,
-																					{
-																						ctor: '::',
-																						_0: _elm_lang$html$Html_Attributes$class('box3'),
-																						_1: {
-																							ctor: '::',
-																							_0: _elm_lang$html$Html_Attributes$style(
-																								{
-																									ctor: '::',
-																									_0: {ctor: '_Tuple2', _0: 'position', _1: 'relative'},
-																									_1: {ctor: '[]'}
-																								}),
-																							_1: {ctor: '[]'}
-																						}
-																					},
-																					{
-																						ctor: '::',
-																						_0: _elm_lang$html$Html$text('Ripple me'),
-																						_1: {
-																							ctor: '::',
-																							_0: _user$project$Mwc_Ripple$ripple(_user$project$Mwc_Ripple$rippleConfig),
-																							_1: {ctor: '[]'}
-																						}
-																					}),
-																				_1: {
-																					ctor: '::',
-																					_0: A2(
-																						_elm_lang$html$Html$div,
-																						{
-																							ctor: '::',
-																							_0: _elm_lang$html$Html_Attributes$class('box3'),
-																							_1: {
-																								ctor: '::',
-																								_0: _elm_lang$html$Html_Attributes$style(
-																									{
-																										ctor: '::',
-																										_0: {ctor: '_Tuple2', _0: 'position', _1: 'relative'},
-																										_1: {ctor: '[]'}
-																									}),
-																								_1: {ctor: '[]'}
-																							}
-																						},
-																						{
-																							ctor: '::',
-																							_0: _elm_lang$html$Html$text('Ripple me'),
-																							_1: {
-																								ctor: '::',
-																								_0: _user$project$Mwc_Ripple$ripple(
-																									_elm_lang$core$Native_Utils.update(
-																										_user$project$Mwc_Ripple$rippleConfig,
-																										{primary: true})),
-																								_1: {ctor: '[]'}
-																							}
-																						}),
-																					_1: {
-																						ctor: '::',
-																						_0: A2(
-																							_elm_lang$html$Html$div,
-																							{
-																								ctor: '::',
-																								_0: _elm_lang$html$Html_Attributes$class('box3'),
-																								_1: {
-																									ctor: '::',
-																									_0: _elm_lang$html$Html_Attributes$style(
-																										{
-																											ctor: '::',
-																											_0: {ctor: '_Tuple2', _0: 'position', _1: 'relative'},
-																											_1: {ctor: '[]'}
-																										}),
-																									_1: {ctor: '[]'}
-																								}
-																							},
-																							{
-																								ctor: '::',
-																								_0: _elm_lang$html$Html$text('Ripple me'),
-																								_1: {
-																									ctor: '::',
-																									_0: _user$project$Mwc_Ripple$ripple(
-																										_elm_lang$core$Native_Utils.update(
-																											_user$project$Mwc_Ripple$rippleConfig,
-																											{secondary: true})),
-																									_1: {ctor: '[]'}
-																								}
-																							}),
-																						_1: {ctor: '[]'}
-																					}
-																				}
-																			}),
-																		_1: {ctor: '[]'}
-																	}
+																	_0: A2(_elm_lang$core$Maybe$map, _elm_lang$html$Html_Events$onInput, config.onInput),
+																	_1: {ctor: '[]'}
 																}
 															}
 														}
@@ -9073,9 +11083,1071 @@ var _user$project$Main$main = _elm_lang$virtual_dom$Native_VirtualDom.staticProg
 							}
 						}
 					}
+				}),
+			config.additionalAttributes),
+		{ctor: '[]'});
+};
+var _user$project$Mwc_Textfield$TextfieldConfig = function (a) {
+	return function (b) {
+		return function (c) {
+			return function (d) {
+				return function (e) {
+					return function (f) {
+						return function (g) {
+							return function (h) {
+								return function (i) {
+									return function (j) {
+										return function (k) {
+											return function (l) {
+												return function (m) {
+													return function (n) {
+														return {required: a, value: b, label: c, icon: d, iconTrailing: e, helperText: f, box: g, outlined: h, disabled: i, fullWidth: j, placeholder: k, type_: l, onInput: m, additionalAttributes: n};
+													};
+												};
+											};
+										};
+									};
+								};
+							};
+						};
+					};
+				};
+			};
+		};
+	};
+};
+
+var _user$project$Demo_Textfield$demoGroupSpaced = function (textfieldConfig) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('demo-group-spaced'),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: _user$project$Mwc_Textfield$textfield(textfieldConfig),
+			_1: {
+				ctor: '::',
+				_0: _user$project$Mwc_Textfield$textfield(
+					_elm_lang$core$Native_Utils.update(
+						textfieldConfig,
+						{box: true, label: 'Say something...'})),
+				_1: {
+					ctor: '::',
+					_0: _user$project$Mwc_Textfield$textfield(
+						_elm_lang$core$Native_Utils.update(
+							textfieldConfig,
+							{box: true, label: 'Say something...', value: 'Hi'})),
+					_1: {
+						ctor: '::',
+						_0: _user$project$Mwc_Textfield$textfield(
+							_elm_lang$core$Native_Utils.update(
+								textfieldConfig,
+								{box: true, label: 'Say something...', value: 'Hi', icon: 'event'})),
+						_1: {
+							ctor: '::',
+							_0: _user$project$Mwc_Textfield$textfield(
+								_elm_lang$core$Native_Utils.update(
+									textfieldConfig,
+									{box: true, label: 'Say something...', value: 'Hi', icon: 'mail', iconTrailing: true})),
+							_1: {ctor: '[]'}
+						}
+					}
 				}
 			}
-		}));
+		});
+};
+var _user$project$Demo_Textfield$style = '\n  ';
+var _user$project$Demo_Textfield$update = F2(
+	function (msg, model) {
+		var _p0 = msg;
+		var _p1 = A2(_elm_lang$core$Debug$log, 'input', _p0._0);
+		return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+	});
+var _user$project$Demo_Textfield$defaultModel = {};
+var _user$project$Demo_Textfield$Model = {};
+var _user$project$Demo_Textfield$Input = function (a) {
+	return {ctor: 'Input', _0: a};
+};
+var _user$project$Demo_Textfield$view = function (model) {
+	return A3(
+		_elm_lang$html$Html$node,
+		'main',
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: _user$project$Demo_Textfield$demoGroupSpaced(_user$project$Mwc_Textfield$textfieldConfig),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$h4,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('box'),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: _user$project$Demo_Textfield$demoGroupSpaced(
+						_elm_lang$core$Native_Utils.update(
+							_user$project$Mwc_Textfield$textfieldConfig,
+							{
+								box: true,
+								onInput: _elm_lang$core$Maybe$Just(_user$project$Demo_Textfield$Input)
+							})),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$h4,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text('box - required'),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: _user$project$Demo_Textfield$demoGroupSpaced(
+								_elm_lang$core$Native_Utils.update(
+									_user$project$Mwc_Textfield$textfieldConfig,
+									{
+										box: true,
+										required: true,
+										onInput: _elm_lang$core$Maybe$Just(_user$project$Demo_Textfield$Input)
+									})),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$h4,
+									{ctor: '[]'},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('outlined'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {
+									ctor: '::',
+									_0: _user$project$Demo_Textfield$demoGroupSpaced(
+										_elm_lang$core$Native_Utils.update(
+											_user$project$Mwc_Textfield$textfieldConfig,
+											{
+												outlined: true,
+												onInput: _elm_lang$core$Maybe$Just(_user$project$Demo_Textfield$Input)
+											})),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$h4,
+											{ctor: '[]'},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text('outlined - required - email - helperText'),
+												_1: {ctor: '[]'}
+											}),
+										_1: {
+											ctor: '::',
+											_0: _user$project$Demo_Textfield$demoGroupSpaced(
+												_elm_lang$core$Native_Utils.update(
+													_user$project$Mwc_Textfield$textfieldConfig,
+													{
+														outlined: true,
+														required: true,
+														type_: 'email',
+														helperText: 'Make sure to include an @',
+														onInput: _elm_lang$core$Maybe$Just(_user$project$Demo_Textfield$Input)
+													})),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$h4,
+													{ctor: '[]'},
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html$text('box - disabled'),
+														_1: {ctor: '[]'}
+													}),
+												_1: {
+													ctor: '::',
+													_0: _user$project$Demo_Textfield$demoGroupSpaced(
+														_elm_lang$core$Native_Utils.update(
+															_user$project$Mwc_Textfield$textfieldConfig,
+															{
+																box: true,
+																disabled: true,
+																onInput: _elm_lang$core$Maybe$Just(_user$project$Demo_Textfield$Input)
+															})),
+													_1: {
+														ctor: '::',
+														_0: A2(
+															_elm_lang$html$Html$h4,
+															{ctor: '[]'},
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html$text('fullWidth'),
+																_1: {ctor: '[]'}
+															}),
+														_1: {
+															ctor: '::',
+															_0: _user$project$Demo_Textfield$demoGroupSpaced(
+																_elm_lang$core$Native_Utils.update(
+																	_user$project$Mwc_Textfield$textfieldConfig,
+																	{
+																		fullWidth: true,
+																		onInput: _elm_lang$core$Maybe$Just(_user$project$Demo_Textfield$Input)
+																	})),
+															_1: {ctor: '[]'}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		});
+};
+
+var _user$project$Mwc_Dialog$dialogConfig = {
+	headerLabel: '',
+	acceptLabel: 'OK',
+	declineLabel: 'Cancel',
+	scrollable: false,
+	opened: false,
+	additionalAttributes: {ctor: '[]'}
+};
+var _user$project$Mwc_Dialog$dialog = function (config) {
+	var bool = function (v) {
+		return v ? _elm_lang$core$Maybe$Just('') : _elm_lang$core$Maybe$Nothing;
+	};
+	return A2(
+		_elm_lang$html$Html$node,
+		'mwc-dialog',
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			A2(
+				_elm_lang$core$List$filterMap,
+				_elm_lang$core$Basics$identity,
+				{
+					ctor: '::',
+					_0: _elm_lang$core$Maybe$Just(
+						A2(_elm_lang$html$Html_Attributes$attribute, 'headerLabel', config.headerLabel)),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$core$Maybe$Just(
+							A2(_elm_lang$html$Html_Attributes$attribute, 'acceptLabel', config.acceptLabel)),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$core$Maybe$Just(
+								A2(_elm_lang$html$Html_Attributes$attribute, 'declineLabel', config.declineLabel)),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$core$Maybe$map,
+									_elm_lang$html$Html_Attributes$attribute('scrollable'),
+									bool(config.scrollable)),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$core$Maybe$map,
+										_elm_lang$html$Html_Attributes$attribute('opened'),
+										bool(config.opened)),
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					}
+				}),
+			config.additionalAttributes));
+};
+var _user$project$Mwc_Dialog$DialogConfig = F6(
+	function (a, b, c, d, e, f) {
+		return {headerLabel: a, acceptLabel: b, declineLabel: c, scrollable: d, opened: e, additionalAttributes: f};
+	});
+
+var _user$project$Mwc_FormField$formFieldConfig = {
+	label: '',
+	alignEnd: false,
+	additionalAttributes: {ctor: '[]'}
+};
+var _user$project$Mwc_FormField$formField = function (config) {
+	var bool = function (v) {
+		return v ? _elm_lang$core$Maybe$Just('') : _elm_lang$core$Maybe$Nothing;
+	};
+	return A2(
+		_elm_lang$html$Html$node,
+		'mwc-formfield',
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			A2(
+				_elm_lang$core$List$filterMap,
+				_elm_lang$core$Basics$identity,
+				{
+					ctor: '::',
+					_0: _elm_lang$core$Maybe$Just(
+						A2(_elm_lang$html$Html_Attributes$attribute, 'label', config.label)),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$core$Maybe$map,
+							_elm_lang$html$Html_Attributes$attribute('alignEnd'),
+							bool(config.alignEnd)),
+						_1: {ctor: '[]'}
+					}
+				}),
+			config.additionalAttributes));
+};
+var _user$project$Mwc_FormField$FormFieldConfig = F3(
+	function (a, b, c) {
+		return {label: a, alignEnd: b, additionalAttributes: c};
+	});
+
+var _user$project$Mwc_List$itemSeparatorConfig = {
+	additionalAttributes: {ctor: '[]'}
+};
+var _user$project$Mwc_List$itemSeparator = function (config) {
+	return A3(
+		_elm_lang$html$Html$node,
+		'mwc-list-item-separator',
+		config.additionalAttributes,
+		{ctor: '[]'});
+};
+var _user$project$Mwc_List$itemConfig = {
+	label: '',
+	icon: '',
+	disabled: false,
+	additionalAttributes: {ctor: '[]'}
+};
+var _user$project$Mwc_List$item = function (config) {
+	var bool = function (v) {
+		return v ? _elm_lang$core$Maybe$Just('') : _elm_lang$core$Maybe$Nothing;
+	};
+	return A3(
+		_elm_lang$html$Html$node,
+		'mwc-list-item',
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			A2(
+				_elm_lang$core$List$filterMap,
+				_elm_lang$core$Basics$identity,
+				{
+					ctor: '::',
+					_0: _elm_lang$core$Maybe$Just(
+						A2(_elm_lang$html$Html_Attributes$attribute, 'label', config.label)),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$core$Maybe$Just(
+							A2(_elm_lang$html$Html_Attributes$attribute, 'icon', config.icon)),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$core$Maybe$map,
+								_elm_lang$html$Html_Attributes$attribute('disabled'),
+								bool(config.disabled)),
+							_1: {ctor: '[]'}
+						}
+					}
+				}),
+			config.additionalAttributes),
+		{ctor: '[]'});
+};
+var _user$project$Mwc_List$ItemConfig = F4(
+	function (a, b, c, d) {
+		return {label: a, icon: b, disabled: c, additionalAttributes: d};
+	});
+var _user$project$Mwc_List$ItemSeparatorConfig = function (a) {
+	return {additionalAttributes: a};
+};
+
+var _user$project$Mwc_Menu$menuConfig = {
+	additionalAttributes: {ctor: '[]'}
+};
+var _user$project$Mwc_Menu$menu = function (config) {
+	return A2(_elm_lang$html$Html$node, 'mwc-menu', config.additionalAttributes);
+};
+var _user$project$Mwc_Menu$MenuConfig = function (a) {
+	return {additionalAttributes: a};
+};
+
+var _user$project$Mwc_Select$selectConfig = {
+	label: '',
+	disabled: false,
+	box: false,
+	additionalAttributes: {ctor: '[]'}
+};
+var _user$project$Mwc_Select$select = function (config) {
+	var bool = function (v) {
+		return v ? _elm_lang$core$Maybe$Just('') : _elm_lang$core$Maybe$Nothing;
+	};
+	return A2(
+		_elm_lang$html$Html$node,
+		'mwc-select',
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			A2(
+				_elm_lang$core$List$filterMap,
+				_elm_lang$core$Basics$identity,
+				{
+					ctor: '::',
+					_0: _elm_lang$core$Maybe$Just(
+						A2(_elm_lang$html$Html_Attributes$attribute, 'label', config.label)),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$core$Maybe$map,
+							_elm_lang$html$Html_Attributes$attribute('disabled'),
+							bool(config.disabled)),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$core$Maybe$map,
+								_elm_lang$html$Html_Attributes$attribute('box'),
+								bool(config.box)),
+							_1: {ctor: '[]'}
+						}
+					}
+				}),
+			config.additionalAttributes));
+};
+var _user$project$Mwc_Select$SelectConfig = F4(
+	function (a, b, c, d) {
+		return {label: a, disabled: b, box: c, additionalAttributes: d};
+	});
+
+var _user$project$Mwc_Slider$sliderConfig = {
+	disabled: false,
+	step: 0,
+	min: 0,
+	max: 10,
+	value: 0,
+	discrete: false,
+	markers: false,
+	additionalAttributes: {ctor: '[]'}
+};
+var _user$project$Mwc_Slider$slider = function (config) {
+	var bool = function (v) {
+		return v ? _elm_lang$core$Maybe$Just('') : _elm_lang$core$Maybe$Nothing;
+	};
+	return A3(
+		_elm_lang$html$Html$node,
+		'mwc-slider',
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			A2(
+				_elm_lang$core$List$filterMap,
+				_elm_lang$core$Basics$identity,
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$core$Maybe$map,
+						_elm_lang$html$Html_Attributes$attribute('disabled'),
+						bool(config.disabled)),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$core$Maybe$Just(
+							A2(
+								_elm_lang$html$Html_Attributes$attribute,
+								'step',
+								_elm_lang$core$Basics$toString(config.step))),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$core$Maybe$Just(
+								A2(
+									_elm_lang$html$Html_Attributes$attribute,
+									'min',
+									_elm_lang$core$Basics$toString(config.min))),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$core$Maybe$Just(
+									A2(
+										_elm_lang$html$Html_Attributes$attribute,
+										'max',
+										_elm_lang$core$Basics$toString(config.max))),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$core$Maybe$Just(
+										A2(
+											_elm_lang$html$Html_Attributes$attribute,
+											'value',
+											_elm_lang$core$Basics$toString(config.value))),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$core$Maybe$map,
+											_elm_lang$html$Html_Attributes$attribute('discrete'),
+											bool(config.discrete)),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$core$Maybe$map,
+												_elm_lang$html$Html_Attributes$attribute('markers'),
+												bool(config.markers)),
+											_1: {ctor: '[]'}
+										}
+									}
+								}
+							}
+						}
+					}
+				}),
+			config.additionalAttributes),
+		{ctor: '[]'});
+};
+var _user$project$Mwc_Slider$SliderConfig = F8(
+	function (a, b, c, d, e, f, g, h) {
+		return {disabled: a, step: b, min: c, max: d, value: e, discrete: f, markers: g, additionalAttributes: h};
+	});
+
+var _user$project$Mwc_Tabs$tabBarScrollerConfig = {
+	additionalAttributes: {ctor: '[]'}
+};
+var _user$project$Mwc_Tabs$tabBarScroller = function (config) {
+	return A3(
+		_elm_lang$html$Html$node,
+		'mwc-tab-bar-scroller',
+		config.additionalAttributes,
+		{ctor: '[]'});
+};
+var _user$project$Mwc_Tabs$tabBarConfig = {
+	activeIndex: 0,
+	additionalAttributes: {ctor: '[]'}
+};
+var _user$project$Mwc_Tabs$tabBar = function (config) {
+	return A3(
+		_elm_lang$html$Html$node,
+		'mwc-tab-bar',
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html_Attributes$attribute,
+					'activeIndex',
+					_elm_lang$core$Basics$toString(config.activeIndex)),
+				_1: {ctor: '[]'}
+			},
+			config.additionalAttributes),
+		{ctor: '[]'});
+};
+var _user$project$Mwc_Tabs$tabConfig = {
+	href: '',
+	icon: '',
+	label: '',
+	additionalAttributes: {ctor: '[]'}
+};
+var _user$project$Mwc_Tabs$tab = function (config) {
+	return A3(
+		_elm_lang$html$Html$node,
+		'mwc-tab',
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			{
+				ctor: '::',
+				_0: A2(_elm_lang$html$Html_Attributes$attribute, 'href', config.href),
+				_1: {
+					ctor: '::',
+					_0: A2(_elm_lang$html$Html_Attributes$attribute, 'icon', config.icon),
+					_1: {
+						ctor: '::',
+						_0: A2(_elm_lang$html$Html_Attributes$attribute, 'label', config.label),
+						_1: {ctor: '[]'}
+					}
+				}
+			},
+			config.additionalAttributes),
+		{ctor: '[]'});
+};
+var _user$project$Mwc_Tabs$TabConfig = F4(
+	function (a, b, c, d) {
+		return {href: a, icon: b, label: c, additionalAttributes: d};
+	});
+var _user$project$Mwc_Tabs$TabBarConfig = F2(
+	function (a, b) {
+		return {activeIndex: a, additionalAttributes: b};
+	});
+var _user$project$Mwc_Tabs$TabBarScrollerConfig = function (a) {
+	return {additionalAttributes: a};
+};
+
+var _user$project$Main$style = '\nbody {\n    font-family: Roboto, sans-serif;\n    margin: 0;\n  }\n\n  .unresolved {\n    opacity: 0;\n  }\n\n  body {\n    transition: opacity ease-in 0.2s;\n  }\n\n  header {\n    background-color: #6200ee;\n    position: fixed;\n    top: 0;\n    left: 0;\n    z-index: 4;\n    width: 100%;\n    display: flex;\n    align-items: center;\n    padding: 8px 12px;\n    box-sizing: border-box;\n    font-family: \"Roboto Mono\", monospace;\n    -webkit-font-smoothing: antialiased;\n    font-size: 1.25rem;\n    line-height: 2rem;\n    letter-spacing: 0.02em;\n    color: white;\n    min-height: 64px;\n    box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);\n  }\n\n  header > a {\n    text-decoration: none;\n    color: white;\n    display: flex;\n    align-items: center;\n  }\n\n  mwc-icon {\n    margin: 0 16px;\n  }\n\n  main {\n    margin-top: 64px;\n    padding: 16px;\n  }\n\n  .demo-group, .demo-group-spaced {\n    display: flex;\n    align-items: center;\n  }\n\n  .demo-group-spaced {\n    justify-content: space-around;\n  }\n\n  .demo-group > *, .demo-group-spaced > * {\n    margin: 0 8px;\n  }\n  ';
+var _user$project$Main$subscriptions = function (model) {
+	return _elm_lang$core$Platform_Sub$none;
+};
+var _user$project$Main$defaultModel = {button: _user$project$Demo_Button$defaultModel, card: _user$project$Demo_Card$defaultModel, snackbar: _user$project$Demo_Snackbar$Model, textfield: _user$project$Demo_Textfield$Model, iconToggle: _user$project$Demo_IconToggle$defaultModel, linearProgress: _user$project$Demo_LinearProgress$defaultModel, radio: _user$project$Demo_Radio$defaultModel, $switch: _user$project$Demo_Switch$defaultModel, checkbox: _user$project$Demo_Checkbox$defaultModel, fab: _user$project$Demo_Fab$defaultModel, icon: _user$project$Demo_Icon$defaultModel};
+var _user$project$Main$init = {ctor: '_Tuple2', _0: _user$project$Main$defaultModel, _1: _elm_lang$core$Platform_Cmd$none};
+var _user$project$Main$Model = function (a) {
+	return function (b) {
+		return function (c) {
+			return function (d) {
+				return function (e) {
+					return function (f) {
+						return function (g) {
+							return function (h) {
+								return function (i) {
+									return function (j) {
+										return function (k) {
+											return {button: a, card: b, snackbar: c, textfield: d, iconToggle: e, linearProgress: f, radio: g, $switch: h, checkbox: i, fab: j, icon: k};
+										};
+									};
+								};
+							};
+						};
+					};
+				};
+			};
+		};
+	};
+};
+var _user$project$Main$RadioMsg = function (a) {
+	return {ctor: 'RadioMsg', _0: a};
+};
+var _user$project$Main$SwitchMsg = function (a) {
+	return {ctor: 'SwitchMsg', _0: a};
+};
+var _user$project$Main$LinearProgressMsg = function (a) {
+	return {ctor: 'LinearProgressMsg', _0: a};
+};
+var _user$project$Main$TextfieldMsg = function (a) {
+	return {ctor: 'TextfieldMsg', _0: a};
+};
+var _user$project$Main$SnackbarMsg = function (a) {
+	return {ctor: 'SnackbarMsg', _0: a};
+};
+var _user$project$Main$IconToggleMsg = function (a) {
+	return {ctor: 'IconToggleMsg', _0: a};
+};
+var _user$project$Main$IconMsg = function (a) {
+	return {ctor: 'IconMsg', _0: a};
+};
+var _user$project$Main$CardMsg = function (a) {
+	return {ctor: 'CardMsg', _0: a};
+};
+var _user$project$Main$FabMsg = function (a) {
+	return {ctor: 'FabMsg', _0: a};
+};
+var _user$project$Main$CheckboxMsg = function (a) {
+	return {ctor: 'CheckboxMsg', _0: a};
+};
+var _user$project$Main$ButtonMsg = function (a) {
+	return {ctor: 'ButtonMsg', _0: a};
+};
+var _user$project$Main$update = F2(
+	function (msg, model) {
+		var _p0 = A2(_elm_lang$core$Debug$log, 'Msg', msg);
+		switch (_p0.ctor) {
+			case 'ButtonMsg':
+				return A2(
+					_elm_lang$core$Tuple$mapSecond,
+					_elm_lang$core$Platform_Cmd$map(_user$project$Main$ButtonMsg),
+					A2(
+						_elm_lang$core$Tuple$mapFirst,
+						function (button) {
+							return _elm_lang$core$Native_Utils.update(
+								model,
+								{button: button});
+						},
+						A2(_user$project$Demo_Button$update, _p0._0, model.button)));
+			case 'CheckboxMsg':
+				return A2(
+					_elm_lang$core$Tuple$mapSecond,
+					_elm_lang$core$Platform_Cmd$map(_user$project$Main$CheckboxMsg),
+					A2(
+						_elm_lang$core$Tuple$mapFirst,
+						function (checkbox) {
+							return _elm_lang$core$Native_Utils.update(
+								model,
+								{checkbox: checkbox});
+						},
+						A2(_user$project$Demo_Checkbox$update, _p0._0, model.checkbox)));
+			case 'FabMsg':
+				return A2(
+					_elm_lang$core$Tuple$mapSecond,
+					_elm_lang$core$Platform_Cmd$map(_user$project$Main$FabMsg),
+					A2(
+						_elm_lang$core$Tuple$mapFirst,
+						function (fab) {
+							return _elm_lang$core$Native_Utils.update(
+								model,
+								{fab: fab});
+						},
+						A2(_user$project$Demo_Fab$update, _p0._0, model.fab)));
+			case 'IconMsg':
+				return A2(
+					_elm_lang$core$Tuple$mapSecond,
+					_elm_lang$core$Platform_Cmd$map(_user$project$Main$IconMsg),
+					A2(
+						_elm_lang$core$Tuple$mapFirst,
+						function (icon) {
+							return _elm_lang$core$Native_Utils.update(
+								model,
+								{icon: icon});
+						},
+						A2(_user$project$Demo_Icon$update, _p0._0, model.icon)));
+			case 'IconToggleMsg':
+				return A2(
+					_elm_lang$core$Tuple$mapSecond,
+					_elm_lang$core$Platform_Cmd$map(_user$project$Main$IconToggleMsg),
+					A2(
+						_elm_lang$core$Tuple$mapFirst,
+						function (iconToggle) {
+							return _elm_lang$core$Native_Utils.update(
+								model,
+								{iconToggle: iconToggle});
+						},
+						A2(_user$project$Demo_IconToggle$update, _p0._0, model.iconToggle)));
+			case 'CardMsg':
+				return A2(
+					_elm_lang$core$Tuple$mapSecond,
+					_elm_lang$core$Platform_Cmd$map(_user$project$Main$CardMsg),
+					A2(
+						_elm_lang$core$Tuple$mapFirst,
+						function (card) {
+							return _elm_lang$core$Native_Utils.update(
+								model,
+								{card: card});
+						},
+						A2(_user$project$Demo_Card$update, _p0._0, model.card)));
+			case 'SnackbarMsg':
+				return A2(
+					_elm_lang$core$Tuple$mapSecond,
+					_elm_lang$core$Platform_Cmd$map(_user$project$Main$SnackbarMsg),
+					A2(
+						_elm_lang$core$Tuple$mapFirst,
+						function (snackbar) {
+							return _elm_lang$core$Native_Utils.update(
+								model,
+								{snackbar: snackbar});
+						},
+						A2(_user$project$Demo_Snackbar$update, _p0._0, model.snackbar)));
+			case 'TextfieldMsg':
+				return A2(
+					_elm_lang$core$Tuple$mapSecond,
+					_elm_lang$core$Platform_Cmd$map(_user$project$Main$TextfieldMsg),
+					A2(
+						_elm_lang$core$Tuple$mapFirst,
+						function (textfield) {
+							return _elm_lang$core$Native_Utils.update(
+								model,
+								{textfield: textfield});
+						},
+						A2(_user$project$Demo_Textfield$update, _p0._0, model.textfield)));
+			case 'LinearProgressMsg':
+				return A2(
+					_elm_lang$core$Tuple$mapSecond,
+					_elm_lang$core$Platform_Cmd$map(_user$project$Main$LinearProgressMsg),
+					A2(
+						_elm_lang$core$Tuple$mapFirst,
+						function (linearProgress) {
+							return _elm_lang$core$Native_Utils.update(
+								model,
+								{linearProgress: linearProgress});
+						},
+						A2(_user$project$Demo_LinearProgress$update, _p0._0, model.linearProgress)));
+			case 'SwitchMsg':
+				return A2(
+					_elm_lang$core$Tuple$mapSecond,
+					_elm_lang$core$Platform_Cmd$map(_user$project$Main$SwitchMsg),
+					A2(
+						_elm_lang$core$Tuple$mapFirst,
+						function ($switch) {
+							return _elm_lang$core$Native_Utils.update(
+								model,
+								{$switch: $switch});
+						},
+						A2(_user$project$Demo_Switch$update, _p0._0, model.$switch)));
+			default:
+				return A2(
+					_elm_lang$core$Tuple$mapSecond,
+					_elm_lang$core$Platform_Cmd$map(_user$project$Main$RadioMsg),
+					A2(
+						_elm_lang$core$Tuple$mapFirst,
+						function (radio) {
+							return _elm_lang$core$Native_Utils.update(
+								model,
+								{radio: radio});
+						},
+						A2(_user$project$Demo_Radio$update, _p0._0, model.radio)));
+		}
+	});
+var _user$project$Main$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A3(
+				_elm_lang$html$Html$node,
+				'style',
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$type_('text/css'),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text(_user$project$Main$style),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(_user$project$Demo_Button$style),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(_user$project$Demo_Card$style),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(_user$project$Demo_Snackbar$style),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html$text(_user$project$Demo_Icon$style),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html$text(_user$project$Demo_IconToggle$style),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$html$Html$text(_user$project$Demo_LinearProgress$style),
+											_1: {ctor: '[]'}
+										}
+									}
+								}
+							}
+						}
+					}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$map,
+							_user$project$Main$ButtonMsg,
+							_user$project$Demo_Button$view(model.button)),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$map,
+								_user$project$Main$CheckboxMsg,
+								_user$project$Demo_Checkbox$view(model.checkbox)),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$map,
+									_user$project$Main$FabMsg,
+									_user$project$Demo_Fab$view(model.fab)),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$map,
+										_user$project$Main$CardMsg,
+										_user$project$Demo_Card$view(model.card)),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$map,
+											_user$project$Main$IconMsg,
+											_user$project$Demo_Icon$view(model.icon)),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$map,
+												_user$project$Main$IconToggleMsg,
+												_user$project$Demo_IconToggle$view(model.iconToggle)),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$map,
+													_user$project$Main$LinearProgressMsg,
+													_user$project$Demo_LinearProgress$view(model.linearProgress)),
+												_1: {
+													ctor: '::',
+													_0: A2(
+														_elm_lang$html$Html$map,
+														_user$project$Main$RadioMsg,
+														_user$project$Demo_Radio$view(model.radio)),
+													_1: {
+														ctor: '::',
+														_0: A2(
+															_elm_lang$html$Html$map,
+															_user$project$Main$TextfieldMsg,
+															_user$project$Demo_Textfield$view(model.textfield)),
+														_1: {
+															ctor: '::',
+															_0: A2(
+																_elm_lang$html$Html$map,
+																_user$project$Main$SwitchMsg,
+																_user$project$Demo_Switch$view(model.$switch)),
+															_1: {ctor: '[]'}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$hr,
+						{ctor: '[]'},
+						{ctor: '[]'}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$h2,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text('Material Web Components'),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$h3,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('Ripple'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$div,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$class('group'),
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$div,
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$class('box3'),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$style(
+														{
+															ctor: '::',
+															_0: {ctor: '_Tuple2', _0: 'position', _1: 'relative'},
+															_1: {ctor: '[]'}
+														}),
+													_1: {ctor: '[]'}
+												}
+											},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text('Ripple me'),
+												_1: {
+													ctor: '::',
+													_0: _user$project$Mwc_Ripple$ripple(_user$project$Mwc_Ripple$rippleConfig),
+													_1: {ctor: '[]'}
+												}
+											}),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$div,
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$class('box3'),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$style(
+															{
+																ctor: '::',
+																_0: {ctor: '_Tuple2', _0: 'position', _1: 'relative'},
+																_1: {ctor: '[]'}
+															}),
+														_1: {ctor: '[]'}
+													}
+												},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text('Ripple me'),
+													_1: {
+														ctor: '::',
+														_0: _user$project$Mwc_Ripple$ripple(
+															_elm_lang$core$Native_Utils.update(
+																_user$project$Mwc_Ripple$rippleConfig,
+																{primary: true})),
+														_1: {ctor: '[]'}
+													}
+												}),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$div,
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$class('box3'),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$html$Html_Attributes$style(
+																{
+																	ctor: '::',
+																	_0: {ctor: '_Tuple2', _0: 'position', _1: 'relative'},
+																	_1: {ctor: '[]'}
+																}),
+															_1: {ctor: '[]'}
+														}
+													},
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html$text('Ripple me'),
+														_1: {
+															ctor: '::',
+															_0: _user$project$Mwc_Ripple$ripple(
+																_elm_lang$core$Native_Utils.update(
+																	_user$project$Mwc_Ripple$rippleConfig,
+																	{secondary: true})),
+															_1: {ctor: '[]'}
+														}
+													}),
+												_1: {ctor: '[]'}
+											}
+										}
+									}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$h3,
+										{ctor: '[]'},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text('Card'),
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$map,
+											_user$project$Main$SnackbarMsg,
+											_user$project$Demo_Snackbar$view(model.snackbar)),
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		});
+};
+var _user$project$Main$main = _elm_lang$html$Html$program(
+	{init: _user$project$Main$init, subscriptions: _user$project$Main$subscriptions, update: _user$project$Main$update, view: _user$project$Main$view})();
 
 var Elm = {};
 Elm['Main'] = Elm['Main'] || {};
