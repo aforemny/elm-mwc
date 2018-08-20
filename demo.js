@@ -8718,44 +8718,58 @@ var _user$project$Mwc_Button$button = F2(
 			'mwc-button',
 			A2(
 				_elm_lang$core$Basics_ops['++'],
-				{
-					ctor: '::',
-					_0: A2(
-						_user$project$Mwc_Attributes$boolProp,
-						'raised',
-						_elm_lang$core$Native_Utils.eq(config.variant, _user$project$Mwc_Button$Raised)),
-					_1: {
+				A2(
+					_elm_lang$core$List$filterMap,
+					_elm_lang$core$Basics$identity,
+					{
 						ctor: '::',
-						_0: A2(
-							_user$project$Mwc_Attributes$boolProp,
-							'unelevated',
-							_elm_lang$core$Native_Utils.eq(config.variant, _user$project$Mwc_Button$Unelevated)),
+						_0: _elm_lang$core$Maybe$Just(
+							A2(
+								_user$project$Mwc_Attributes$boolProp,
+								'raised',
+								_elm_lang$core$Native_Utils.eq(config.variant, _user$project$Mwc_Button$Raised))),
 						_1: {
 							ctor: '::',
-							_0: A2(
-								_user$project$Mwc_Attributes$boolProp,
-								'outlined',
-								_elm_lang$core$Native_Utils.eq(config.variant, _user$project$Mwc_Button$Outlined)),
+							_0: _elm_lang$core$Maybe$Just(
+								A2(
+									_user$project$Mwc_Attributes$boolProp,
+									'unelevated',
+									_elm_lang$core$Native_Utils.eq(config.variant, _user$project$Mwc_Button$Unelevated))),
 							_1: {
 								ctor: '::',
-								_0: A2(_user$project$Mwc_Attributes$boolProp, 'dense', config.dense),
+								_0: _elm_lang$core$Maybe$Just(
+									A2(
+										_user$project$Mwc_Attributes$boolProp,
+										'outlined',
+										_elm_lang$core$Native_Utils.eq(config.variant, _user$project$Mwc_Button$Outlined))),
 								_1: {
 									ctor: '::',
-									_0: A2(_user$project$Mwc_Attributes$boolProp, 'disabled', config.disabled),
+									_0: _elm_lang$core$Maybe$Just(
+										A2(_user$project$Mwc_Attributes$boolProp, 'dense', config.dense)),
 									_1: {
 										ctor: '::',
-										_0: A2(_user$project$Mwc_Attributes$stringProp, 'icon', config.icon),
+										_0: _elm_lang$core$Maybe$Just(
+											A2(_user$project$Mwc_Attributes$boolProp, 'disabled', config.disabled)),
 										_1: {
 											ctor: '::',
-											_0: A2(_user$project$Mwc_Attributes$stringProp, 'label', config.label),
-											_1: {ctor: '[]'}
+											_0: _elm_lang$core$Maybe$Just(
+												A2(_user$project$Mwc_Attributes$stringProp, 'icon', config.icon)),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$core$Maybe$Just(
+													A2(_user$project$Mwc_Attributes$stringProp, 'label', config.label)),
+												_1: {
+													ctor: '::',
+													_0: A2(_elm_lang$core$Maybe$map, _elm_lang$html$Html_Events$onClick, config.onClick),
+													_1: {ctor: '[]'}
+												}
+											}
 										}
 									}
 								}
 							}
 						}
-					}
-				},
+					}),
 				config.additionalAttributes),
 			{ctor: '[]'});
 	});
