@@ -9,6 +9,7 @@ import Demo.Icon
 import Demo.IconToggle
 import Demo.LinearProgress
 import Demo.Radio
+import Demo.Ripple
 import Demo.Snackbar
 import Demo.Switch
 import Demo.Textfield
@@ -40,6 +41,7 @@ type alias Model =
     , iconToggle : Demo.IconToggle.Model
     , linearProgress : Demo.LinearProgress.Model
     , radio : Demo.Radio.Model
+    , ripple : Demo.Ripple.Model
     , switch : Demo.Switch.Model
     , checkbox : Demo.Checkbox.Model
     , fab : Demo.Fab.Model
@@ -56,6 +58,7 @@ defaultModel =
     , iconToggle = Demo.IconToggle.defaultModel
     , linearProgress = Demo.LinearProgress.defaultModel
     , radio = Demo.Radio.defaultModel
+    , ripple = Demo.Ripple.defaultModel
     , switch = Demo.Switch.defaultModel
     , checkbox = Demo.Checkbox.defaultModel
     , fab = Demo.Fab.defaultModel
@@ -75,6 +78,7 @@ type Msg
     | LinearProgressMsg Demo.LinearProgress.Msg
     | SwitchMsg Demo.Switch.Msg
     | RadioMsg Demo.Radio.Msg
+    | RippleMsg Demo.Ripple.Msg
 
 
 subscriptions : Model -> Sub Msg
@@ -148,6 +152,11 @@ update msg model =
                 |> Tuple.mapFirst (\radio -> { model | radio = radio })
                 |> Tuple.mapSecond (Cmd.map RadioMsg)
 
+        RippleMsg rippleMsg ->
+            Demo.Ripple.update rippleMsg model.ripple
+                |> Tuple.mapFirst (\ripple -> { model | ripple = ripple })
+                |> Tuple.mapSecond (Cmd.map RippleMsg)
+
 
 view model =
     Html.div
@@ -161,7 +170,10 @@ view model =
             , text Demo.Icon.style
             , text Demo.IconToggle.style
             , text Demo.LinearProgress.style
+            , text Demo.Ripple.style
             ]
+        , Html.h2 [] [ text "Material Web Components" ]
+        , Html.hr [] []
         , Html.div []
             [ Html.map ButtonMsg (Demo.Button.view model.button)
             , Html.map CheckboxMsg (Demo.Checkbox.view model.checkbox)
@@ -171,36 +183,9 @@ view model =
             , Html.map IconToggleMsg (Demo.IconToggle.view model.iconToggle)
             , Html.map LinearProgressMsg (Demo.LinearProgress.view model.linearProgress)
             , Html.map RadioMsg (Demo.Radio.view model.radio)
+            , Html.map RippleMsg (Demo.Ripple.view model.ripple)
             , Html.map TextfieldMsg (Demo.Textfield.view model.textfield)
             , Html.map SwitchMsg (Demo.Switch.view model.switch)
-            ]
-        , Html.hr [] []
-        , Html.h2 [] [ text "Material Web Components" ]
-        , Html.h3 [] [ text "Ripple" ]
-        , Html.div
-            [ Html.Attributes.class "group"
-            ]
-            [ Html.div
-                [ Html.Attributes.class "box3"
-                , Html.Attributes.style [ ( "position", "relative" ) ]
-                ]
-                [ text "Ripple me"
-                , ripple rippleConfig
-                ]
-            , Html.div
-                [ Html.Attributes.class "box3"
-                , Html.Attributes.style [ ( "position", "relative" ) ]
-                ]
-                [ text "Ripple me"
-                , ripple { rippleConfig | primary = True }
-                ]
-            , Html.div
-                [ Html.Attributes.class "box3"
-                , Html.Attributes.style [ ( "position", "relative" ) ]
-                ]
-                [ text "Ripple me"
-                , ripple { rippleConfig | secondary = True }
-                ]
             ]
         , Html.h3 [] [ text "Card" ]
         , Html.map SnackbarMsg (Demo.Snackbar.view model.snackbar)
